@@ -3,16 +3,13 @@ package misha.miner.settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.material.TextField
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import misha.miner.ui.theme.MyMinerTheme
 
 @Composable
@@ -20,15 +17,53 @@ fun Settings(settingsViewModel: SettingsViewModel) {
 
     val title = settingsViewModel.title.collectAsState(initial = "")
 
+    var wallet by rememberSaveable { mutableStateOf("") }
+    var address by rememberSaveable { mutableStateOf("") }
+    var port by rememberSaveable { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var command by rememberSaveable { mutableStateOf("") }
+
     Column(modifier = Modifier
         .fillMaxHeight()
-        .background(Color.LightGray)) {
+        .background(Color.White)) {
 
-        Text(text = title.value,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp, bottom = 16.dp),
-            textAlign = TextAlign.Center)
+        TextField(value = wallet,
+            onValueChange = {
+                wallet = it
+            },
+            label = { Text("Кошелёк") }
+        )
+        TextField(value = address,
+            onValueChange = {
+                address = it
+            },
+            label = { Text("Адрес сервера") }
+        )
+        TextField(value = port,
+            onValueChange = {
+                port = it
+            },
+            label = { Text("Порт") }
+        )
+        TextField(value = name,
+            onValueChange = {
+                name = it
+            },
+            label = { Text("Имя") }
+        )
+        TextField(value = password,
+            onValueChange = {
+                password = it
+            },
+            label = { Text("Пароль") }
+        )
+        TextField(value = command,
+            onValueChange = {
+                command = it
+            },
+            label = { Text("Добавить команду") }
+        )
     }
 }
 
