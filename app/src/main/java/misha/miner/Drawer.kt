@@ -34,7 +34,7 @@ fun Drawer(
             Spacer(Modifier.height(24.dp))
             Text(
                 text = screen.title,
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.h5,
                 modifier = Modifier.clickable {
                     onDestinationClicked(screen.route)
                 }
