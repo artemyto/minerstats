@@ -11,6 +11,15 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle.kts files
+
+        classpath("io.realm:realm-gradle-plugin:10.5.0")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
     }
 }
 
