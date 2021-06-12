@@ -40,11 +40,11 @@ fun AppMainScreen(homeViewModel: HomeViewModel, settingsViewModel: SettingsViewM
     Surface(color = MaterialTheme.colors.background) {
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
-//        val openDrawer = {
-//            scope.launch {
-//                drawerState.open()
-//            }
-//        }
+        val openDrawer = {
+            scope.launch {
+                drawerState.open()
+            }
+        }
         ModalDrawer(
             drawerState = drawerState,
             gesturesEnabled = true,
@@ -68,12 +68,14 @@ fun AppMainScreen(homeViewModel: HomeViewModel, settingsViewModel: SettingsViewM
             ) {
                 composable(DrawerScreens.Home.route) {
                     Home(
-                        homeViewModel = homeViewModel
+                        homeViewModel = homeViewModel,
+                        openDrawer
                     )
                 }
                 composable(DrawerScreens.Settings.route) {
                     Settings(
-                        settingsViewModel = settingsViewModel
+                        settingsViewModel = settingsViewModel,
+                        openDrawer
                     )
                 }
             }

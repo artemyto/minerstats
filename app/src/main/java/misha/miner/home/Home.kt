@@ -5,21 +5,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import misha.miner.ui.theme.MyMinerTheme
+import kotlinx.coroutines.Job
+import misha.miner.R
 
 @Composable
-fun Home(homeViewModel: HomeViewModel) {
+fun Home(homeViewModel: HomeViewModel, openDrawer: () -> Job) {
 
     val title = homeViewModel.title.collectAsState(initial = "")
 
@@ -27,6 +27,11 @@ fun Home(homeViewModel: HomeViewModel) {
         .fillMaxHeight()
         .background(Color.LightGray)) {
 
+        Button(onClick = {
+            openDrawer()
+        }) {
+            Icon(painter = painterResource(id = R.drawable.img_burger_menu), contentDescription = null)
+        }
         Text(text = title.value,
             modifier = Modifier
                 .fillMaxWidth()
@@ -35,11 +40,11 @@ fun Home(homeViewModel: HomeViewModel) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun HomePreview() {
-    MyMinerTheme() {
-        val homeViewModel = HomeViewModel()
-        Home(homeViewModel)
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun HomePreview() {
+//    MyMinerTheme() {
+//        val homeViewModel = HomeViewModel()
+//        Home(homeViewModel, openDrawer)
+//    }
+//}

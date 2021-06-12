@@ -7,17 +7,19 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import misha.miner.ui.theme.MyMinerTheme
+import androidx.compose.ui.res.painterResource
+import kotlinx.coroutines.Job
+import misha.miner.R
 
 @Composable
-fun Settings(settingsViewModel: SettingsViewModel) {
+fun Settings(settingsViewModel: SettingsViewModel, openDrawer: () -> Job) {
 
     val title = settingsViewModel.title.collectAsState(initial = "")
 
@@ -34,6 +36,11 @@ fun Settings(settingsViewModel: SettingsViewModel) {
         .fillMaxHeight()
         .background(Color.White)) {
 
+        Button(onClick = {
+            openDrawer()
+        }) {
+            Icon(painter = painterResource(id = R.drawable.img_burger_menu), contentDescription = null)
+        }
         TextField(value = wallet,
             onValueChange = {
                 wallet = it
@@ -94,11 +101,11 @@ fun CommandList(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun SettingsPreview() {
-    MyMinerTheme() {
-        val settingsViewModel = SettingsViewModel()
-        Settings(settingsViewModel)
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun SettingsPreview() {
+//    MyMinerTheme() {
+//        val settingsViewModel = SettingsViewModel()
+//        Settings(settingsViewModel, openDrawer)
+//    }
+//}
