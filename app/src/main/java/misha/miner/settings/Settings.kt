@@ -1,9 +1,7 @@
 package misha.miner.settings
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
@@ -36,10 +34,17 @@ fun Settings(settingsViewModel: SettingsViewModel, openDrawer: () -> Job) {
         .fillMaxHeight()
         .background(Color.White)) {
 
-        Button(onClick = {
-            openDrawer()
-        }) {
-            Icon(painter = painterResource(id = R.drawable.img_burger_menu), contentDescription = null)
+        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+
+            Button(onClick = {
+                openDrawer()
+            }) {
+                Icon(painter = painterResource(id = R.drawable.img_burger_menu), contentDescription = null)
+            }
+            Button(onClick = {
+            }) {
+                Text(text = "Сохранить")
+            }
         }
         TextField(value = wallet,
             onValueChange = {
