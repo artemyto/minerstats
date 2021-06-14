@@ -29,14 +29,8 @@ class HomeViewModel : ViewModel() {
 
     private var command = ""
 
-    private var notInitialized = true
-
     fun initialize() {
-        if (notInitialized) {
-            _commandList.value = StorageManager.getStorage().commandList
-
-            notInitialized = false
-        }
+        _commandList.value = StorageManager.getStorage().commandList
     }
     
     fun commandSelected(command: String) {
