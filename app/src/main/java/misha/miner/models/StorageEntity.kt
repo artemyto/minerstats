@@ -15,12 +15,12 @@ open class StorageEntity: RealmObject() {
     var commandList = RealmList<String>()
 
     fun toViewModel() = StorageViewModel(
-        wallet,
-        address,
-        name,
-        port,
-        password,
-        command,
-        mutableListOf<String>().apply { addAll(commandList) }
+        wallet = wallet,
+        address = address,
+        name = name,
+        port = port,
+        password = password,
+        command = command,
+        commandList = mutableListOf<String>().apply { addAll(commandList) }
     )
 }
