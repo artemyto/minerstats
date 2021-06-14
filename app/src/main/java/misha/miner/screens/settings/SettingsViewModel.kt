@@ -1,4 +1,4 @@
-package misha.miner.settings
+package misha.miner.screens.settings
 
 import android.util.Log
 import androidx.lifecycle.LiveData

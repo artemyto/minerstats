@@ -1,4 +1,4 @@
-package misha.miner.home
+package misha.miner.screens.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

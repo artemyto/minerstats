@@ -12,10 +12,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import misha.miner.home.Home
-import misha.miner.home.HomeViewModel
-import misha.miner.settings.Settings
-import misha.miner.settings.SettingsViewModel
+import misha.miner.screens.drawer.Drawer
+import misha.miner.screens.drawer.DrawerScreens
+import misha.miner.screens.home.Home
+import misha.miner.screens.home.HomeViewModel
+import misha.miner.screens.settings.Settings
+import misha.miner.screens.settings.SettingsViewModel
 import misha.miner.ui.theme.MyMinerTheme
 
 class MainActivity : ComponentActivity() {

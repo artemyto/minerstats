@@ -1,4 +1,4 @@
-package misha.miner
+package misha.miner.screens.drawer
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

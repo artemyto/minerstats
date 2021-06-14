@@ -1,4 +1,4 @@
-package misha.miner.settings
+package misha.miner.screens.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
