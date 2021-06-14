@@ -86,7 +86,7 @@ fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
                 label = { Text("Добавить команду") }
             )
             Button(onClick = {
-                commandList.add(command)
+                viewModel.addToCommandList(command)
                 command = ""
             }) {
                 Text("Add")

@@ -77,14 +77,14 @@ class SettingsViewModel : ViewModel() {
     }
 
     fun save() {
-//        storageContext.commandList
-
-//        commandList.value?.forEach {
-//            storageContext.command
-//        }
 
         Log.d("mytag", storageContext.toString())
 
         StorageManager.update(storageContext)
+    }
+
+    fun addToCommandList(command: String) {
+        storageContext.commandList.add(command)
+        _commandList.value = storageContext.commandList
     }
 }
