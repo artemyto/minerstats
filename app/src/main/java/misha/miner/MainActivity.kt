@@ -74,7 +74,7 @@ fun AppMainScreen(homeViewModel: HomeViewModel, settingsViewModel: SettingsViewM
                 }
                 composable(DrawerScreens.Settings.route) {
                     Settings(
-                        settingsViewModel = settingsViewModel,
+                        viewModel = settingsViewModel,
                         openDrawer
                     )
                 }

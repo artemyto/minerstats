@@ -9,6 +9,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,18 +18,18 @@ import kotlinx.coroutines.Job
 import misha.miner.R
 
 @Composable
-fun Settings(settingsViewModel: SettingsViewModel, openDrawer: () -> Job) {
+fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
 
-    val title = settingsViewModel.title.collectAsState(initial = "")
+    viewModel.initialization()
 
-    var wallet by rememberSaveable { mutableStateOf("") }
-    var address by rememberSaveable { mutableStateOf("") }
-    var port by rememberSaveable { mutableStateOf("") }
-    var name by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
+    val wallet: State<String> = viewModel.wallet.collectAsState()
+    val address: String by viewModel.address.observeAsState("")
+    val port: String by viewModel.port.observeAsState("")
+    val nameState: State<String> = viewModel.name.observeAsState("")
+    val password: String by viewModel.password.observeAsState("")
     var command by rememberSaveable { mutableStateOf("") }
 
-    val commandList by rememberSaveable { mutableStateOf(mutableListOf<String>()) }
+    val commandList: MutableList<String> by viewModel.commandList.observeAsState(mutableListOf())
 
     Column(modifier = Modifier
         .fillMaxHeight()
@@ -42,37 +43,38 @@ fun Settings(settingsViewModel: SettingsViewModel, openDrawer: () -> Job) {
                 Icon(painter = painterResource(id = R.drawable.img_burger_menu), contentDescription = null)
             }
             Button(onClick = {
+                viewModel.save()
             }) {
                 Text(text = "Сохранить")
             }
         }
-        TextField(value = wallet,
+        TextField(value = wallet.value,
             onValueChange = {
-                wallet = it
+                viewModel.inputWallet(it)
             },
             label = { Text("Кошелёк") }
         )
         TextField(value = address,
             onValueChange = {
-                address = it
+                viewModel.inputAddress(it)
             },
             label = { Text("Адрес сервера") }
         )
         TextField(value = port,
             onValueChange = {
-                port = it
+                viewModel.inputPort(it)
             },
             label = { Text("Порт") }
         )
-        TextField(value = name,
+        TextField(value = nameState.value,
             onValueChange = {
-                name = it
+                viewModel.inputName(it)
             },
             label = { Text("Имя") }
         )
         TextField(value = password,
             onValueChange = {
-                password = it
+                viewModel.inputPassword(it)
             },
             label = { Text("Пароль") }
         )
