@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import misha.miner.screens.drawer.Pool
+import misha.miner.screens.drawer.Wallet
 import misha.miner.ui.theme.MyMinerTheme
 
 sealed class DrawerScreens(val title: String, val route: String) {
@@ -40,6 +42,10 @@ fun Drawer(
                 }
             )
         }
+        Spacer(Modifier.height(24.dp))
+        Pool()
+        Spacer(Modifier.height(24.dp))
+        Wallet()
     }
 }
 
