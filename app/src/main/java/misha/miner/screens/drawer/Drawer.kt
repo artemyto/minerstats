@@ -46,6 +46,8 @@ fun Drawer(
         Pool()
         Spacer(Modifier.height(24.dp))
         Wallet()
+        Spacer(Modifier.height(24.dp))
+        Rate()
     }
 }
 
