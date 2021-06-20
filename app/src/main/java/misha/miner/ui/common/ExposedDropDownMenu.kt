@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ExposedDropDownMenu(
     suggestions: List<String>,
-    onItemSelected: (String) -> Unit
+    onTextChanged: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf("") }
@@ -29,7 +29,10 @@ fun ExposedDropDownMenu(
     Column {
         OutlinedTextField(
             value = selectedText,
-            onValueChange = { selectedText = it },
+            onValueChange = {
+                selectedText = it
+                onTextChanged(it)
+            },
             modifier = Modifier.fillMaxWidth(),
                     trailingIcon = {
                 Icon(icon, null, Modifier.clickable { expanded = !expanded })
@@ -44,7 +47,7 @@ fun ExposedDropDownMenu(
                 DropdownMenuItem(onClick = {
                     selectedText = label
                     expanded = false
-                    onItemSelected(label)
+                    onTextChanged(label)
                 }) {
                     Text(text = label)
                 }

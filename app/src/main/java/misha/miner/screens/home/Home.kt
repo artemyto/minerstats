@@ -47,7 +47,7 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
         Row(modifier = Modifier.fillMaxWidth()) {
             ExposedDropDownMenu(
                 suggestions = commandList,
-                onItemSelected = {
+                onTextChanged = {
                     viewModel.commandSelected(it)
                 }
             )
