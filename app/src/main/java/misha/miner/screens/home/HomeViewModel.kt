@@ -49,6 +49,16 @@ class HomeViewModel : ViewModel() {
             )
             _status.emit("Connection to ${config.name}@${config.address}:${config.port} is established")
             _output.emit(SSHConnectionManager.runCommand(command = command))
+
+            commandList.value?.let {
+                if (command !in it) {
+                    var storageContext = StorageManager.getStorage()
+                    storageContext.commandList.add(command)
+                    StorageManager.update(storageContext)
+                    storageContext = StorageManager.getStorage()
+                    _commandList.postValue(storageContext.commandList)
+                }
+            }
         }
     }
 
