@@ -60,7 +60,7 @@ fun AppMainScreen(homeViewModel: HomeViewModel, settingsViewModel: SettingsViewM
                             drawerState.close()
                         }
                         navController.navigate(route) {
-                            popUpTo = navController.graph.startDestinationId
+                            popUpTo(navController.graph.startDestinationId)
                             launchSingleTop = true
                         }
                     }
