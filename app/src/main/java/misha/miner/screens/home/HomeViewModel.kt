@@ -3,12 +3,8 @@ package misha.miner.screens.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,56 +16,52 @@ class HomeViewModel : ViewModel() {
     private val _status: MutableStateFlow<String> = MutableStateFlow("Connection is not opened yet")
     val status: StateFlow<String> = _status
 
-    private val _output: MutableStateFlow<String> = MutableStateFlow("")
-    val output: StateFlow<String> = _output
-
-    private val _commandList: MutableLiveData<MutableList<String>> =
+    private val _outputList: MutableLiveData<MutableList<String>> =
         MutableLiveData(mutableListOf())
-    val commandList: LiveData<MutableList<String>> = _commandList
+    val outputList: LiveData<MutableList<String>> = _outputList
 
-    private var command = ""
+    private val commandList = mutableListOf(
+
+        "Amd mem temp" to "sensors | grep 'mem' | grep -o \"+[0-9]*\\.[0-9]*.C \""
+    )
+    private var outputListField = mutableListOf<String>()
+
+    private var initialized = false
 
     fun initialize() {
-        _commandList.value = StorageManager.getStorage().commandList
-    }
-    
-    fun commandSelected(command: String) {
-        this.command = command
-    }
-
-    @Suppress("BlockingMethodInNonBlockingContext")
-    fun runClicked() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val config = StorageManager.getStorage()
-            SSHConnectionManager.open(
-                hostname = config.address,
-                port = config.port.toInt(),
-                username = config.name,
-                password = config.password
-            )
-            _status.emit("Connection to ${config.name}@${config.address}:${config.port} is established")
-            _output.emit(SSHConnectionManager.runCommand(command = command))
-
-            commandList.value?.let {
-                if (command !in it) {
-                    var storageContext = StorageManager.getStorage()
-                    storageContext.commandList.add(command)
-                    StorageManager.update(storageContext)
-                    storageContext = StorageManager.getStorage()
-                    _commandList.postValue(storageContext.commandList)
-                }
-            }
+        if (!initialized) {
+            initialized = true
+            run()
         }
     }
 
-    private val _title: MutableSharedFlow<String> = MutableStateFlow("Screen 1: title 0")
-    val title: Flow<String> = _title
+    private var opened = false
 
-    init {
-        viewModelScope.launch {
-            for (i in 1..5) {
-                _title.emit("Screen 1: title $i")
-                delay(2000)
+    fun runClicked() {
+        run()
+    }
+
+    @Suppress("BlockingMethodInNonBlockingContext")
+    private fun run() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val config = StorageManager.getStorage()
+
+            if (!opened) {
+                SSHConnectionManager.open(
+                    hostname = config.address,
+                    port = config.port.toInt(),
+                    username = config.name,
+                    password = config.password
+                )
+                opened = true
+            }
+
+            _status.emit("Connection to ${config.name}@${config.address}:${config.port} is established")
+
+            outputListField = mutableListOf()
+            commandList.forEach {
+                outputListField.add("${it.first}: ${SSHConnectionManager.runCommand(command = it.second)}")
+                _outputList.postValue(outputListField)
             }
         }
     }

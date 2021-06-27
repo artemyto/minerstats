@@ -1,10 +1,9 @@
 package misha.miner.screens.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -17,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import kotlinx.coroutines.Job
 import misha.miner.R
-import misha.miner.ui.common.ExposedDropDownMenu
 
 @Composable
 fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
@@ -25,9 +23,8 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
     viewModel.initialize()
 
     val status by viewModel.status.collectAsState()
-    val output by viewModel.output.collectAsState()
 
-    val commandList: MutableList<String> by viewModel.commandList.observeAsState(mutableListOf())
+    val outputList: MutableList<String> by viewModel.outputList.observeAsState(mutableListOf())
 
     Column(
         modifier = Modifier
@@ -35,38 +32,32 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
             .background(Color.LightGray)
     ) {
 
-        Button(onClick = {
-            openDrawer()
-        }) {
-            Icon(
-                painter = painterResource(id = R.drawable.img_burger_menu),
-                contentDescription = null
-            )
-        }
-        Text(text = status)
-        Row(modifier = Modifier.fillMaxWidth()) {
-            ExposedDropDownMenu(
-                suggestions = commandList,
-                onTextChanged = {
-                    viewModel.commandSelected(it)
-                }
-            )
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Button(onClick = {
+                openDrawer()
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.img_burger_menu),
+                    contentDescription = null
+                )
+            }
             Button(onClick = { viewModel.runClicked() }) {
-                Text(text = "run")
+                Text(text = "refresh")
             }
         }
-        Button(onClick = { viewModel.runClicked() }) {
-            Text(text = "run")
-        }
-        Text(text = output)
+        Text(text = status)
+        CommandList(items = outputList)
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun HomePreview() {
-//    MyMinerTheme() {
-//        val homeViewModel = HomeViewModel()
-//        Home(homeViewModel, openDrawer)
-//    }
-//}
+@Composable
+fun CommandList(
+    modifier: Modifier = Modifier,
+    items: List<String>
+) {
+    LazyColumn(modifier = modifier) {
+        itemsIndexed(items) { index, item ->
+            Text(item)
+        }
+    }
+}

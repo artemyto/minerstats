@@ -14,11 +14,13 @@ import misha.miner.ui.theme.MyMinerTheme
 
 sealed class DrawerScreens(val title: String, val route: String) {
     object Home : DrawerScreens("Главная", "home")
+    object RunCommand : DrawerScreens("Запустить команду ssh", "runCommand")
     object Settings : DrawerScreens("Настройки", "settings")
 }
 
 private val screens = listOf(
     DrawerScreens.Home,
+    DrawerScreens.RunCommand,
     DrawerScreens.Settings
 )
 

@@ -18,18 +18,21 @@ import misha.miner.screens.home.Home
 import misha.miner.screens.home.HomeViewModel
 import misha.miner.screens.settings.Settings
 import misha.miner.screens.settings.SettingsViewModel
+import misha.miner.screens.ssh.RunCommand
+import misha.miner.screens.ssh.RunCommandViewModel
 import misha.miner.ui.theme.MyMinerTheme
 
 class MainActivity : ComponentActivity() {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val settingsViewModel: SettingsViewModel by viewModels()
+    private val runCommandViewModel: RunCommandViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyMinerTheme {
-                AppMainScreen(homeViewModel, settingsViewModel)
+                AppMainScreen(homeViewModel, settingsViewModel, runCommandViewModel)
             }
         }
     }
@@ -37,7 +40,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun AppMainScreen(homeViewModel: HomeViewModel, settingsViewModel: SettingsViewModel) {
+fun AppMainScreen(homeViewModel: HomeViewModel, settingsViewModel: SettingsViewModel, runCommandViewModel: RunCommandViewModel) {
     val navController = rememberNavController()
     Surface(color = MaterialTheme.colors.background) {
         val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -74,6 +77,12 @@ fun AppMainScreen(homeViewModel: HomeViewModel, settingsViewModel: SettingsViewM
                         openDrawer
                     )
                 }
+                composable(DrawerScreens.RunCommand.route) {
+                    RunCommand(
+                        viewModel = runCommandViewModel,
+                        openDrawer
+                    )
+                }
                 composable(DrawerScreens.Settings.route) {
                     Settings(
                         viewModel = settingsViewModel,
@@ -91,6 +100,7 @@ fun DefaultPreview() {
     MyMinerTheme {
         val homeViewModel = HomeViewModel()
         val settingsViewModel = SettingsViewModel()
-        AppMainScreen(homeViewModel, settingsViewModel)
+        val runCommandViewModel = RunCommandViewModel()
+        AppMainScreen(homeViewModel, settingsViewModel, runCommandViewModel)
     }
 }
