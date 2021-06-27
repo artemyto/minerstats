@@ -21,8 +21,12 @@ class HomeViewModel : ViewModel() {
     val outputList: LiveData<MutableList<String>> = _outputList
 
     private val commandList = mutableListOf(
-
-        "Amd mem temp" to "sensors | grep 'mem' | grep -o \"+[0-9]*\\.[0-9]*.C \""
+        "CPU temp" to "sensors | grep Tdie | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'",
+        "Nvidia temp" to "nvidia-smi | grep -o \"[0-9]\\+C\"",
+        "Amd temp" to "sensors | grep 'junction' | grep -o \"+[0-9]*\\.[0-9]*.C \"",
+        "Amd mem temp" to "sensors | grep 'mem' | grep -o \"+[0-9]*\\.[0-9]*.C \"",
+        "Nvidia driver" to "nvidia-smi | grep -o '[0-9]\\{3\\}\\.[0-9]\\{2\\}\\.\\{0,1\\}[0-9]\\{0,2\\}' | head -1",
+        "Amd driver" to "DISPLAY=:0 glxinfo | grep \"OpenGL version\" | grep -o '[0-9]\\{2\\}\\.[0-9].[0-9]'",
     )
     private var outputListField = mutableListOf<String>()
 
@@ -61,8 +65,8 @@ class HomeViewModel : ViewModel() {
             outputListField = mutableListOf()
             commandList.forEach {
                 outputListField.add("${it.first}: ${SSHConnectionManager.runCommand(command = it.second)}")
-                _outputList.postValue(outputListField)
             }
+            _outputList.postValue(outputListField)
         }
     }
 }
