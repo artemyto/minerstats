@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -58,7 +60,13 @@ fun RunCommand(viewModel: RunCommandViewModel, openDrawer: () -> Job) {
         Button(onClick = { viewModel.runClicked() }) {
             Text(text = "run")
         }
-        Text(text = output)
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .fillMaxWidth()
+        ) {
+            Text(text = output)
+        }
     }
 }
 
