@@ -8,6 +8,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import misha.miner.common.EthermineHelper
+import misha.miner.services.api.ApiManager
 import misha.miner.services.ssh.SSHConnectionManager
 import misha.miner.services.storage.StorageManager
 
@@ -19,6 +21,12 @@ class HomeViewModel : ViewModel() {
     private val _outputList: MutableLiveData<MutableList<String>> =
         MutableLiveData(mutableListOf())
     val outputList: LiveData<MutableList<String>> = _outputList
+    private lateinit var outputListField: MutableList<String>
+
+    private val _poolOutputList: MutableLiveData<MutableList<String>> =
+        MutableLiveData(mutableListOf())
+    val poolOutputList: LiveData<MutableList<String>> = _poolOutputList
+    private lateinit var poolOutputListField: MutableList<String>
 
     private val commandList = mutableListOf(
         "CPU temp" to "sensors | grep Tdie | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'",
@@ -28,7 +36,6 @@ class HomeViewModel : ViewModel() {
         "Nvidia driver" to "nvidia-smi | grep -o '[0-9]\\{3\\}\\.[0-9]\\{2\\}\\.\\{0,1\\}[0-9]\\{0,2\\}' | head -1",
         "Amd driver" to "DISPLAY=:0 glxinfo | grep \"OpenGL version\" | grep -o '[0-9]\\{2\\}\\.[0-9].[0-9]'",
     )
-    private var outputListField = mutableListOf<String>()
 
     private var initialized = false
 
@@ -68,5 +75,21 @@ class HomeViewModel : ViewModel() {
             }
             _outputList.postValue(outputListField)
         }
+
+        val config = StorageManager.getStorage()
+
+        ApiManager.getPoolStats(
+            config.wallet,
+            completion = { data ->
+                val ethHelper = EthermineHelper(data)
+
+                poolOutputListField = mutableListOf()
+                poolOutputListField.add("ETH/month: ${ethHelper.getEstimatedEthForMonth()}")
+                _poolOutputList.value = poolOutputListField
+            },
+            onError = {
+
+            }
+        )
     }
 }
