@@ -26,6 +26,7 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
 
     val outputList: MutableList<String> by viewModel.outputList.observeAsState(mutableListOf())
     val poolOutputList: MutableList<String> by viewModel.poolOutputList.observeAsState(mutableListOf())
+    val balanceOutputList: MutableList<String> by viewModel.balanceOutputList.observeAsState(mutableListOf())
 
     Column(
         modifier = Modifier
@@ -49,6 +50,7 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
         Text(text = status)
         StringList(items = outputList)
         StringList(items = poolOutputList)
+        StringList(items = balanceOutputList)
     }
 }
 
