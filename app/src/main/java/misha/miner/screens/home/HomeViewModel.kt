@@ -36,6 +36,18 @@ class HomeViewModel : ViewModel() {
     val balanceOutputList: LiveData<MutableList<String>> = _balanceOutputList
     private lateinit var balanceOutputListField: MutableList<String>
 
+    @Volatile
+    private var poolStatus = RunStatus.Finished
+    @Volatile
+    private var walletStatus = RunStatus.Finished
+
+    @Volatile
+    private var balance = 0.0
+    @Volatile
+    private var unpaid = 0.0
+    @Volatile
+    private var estimated = 0.0
+
     private val commandList = mutableListOf(
         "CPU temp" to "sensors | grep Tdie | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'",
         "Nvidia temp" to "nvidia-smi | grep -o \"[0-9]\\+C\"",
@@ -62,6 +74,13 @@ class HomeViewModel : ViewModel() {
 
     @Suppress("BlockingMethodInNonBlockingContext")
     private fun run() {
+
+        makeSshStats()
+        makePoolStats()
+        makeWalletStats()
+    }
+
+    private fun makeSshStats() {
         CoroutineScope(Dispatchers.IO).launch {
             val config = StorageManager.getStorage()
 
@@ -83,54 +102,102 @@ class HomeViewModel : ViewModel() {
             }
             _outputList.postValue(outputListField)
         }
+    }
 
-        val config = StorageManager.getStorage()
+    private fun makePoolStats() {
+        if (poolStatus == RunStatus.Finished) {
 
-        ApiManager.getPoolStats(
-            config.wallet,
-            completion = { data ->
-                val ethHelper = EthermineHelper(data)
+            val config = StorageManager.getStorage()
 
-                poolOutputListField = mutableListOf()
-                poolOutputListField.add("Pool miner stats:\n")
-                poolOutputListField.add("Average hashrate: ${ethHelper.getAverageHashrate()}\n")
-                poolOutputListField.add("Reported hashrate: ${ethHelper.getReportedHashrate()}\n")
-                poolOutputListField.add("Current hashrate: ${ethHelper.getCurrentHashrate()}\n")
-                poolOutputListField.add("Workers: ${ethHelper.getWorkers()}\n")
-                poolOutputListField.add("Shares during last hour (valid/stale/invalid): ${ethHelper.getShares()}\n")
-                poolOutputListField.add("Unpaid balance: ${ethHelper.getUnpaidBalanceLabel()}\n")
-                poolOutputListField.add("ETH/month: ${ethHelper.getEstimatedEthForMonthLabel()}\n")
-                _poolOutputList.value = poolOutputListField
+            poolStatus = RunStatus.Launched
+            ApiManager.getPoolStats(
+                config.wallet,
+                completion = { data ->
+                    val ethHelper = EthermineHelper(data)
+
+                    unpaid = ethHelper.getUnpaidBalanceValue()
+                    estimated = ethHelper.getEstimatedEthForMonthValue()
+
+                    poolOutputListField = mutableListOf()
+                    poolOutputListField.add("Pool miner stats:\n")
+                    poolOutputListField.add("Average hashrate: ${ethHelper.getAverageHashrate()}\n")
+                    poolOutputListField.add("Reported hashrate: ${ethHelper.getReportedHashrate()}\n")
+                    poolOutputListField.add("Current hashrate: ${ethHelper.getCurrentHashrate()}\n")
+                    poolOutputListField.add("Workers: ${ethHelper.getWorkers()}\n")
+                    poolOutputListField.add("Shares during last hour (valid/stale/invalid): ${ethHelper.getShares()}\n")
+                    _poolOutputList.value = poolOutputListField
+
+                    if (walletStatus == RunStatus.Finished)
+                        makeBalanceStats()
+                    poolStatus = RunStatus.Finished
+                },
+                onError = {
+                    poolStatus = RunStatus.Finished
+                }
+            )
+        }
+    }
+
+    private fun makeWalletStats() {
+        if (walletStatus == RunStatus.Finished) {
+
+            val config = StorageManager.getStorage()
+
+            walletStatus = RunStatus.Launched
+            ApiManager.getWalletStats(
+                config.wallet.fullEthAddr(),
+                completion = { result ->
+                    val ethHelper = EtherscanHelper(result)
+
+                    balance = ethHelper.getBalanceValue()
+
+                    if (poolStatus == RunStatus.Finished)
+                        makeBalanceStats()
+                    walletStatus = RunStatus.Finished
+                },
+                onError = {
+                    walletStatus = RunStatus.Finished
+                }
+            )
+        }
+    }
+
+    private fun makeBalanceStats() {
+        ApiManager.convertCurrency(
+            from = CurrencyType.ETH,
+            to = CurrencyType.RUB,
+            amount = 1.0,
+            completion = { oneEth ->
+
+                val balanceRub = oneEth * balance
+                val unpaidRub = oneEth * unpaid
+                val estimatedRub = oneEth * estimated
+                val walletPoolSum = balance + unpaid
+                val walletPoolSumRub = oneEth * walletPoolSum
+
+                balanceOutputListField = mutableListOf()
+                balanceOutputListField.add("Balance stats:\n")
+                balanceOutputListField.add("Wallet balance: " +
+                        "${String.format("%.5f", balance)} ETH / " +
+                        "${String.format("%.0f", balanceRub)} ₽\n")
+                balanceOutputListField.add("Pool unpaid: " +
+                        "${String.format("%.5f", unpaid)} ETH / " +
+                        "${String.format("%.0f", unpaidRub)} ₽\n")
+                balanceOutputListField.add("Wallet + unpaid: " +
+                        "${String.format("%.5f", walletPoolSum)} ETH / " +
+                        "${String.format("%.0f", walletPoolSumRub)} ₽\n")
+                balanceOutputListField.add("Estimated for one month: " +
+                        "${String.format("%.5f", estimated)} ETH / " +
+                        "${String.format("%.0f", estimatedRub)} ₽\n")
+                _balanceOutputList.value = balanceOutputListField
             },
             onError = {
 
             }
         )
-        ApiManager.getWalletStats(
-            config.wallet.fullEthAddr(),
-            completion = { result ->
-                val ethHelper = EtherscanHelper(result)
+    }
 
-                val balance = ethHelper.getBalanceValue()
-
-                ApiManager.convertCurrency(
-                    from = CurrencyType.ETH,
-                    to = CurrencyType.RUB,
-                    amount = balance,
-                    completion = { rub ->
-                        balanceOutputListField = mutableListOf()
-                        balanceOutputListField.add("Wallet stats:\n")
-                        balanceOutputListField.add("Balance: ${ethHelper.getBalanceLabel()} / ${String.format("%.1f", rub)} ₽")
-                        _balanceOutputList.value = balanceOutputListField
-                    },
-                    onError = {
-
-                    }
-                )
-            },
-            onError = {
-
-            }
-        )
+    enum class RunStatus {
+        Launched, Finished
     }
 }

@@ -49,8 +49,8 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
         }
         Text(text = status)
         StringList(items = outputList)
-        StringList(items = poolOutputList)
         StringList(items = balanceOutputList)
+        StringList(items = poolOutputList)
     }
 }
 
