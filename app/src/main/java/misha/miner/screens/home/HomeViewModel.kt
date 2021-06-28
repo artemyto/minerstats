@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import misha.miner.common.EthermineHelper
+import misha.miner.common.EtherscanHelper
+import misha.miner.common.fullEthAddr
 import misha.miner.services.api.ApiManager
 import misha.miner.services.ssh.SSHConnectionManager
 import misha.miner.services.storage.StorageManager
@@ -27,6 +29,11 @@ class HomeViewModel : ViewModel() {
         MutableLiveData(mutableListOf())
     val poolOutputList: LiveData<MutableList<String>> = _poolOutputList
     private lateinit var poolOutputListField: MutableList<String>
+
+    private val _balanceOutputList: MutableLiveData<MutableList<String>> =
+        MutableLiveData(mutableListOf())
+    val balanceOutputList: LiveData<MutableList<String>> = _balanceOutputList
+    private lateinit var balanceOutputListField: MutableList<String>
 
     private val commandList = mutableListOf(
         "CPU temp" to "sensors | grep Tdie | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'",
@@ -93,6 +100,20 @@ class HomeViewModel : ViewModel() {
                 poolOutputListField.add("Unpaid balance: ${ethHelper.getUnpaidBalanceLabel()}\n")
                 poolOutputListField.add("ETH/month: ${ethHelper.getEstimatedEthForMonthLabel()}\n")
                 _poolOutputList.value = poolOutputListField
+            },
+            onError = {
+
+            }
+        )
+        ApiManager.getWalletStats(
+            config.wallet.fullEthAddr(),
+            completion = { result ->
+                val ethHelper = EtherscanHelper(result)
+
+                balanceOutputListField = mutableListOf()
+                balanceOutputListField.add("Wallet stats:\n")
+                balanceOutputListField.add("Balance: ${ethHelper.getBalanceLabel()}")
+                _balanceOutputList.value = balanceOutputListField
             },
             onError = {
 
