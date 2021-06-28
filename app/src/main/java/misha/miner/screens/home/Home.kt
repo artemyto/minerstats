@@ -25,6 +25,7 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
     val status by viewModel.status.collectAsState()
 
     val outputList: MutableList<String> by viewModel.outputList.observeAsState(mutableListOf())
+    val poolOutputList: MutableList<String> by viewModel.poolOutputList.observeAsState(mutableListOf())
 
     Column(
         modifier = Modifier
@@ -46,12 +47,13 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
             }
         }
         Text(text = status)
-        CommandList(items = outputList)
+        StringList(items = outputList)
+        StringList(items = poolOutputList)
     }
 }
 
 @Composable
-fun CommandList(
+fun StringList(
     modifier: Modifier = Modifier,
     items: List<String>
 ) {
