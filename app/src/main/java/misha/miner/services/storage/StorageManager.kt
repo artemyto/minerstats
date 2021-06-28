@@ -2,8 +2,8 @@ package misha.miner.services.storage
 
 import io.realm.Realm
 import io.realm.kotlin.where
-import misha.miner.models.StorageEntity
-import misha.miner.models.StorageViewModel
+import misha.miner.models.storage.StorageEntity
+import misha.miner.models.storage.StorageViewModel
 
 object StorageManager {
 

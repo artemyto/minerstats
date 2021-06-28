@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import misha.miner.models.StorageViewModel
+import misha.miner.models.storage.StorageViewModel
 import misha.miner.services.storage.StorageManager
 
 class SettingsViewModel : ViewModel() {

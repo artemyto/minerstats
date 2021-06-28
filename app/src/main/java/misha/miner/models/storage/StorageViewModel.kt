@@ -1,4 +1,4 @@
-package misha.miner.models
+package misha.miner.models.storage
 
 data class StorageViewModel(
     var wallet: String = "",
