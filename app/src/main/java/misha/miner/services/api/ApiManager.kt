@@ -1,6 +1,5 @@
 package misha.miner.services.api
 
-import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,21 +20,16 @@ object ApiManager {
         completion: (EthermineData) -> Unit,
         onError: (BaseError) -> Unit
     ) {
-        Log.d("mytag", "we are in apiManager")
 
         val service = RetrofitFactory.makeRetrofitService(App.getContext())
 
         val endPoint = Constants.Ethermine.statsByAddress(address)
         val apiCall = service::getPoolStats
 
-        Log.d("mytag", "we want to call coroutine")
-
         CoroutineScope(Dispatchers.IO).launch {
-            Log.d("mytag", "we are in routine")
             try {
                 val response = apiCall(endPoint)
                 withContext(Dispatchers.Main) {
-                    Log.d("mytag", "we are returned to Main IO")
                     if (response.isSuccessful) {
                         when {
                             response.body() == null -> {
