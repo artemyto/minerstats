@@ -20,6 +20,7 @@ android {
         buildProps.load(FileInputStream(buildPropsFile))
 
     val etherScanApiKey = buildProps.getProperty("ETHERSCAN_API_KEY", "\"\"")
+    val cmcApiKey = buildProps.getProperty("COINMARKETCAP_API_KEY", "\"\"")
 
     defaultConfig {
         applicationId = "misha.miner"
@@ -28,6 +29,7 @@ android {
         versionCode = 1
         versionName = "1.0"
         buildConfigField("String", "ETHERSCAN_API_KEY", etherScanApiKey)
+        buildConfigField("String", "COINMARKETCAP_API_KEY", cmcApiKey)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
