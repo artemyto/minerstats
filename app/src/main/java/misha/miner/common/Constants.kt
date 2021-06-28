@@ -14,5 +14,14 @@ object Constants {
         const val api = "https://api.etherscan.io/api"
     }
 
+    object CoinMarketCap {
+
+        const val apiKeyName = "X-CMC_PRO_API_KEY"
+
+        private const val base = "https://pro-api.coinmarketcap.com/v1/"
+
+        const val priceConversion = "${base}tools/price-conversion"
+    }
+
     const val exampleBaseUrl = "https://ya.ru"
 }
