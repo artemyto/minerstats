@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import misha.miner.common.EthermineHelper
 import misha.miner.common.EtherscanHelper
 import misha.miner.common.fullEthAddr
+import misha.miner.models.coinmarketcap.currency.CurrencyType
 import misha.miner.services.api.ApiManager
 import misha.miner.services.ssh.SSHConnectionManager
 import misha.miner.services.storage.StorageManager
@@ -110,10 +111,22 @@ class HomeViewModel : ViewModel() {
             completion = { result ->
                 val ethHelper = EtherscanHelper(result)
 
-                balanceOutputListField = mutableListOf()
-                balanceOutputListField.add("Wallet stats:\n")
-                balanceOutputListField.add("Balance: ${ethHelper.getBalanceLabel()}")
-                _balanceOutputList.value = balanceOutputListField
+                val balance = ethHelper.getBalanceValue()
+
+                ApiManager.convertCurrency(
+                    from = CurrencyType.ETH,
+                    to = CurrencyType.RUB,
+                    amount = balance,
+                    completion = { rub ->
+                        balanceOutputListField = mutableListOf()
+                        balanceOutputListField.add("Wallet stats:\n")
+                        balanceOutputListField.add("Balance: ${ethHelper.getBalanceLabel()} / ${String.format("%.1f", rub)} ₽")
+                        _balanceOutputList.value = balanceOutputListField
+                    },
+                    onError = {
+
+                    }
+                )
             },
             onError = {
 
