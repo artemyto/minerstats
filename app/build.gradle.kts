@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.*
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -9,12 +12,22 @@ android {
     compileSdk = 30
     buildToolsVersion = "30.0.3"
 
+    val buildPropsFile = file("build.properties")
+
+    val buildProps = Properties()
+
+    if(buildPropsFile.exists())
+        buildProps.load(FileInputStream(buildPropsFile))
+
+    val etherScanApiKey = buildProps.getProperty("ETHERSCAN_API_KEY", "\"\"")
+
     defaultConfig {
         applicationId = "misha.miner"
         minSdk = 21
         targetSdk = 30
         versionCode = 1
         versionName = "1.0"
+        buildConfigField("String", "ETHERSCAN_API_KEY", etherScanApiKey)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
