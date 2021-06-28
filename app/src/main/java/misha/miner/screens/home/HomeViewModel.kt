@@ -69,7 +69,7 @@ class HomeViewModel : ViewModel() {
 
             _status.emit("Connection to ${config.name}@${config.address}:${config.port} is established")
 
-            outputListField = mutableListOf()
+            outputListField = mutableListOf("PC miner stats:\n")
             commandList.forEach {
                 outputListField.add("${it.first}: ${SSHConnectionManager.runCommand(command = it.second)}")
             }
@@ -84,7 +84,14 @@ class HomeViewModel : ViewModel() {
                 val ethHelper = EthermineHelper(data)
 
                 poolOutputListField = mutableListOf()
-                poolOutputListField.add("ETH/month: ${ethHelper.getEstimatedEthForMonth()}")
+                poolOutputListField.add("Pool miner stats:\n")
+                poolOutputListField.add("Average hashrate: ${ethHelper.getAverageHashrate()}\n")
+                poolOutputListField.add("Reported hashrate: ${ethHelper.getReportedHashrate()}\n")
+                poolOutputListField.add("Current hashrate: ${ethHelper.getCurrentHashrate()}\n")
+                poolOutputListField.add("Workers: ${ethHelper.getWorkers()}\n")
+                poolOutputListField.add("Shares during last hour (valid/stale/invalid): ${ethHelper.getShares()}\n")
+                poolOutputListField.add("Unpaid balance: ${ethHelper.getUnpaidBalanceLabel()}\n")
+                poolOutputListField.add("ETH/month: ${ethHelper.getEstimatedEthForMonthLabel()}\n")
                 _poolOutputList.value = poolOutputListField
             },
             onError = {
