@@ -84,7 +84,9 @@ class SettingsViewModel : ViewModel() {
     }
 
     fun addToCommandList(command: String) {
-        storageContext.commandList.add(command)
-        _commandList.value = storageContext.commandList
+        if (command !in storageContext.commandList) {
+            storageContext.commandList.add(command)
+            _commandList.value = storageContext.commandList
+        }
     }
 }
