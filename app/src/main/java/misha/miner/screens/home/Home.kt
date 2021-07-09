@@ -21,6 +21,7 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
 
     viewModel.initialize()
 
+    val eth: String by viewModel.eth.observeAsState("")
     val poolOutputList: MutableList<String> by viewModel.poolOutputList.observeAsState(mutableListOf())
     val balanceOutputList: MutableList<String> by viewModel.balanceOutputList.observeAsState(mutableListOf())
 
@@ -43,6 +44,7 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
                 Text(text = "refresh")
             }
         }
+        Text(text = eth)
         StringList(items = balanceOutputList)
         StringList(items = poolOutputList)
     }

@@ -3,20 +3,17 @@ package misha.miner.screens.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import misha.miner.common.EthermineHelper
 import misha.miner.common.EtherscanHelper
 import misha.miner.common.fullEthAddr
 import misha.miner.models.coinmarketcap.currency.CurrencyType
 import misha.miner.services.api.ApiManager
-import misha.miner.services.ssh.SSHConnectionManager
 import misha.miner.services.storage.StorageManager
 
 class HomeViewModel : ViewModel() {
+
+    private val _eth: MutableLiveData<String> = MutableLiveData()
+    val eth: LiveData<String> = _eth
 
     private val _poolOutputList: MutableLiveData<MutableList<String>> =
         MutableLiveData(mutableListOf())
@@ -56,6 +53,7 @@ class HomeViewModel : ViewModel() {
     @Suppress("BlockingMethodInNonBlockingContext")
     private fun run() {
 
+        getEth()
         makePoolStats()
         makeWalletStats()
     }
@@ -146,6 +144,21 @@ class HomeViewModel : ViewModel() {
                         "${String.format("%.5f", estimated)} ETH / " +
                         "${String.format("%.0f", estimatedRub)} ₽\n")
                 _balanceOutputList.value = balanceOutputListField
+            },
+            onError = {
+
+            }
+        )
+    }
+
+    private fun getEth() {
+        ApiManager.convertCurrency(
+            from = CurrencyType.ETH,
+            to = CurrencyType.USD,
+            amount = 1.0,
+            completion = { oneEth ->
+
+                _eth.value = "1 eth = ${String.format("%.2f", oneEth)} $\n"
             },
             onError = {
 
