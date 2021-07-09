@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,10 +20,12 @@ fun Rate() {
     Text(
         text = "Курс",
         style = MaterialTheme.typography.h5,
-        modifier = Modifier.clickable {
-            val openUrlIntent = Intent(Intent.ACTION_VIEW)
-            openUrlIntent.data = Uri.parse("https://ru.investing.com/crypto/ethereum/eth-usd")
-            ContextCompat.startActivity(context, openUrlIntent, Bundle())
-        }
+        modifier = Modifier
+            .clickable {
+                val openUrlIntent = Intent(Intent.ACTION_VIEW)
+                openUrlIntent.data = Uri.parse("https://ru.investing.com/crypto/ethereum/eth-usd")
+                ContextCompat.startActivity(context, openUrlIntent, Bundle())
+            }
+            .fillMaxWidth()
     )
 }

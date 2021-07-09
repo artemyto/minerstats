@@ -41,9 +41,11 @@ fun Drawer(
             Text(
                 text = screen.title,
                 style = MaterialTheme.typography.h5,
-                modifier = Modifier.clickable {
-                    onDestinationClicked(screen.route)
-                }
+                modifier = Modifier
+                    .clickable {
+                        onDestinationClicked(screen.route)
+                    }
+                    .fillMaxWidth()
             )
         }
         Spacer(Modifier.height(24.dp))
