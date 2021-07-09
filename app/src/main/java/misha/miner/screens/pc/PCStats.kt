@@ -1,4 +1,4 @@
-package misha.miner.screens.home
+package misha.miner.screens.pc
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -9,6 +9,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,12 +18,13 @@ import kotlinx.coroutines.Job
 import misha.miner.R
 
 @Composable
-fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
+fun PCStats(viewModel: PCStatsViewModel, openDrawer: () -> Job) {
 
     viewModel.initialize()
 
-    val poolOutputList: MutableList<String> by viewModel.poolOutputList.observeAsState(mutableListOf())
-    val balanceOutputList: MutableList<String> by viewModel.balanceOutputList.observeAsState(mutableListOf())
+    val status by viewModel.status.collectAsState()
+
+    val outputList: MutableList<String> by viewModel.outputList.observeAsState(mutableListOf())
 
     Column(
         modifier = Modifier
@@ -43,8 +45,8 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
                 Text(text = "refresh")
             }
         }
-        StringList(items = balanceOutputList)
-        StringList(items = poolOutputList)
+        Text(text = status)
+        StringList(items = outputList)
     }
 }
 

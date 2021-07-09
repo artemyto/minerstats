@@ -16,6 +16,8 @@ import misha.miner.screens.drawer.Drawer
 import misha.miner.screens.drawer.DrawerScreens
 import misha.miner.screens.home.Home
 import misha.miner.screens.home.HomeViewModel
+import misha.miner.screens.pc.PCStats
+import misha.miner.screens.pc.PCStatsViewModel
 import misha.miner.screens.settings.Settings
 import misha.miner.screens.settings.SettingsViewModel
 import misha.miner.screens.ssh.RunCommand
@@ -27,12 +29,18 @@ class MainActivity : ComponentActivity() {
     private val homeViewModel: HomeViewModel by viewModels()
     private val settingsViewModel: SettingsViewModel by viewModels()
     private val runCommandViewModel: RunCommandViewModel by viewModels()
+    private val pcStatsViewModel: PCStatsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyMinerTheme {
-                AppMainScreen(homeViewModel, settingsViewModel, runCommandViewModel)
+                AppMainScreen(
+                    homeViewModel,
+                    settingsViewModel,
+                    runCommandViewModel,
+                    pcStatsViewModel
+                )
             }
         }
     }
@@ -40,7 +48,12 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun AppMainScreen(homeViewModel: HomeViewModel, settingsViewModel: SettingsViewModel, runCommandViewModel: RunCommandViewModel) {
+fun AppMainScreen(
+    homeViewModel: HomeViewModel,
+    settingsViewModel: SettingsViewModel,
+    runCommandViewModel: RunCommandViewModel,
+    pcStatsViewModel: PCStatsViewModel
+) {
     val navController = rememberNavController()
     Surface(color = MaterialTheme.colors.background) {
         val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -77,6 +90,12 @@ fun AppMainScreen(homeViewModel: HomeViewModel, settingsViewModel: SettingsViewM
                         openDrawer
                     )
                 }
+                composable(DrawerScreens.PCStats.route) {
+                    PCStats(
+                        viewModel = pcStatsViewModel,
+                        openDrawer
+                    )
+                }
                 composable(DrawerScreens.RunCommand.route) {
                     RunCommand(
                         viewModel = runCommandViewModel,
@@ -101,6 +120,7 @@ fun DefaultPreview() {
         val homeViewModel = HomeViewModel()
         val settingsViewModel = SettingsViewModel()
         val runCommandViewModel = RunCommandViewModel()
-        AppMainScreen(homeViewModel, settingsViewModel, runCommandViewModel)
+        val pcStatsViewModel = PCStatsViewModel()
+        AppMainScreen(homeViewModel, settingsViewModel, runCommandViewModel, pcStatsViewModel)
     }
 }
