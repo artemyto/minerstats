@@ -83,6 +83,7 @@ fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
         Box(Modifier.padding(top = 8.dp, bottom = 16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically,modifier = Modifier.fillMaxWidth()) {
                 ExposedDropDownMenu(
+                    label = { Text("Выбрать ПК") },
                     text = pc,
                     suggestions = pcLabelList,
                     onTextChanged = {

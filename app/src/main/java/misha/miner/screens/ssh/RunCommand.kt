@@ -50,6 +50,7 @@ fun RunCommand(viewModel: RunCommandViewModel, openDrawer: () -> Job) {
         Box(Modifier.padding(top = 16.dp, bottom = 16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically,modifier = Modifier.fillMaxWidth()) {
                 ExposedDropDownMenu(
+                    label = { Text("Выбрать ПК") },
                     text = pc,
                     suggestions = pcLabelList,
                     onTextChanged = {
@@ -63,6 +64,7 @@ fun RunCommand(viewModel: RunCommandViewModel, openDrawer: () -> Job) {
             Text(text = status)
             Row(modifier = Modifier.fillMaxWidth()) {
                 ExposedDropDownMenu(
+                    label = { Text("Выбрать или добавить команду") },
                     suggestions = commandList,
                     onTextChanged = {
                         viewModel.commandSelected(it)
