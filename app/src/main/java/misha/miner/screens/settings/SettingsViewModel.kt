@@ -51,7 +51,7 @@ class SettingsViewModel : ViewModel() {
             _wallet.value = storageContext.wallet
             _commandList.value = storageContext.commandList
 
-            _pcLabelList.value = storageContext.pcList.mapIndexed { index, _ -> "PC $index" }.toMutableList()
+            _pcLabelList.value = storageContext.pcList.mapIndexed { index, _ -> "PC ${index + 1}" }.toMutableList()
 
             Log.d("mytag", storageContext.toString())
 
