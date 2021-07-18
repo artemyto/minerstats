@@ -6,21 +6,14 @@ import io.realm.RealmObject
 open class StorageEntity: RealmObject() {
 
     var wallet = ""
-    var address = ""
-    var port = ""
-    var name = ""
-    var password = ""
-    var command = ""
+
+    var pcList = RealmList<PCEntity>()
 
     var commandList = RealmList<String>()
 
     fun toViewModel() = StorageViewModel(
         wallet = wallet,
-        address = address,
-        name = name,
-        port = port,
-        password = password,
-        command = command,
+        pcList = pcList.map { it.toViewModel() }.toMutableList(),
         commandList = mutableListOf<String>().apply { addAll(commandList) }
     )
 }

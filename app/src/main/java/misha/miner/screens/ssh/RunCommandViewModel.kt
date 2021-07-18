@@ -41,14 +41,17 @@ class RunCommandViewModel : ViewModel() {
     fun runClicked() {
         CoroutineScope(Dispatchers.IO).launch {
             val config = StorageManager.getStorage()
-            SSHConnectionManager.open(
-                hostname = config.address,
-                port = config.port.toInt(),
-                username = config.name,
-                password = config.password
-            )
-            _status.emit("Connection to ${config.name}@${config.address}:${config.port} is established")
-            _output.emit(SSHConnectionManager.runCommand(command = command))
+            config.pcList.getOrNull(0)?.let {
+                SSHConnectionManager.open(
+                    hostname = it.address,
+                    port = it.port.toInt(),
+                    username = it.name,
+                    password = it.password
+                )
+
+                _status.emit("Connection to ${it.name}@${it.address}:${it.port} is established")
+                _output.emit(SSHConnectionManager.runCommand(command = command))
+            }
 
             commandList.value?.let {
                 if (command !in it) {

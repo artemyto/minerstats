@@ -61,22 +61,25 @@ class PCStatsViewModel : ViewModel() {
             val config = StorageManager.getStorage()
 
             if (!opened) {
-                SSHConnectionManager.open(
-                    hostname = config.address,
-                    port = config.port.toInt(),
-                    username = config.name,
-                    password = config.password
-                )
-                opened = true
+                config.pcList.getOrNull(0)?.let {
+                    SSHConnectionManager.open(
+                        hostname = it.address,
+                        port = it.port.toInt(),
+                        username = it.name,
+                        password = it.password
+                    )
+                    opened = true
+                }
             }
+            config.pcList.getOrNull(0)?.let {
+                _status.emit("Connection to ${it.name}@${it.address}:${it.port} is established")
 
-            _status.emit("Connection to ${config.name}@${config.address}:${config.port} is established")
-
-            outputListField = mutableListOf("PC miner stats:\n")
-            commandList.forEach {
-                outputListField.add("${it.first}: ${SSHConnectionManager.runCommand(command = it.second)}")
+                outputListField = mutableListOf("PC miner stats:\n")
+                commandList.forEach {
+                    outputListField.add("${it.first}: ${SSHConnectionManager.runCommand(command = it.second)}")
+                }
+                _outputList.postValue(outputListField)
             }
-            _outputList.postValue(outputListField)
         }
     }
 }

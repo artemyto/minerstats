@@ -1,24 +1,14 @@
 package misha.miner.models.storage
 
 data class StorageViewModel(
-    var wallet: String = "",
-    var address: String = "",
-    var port: String = "",
-    var name: String = "",
-    var password: String = "",
-    var command: String = "",
+    var wallet: String,
+    val pcList: MutableList<PCViewModel>,
     val commandList: MutableList<String> = mutableListOf()
 ) {
 
-    fun toEntity(): StorageEntity {
-        val entity = StorageEntity()
-        entity.wallet = wallet
-        entity.address = address
-        entity.name = name
-        entity.port = port
-        entity.password = password
-        entity.command = command
-        entity.commandList.addAll(commandList)
-        return entity
+    fun toEntity() = StorageEntity().apply {
+        wallet = this@StorageViewModel.wallet
+        this@StorageViewModel.pcList.forEach { pcList.add(it.toEntity()) }
+        commandList.addAll(this@StorageViewModel.commandList)
     }
 }

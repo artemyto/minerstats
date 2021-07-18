@@ -11,11 +11,14 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
 import misha.miner.R
+import misha.miner.ui.common.ExposedDropDownMenu
 
 @Composable
 fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
@@ -28,8 +31,10 @@ fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
     val nameState: State<String> = viewModel.name.observeAsState("")
     val password: String by viewModel.password.observeAsState("")
     var command by rememberSaveable { mutableStateOf("") }
+    val pc: String by viewModel.pc.observeAsState("")
 
     val commandList: MutableList<String> by viewModel.commandList.observeAsState(mutableListOf())
+    val pcLabelList: MutableList<String> by viewModel.pcLabelList.observeAsState(mutableListOf())
 
     Column(modifier = Modifier
         .fillMaxHeight()
@@ -48,12 +53,50 @@ fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
                 Text(text = "Сохранить")
             }
         }
-        TextField(value = wallet.value,
-            onValueChange = {
-                viewModel.inputWallet(it)
-            },
-            label = { Text("Кошелёк") }
-        )
+        Box(Modifier.padding(top = 16.dp, bottom = 8.dp)) {
+            TextField(value = wallet.value,
+                onValueChange = {
+                    viewModel.inputWallet(it)
+                },
+                label = { Text("Кошелёк") }
+            )
+        }
+        Box(Modifier.padding(top = 8.dp, bottom = 8.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically,modifier = Modifier.fillMaxWidth()) {
+                ExposedDropDownMenu(
+                    label = { Text("Добавить команду") },
+                    suggestions = commandList,
+                    onTextChanged = {
+                        command = it
+                    },
+                    disableListAction = true
+                )
+                Button(
+                    onClick = {
+                    viewModel.addToCommandList(command)
+                    command = ""
+                }) {
+                    Text(text = "Add")
+                }
+            }
+        }
+        Box(Modifier.padding(top = 8.dp, bottom = 16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically,modifier = Modifier.fillMaxWidth()) {
+                ExposedDropDownMenu(
+                    text = pc,
+                    suggestions = pcLabelList,
+                    onTextChanged = {
+                        viewModel.selectedPC(it)
+                    }
+                )
+                Button(
+                    onClick = {
+                        viewModel.newPC()
+                    }) {
+                    Text(text = "New pc")
+                }
+            }
+        }
         TextField(value = address,
             onValueChange = {
                 viewModel.inputAddress(it)
@@ -78,21 +121,6 @@ fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
             },
             label = { Text("Пароль") }
         )
-        Row {
-            TextField(value = command,
-                onValueChange = {
-                    command = it
-                },
-                label = { Text("Добавить команду") }
-            )
-            Button(onClick = {
-                viewModel.addToCommandList(command)
-                command = ""
-            }) {
-                Text("Add")
-            }
-        }
-        CommandList(items = commandList)
     }
 }
 

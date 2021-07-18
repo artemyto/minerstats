@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import misha.miner.models.storage.PCViewModel
 import misha.miner.models.storage.StorageViewModel
 import misha.miner.services.storage.StorageManager
 
@@ -16,6 +17,9 @@ class SettingsViewModel : ViewModel() {
 
     private val _address: MutableLiveData<String> = MutableLiveData("")
     val address: LiveData<String> = _address
+
+    private val _pc: MutableLiveData<String> = MutableLiveData("")
+    val pc: LiveData<String> = _pc
 
     private val _port: MutableLiveData<String> = MutableLiveData("")
     val port: LiveData<String> = _port
@@ -30,7 +34,13 @@ class SettingsViewModel : ViewModel() {
         MutableLiveData(mutableListOf())
     val commandList: LiveData<MutableList<String>> = _commandList
 
+    private val _pcLabelList: MutableLiveData<MutableList<String>> =
+        MutableLiveData(mutableListOf())
+    val pcLabelList: LiveData<MutableList<String>> = _pcLabelList
+
     private lateinit var storageContext : StorageViewModel
+
+    private var index = -1
 
     private var notInitialized = true
 
@@ -39,11 +49,9 @@ class SettingsViewModel : ViewModel() {
             storageContext = StorageManager.getStorage()
 
             _wallet.value = storageContext.wallet
-            _address.value = storageContext.address
-            _port.value = storageContext.port
-            _name.value = storageContext.name
-            _password.value = storageContext.password
             _commandList.value = storageContext.commandList
+
+            _pcLabelList.value = storageContext.pcList.mapIndexed { index, _ -> "PC $index" }.toMutableList()
 
             Log.d("mytag", storageContext.toString())
 
@@ -57,22 +65,26 @@ class SettingsViewModel : ViewModel() {
     }
 
     fun inputAddress(input: String) {
-        storageContext.address = input
+        if (index in storageContext.pcList.indices)
+            storageContext.pcList[index].address = input
         _address.value = input
     }
 
     fun inputPort(input: String) {
-        storageContext.port = input
+        if (index in storageContext.pcList.indices)
+            storageContext.pcList[index].port = input
         _port.value = input
     }
 
     fun inputName(input: String) {
-        storageContext.name = input
+        if (index in storageContext.pcList.indices)
+            storageContext.pcList[index].name = input
         _name.value = input
     }
 
     fun inputPassword(input: String) {
-        storageContext.password = input
+        if (index in storageContext.pcList.indices)
+            storageContext.pcList[index].password = input
         _password.value = input
     }
 
@@ -88,5 +100,31 @@ class SettingsViewModel : ViewModel() {
             storageContext.commandList.add(command)
             _commandList.value = storageContext.commandList
         }
+    }
+
+    fun selectedPC(name: String) {
+        index = (name.filter { it.isDigit() }.toIntOrNull() ?: 0) - 1
+        val pc = storageContext.pcList.getOrNull(index)
+        pc?.let {
+            _address.value = it.address
+            _port.value = it.port
+            _name.value = it.name
+            _password.value = it.password
+        } ?: let {
+            _address.value = ""
+            _port.value = ""
+            _name.value = ""
+            _password.value = ""
+        }
+    }
+
+    fun newPC() {
+        val num = _pcLabelList.value?.size ?: 0
+        val newPC = "PC ${num + 1}"
+        val list = _pcLabelList.value?.toMutableList()
+        list?.add(newPC)
+        storageContext.pcList.add(PCViewModel("","","",""))
+        _pcLabelList.value = list
+        _pc.value = newPC
     }
 }

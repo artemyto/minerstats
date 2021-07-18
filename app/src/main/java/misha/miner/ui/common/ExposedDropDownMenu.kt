@@ -16,11 +16,14 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun ExposedDropDownMenu(
+    text: String = "",
     suggestions: List<String>,
-    onTextChanged: (String) -> Unit
+    onTextChanged: (String) -> Unit,
+    disableListAction: Boolean = false,
+    label: @Composable (() -> Unit)? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf("") }
+    var selectedText by remember { mutableStateOf(text) }
 
     val icon = if (expanded)
         Icons.Filled.ArrowForward
@@ -28,13 +31,13 @@ fun ExposedDropDownMenu(
 
     Column {
         OutlinedTextField(
+            label = label,
             value = selectedText,
             onValueChange = {
                 selectedText = it
                 onTextChanged(it)
             },
-            modifier = Modifier.fillMaxWidth(),
-                    trailingIcon = {
+            trailingIcon = {
                 Icon(icon, null, Modifier.clickable { expanded = !expanded })
             }
         )
@@ -45,9 +48,11 @@ fun ExposedDropDownMenu(
         ) {
             suggestions.forEach { label ->
                 DropdownMenuItem(onClick = {
-                    selectedText = label
-                    expanded = false
-                    onTextChanged(label)
+                    if (!disableListAction) {
+                        selectedText = label
+                        expanded = false
+                        onTextChanged(label)
+                    }
                 }) {
                     Text(text = label)
                 }
