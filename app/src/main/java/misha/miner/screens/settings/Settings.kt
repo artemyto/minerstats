@@ -2,8 +2,6 @@ package misha.miner.screens.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -123,18 +121,6 @@ fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
                 },
                 label = { Text("Пароль") }
             )
-        }
-    }
-}
-
-@Composable
-fun CommandList(
-    modifier: Modifier = Modifier,
-    items: List<String>
-) {
-    LazyColumn(modifier = modifier) {
-        itemsIndexed(items) { index, item ->
-            Text(item)
         }
     }
 }
