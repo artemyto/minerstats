@@ -110,11 +110,15 @@ class SettingsViewModel : ViewModel() {
             _port.value = it.port
             _name.value = it.name
             _password.value = it.password
+
+            _pc.value = name
         } ?: let {
             _address.value = ""
             _port.value = ""
             _name.value = ""
             _password.value = ""
+
+            _pc.value = ""
         }
     }
 

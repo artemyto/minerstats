@@ -97,30 +97,32 @@ fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
                 }
             }
         }
-        TextField(value = address,
-            onValueChange = {
-                viewModel.inputAddress(it)
-            },
-            label = { Text("Адрес сервера") }
-        )
-        TextField(value = port,
-            onValueChange = {
-                viewModel.inputPort(it)
-            },
-            label = { Text("Порт") }
-        )
-        TextField(value = nameState.value,
-            onValueChange = {
-                viewModel.inputName(it)
-            },
-            label = { Text("Имя") }
-        )
-        TextField(value = password,
-            onValueChange = {
-                viewModel.inputPassword(it)
-            },
-            label = { Text("Пароль") }
-        )
+        if (pc.isNotBlank()) {
+            TextField(value = address,
+                onValueChange = {
+                    viewModel.inputAddress(it)
+                },
+                label = { Text("Адрес сервера") }
+            )
+            TextField(value = port,
+                onValueChange = {
+                    viewModel.inputPort(it)
+                },
+                label = { Text("Порт") }
+            )
+            TextField(value = nameState.value,
+                onValueChange = {
+                    viewModel.inputName(it)
+                },
+                label = { Text("Имя") }
+            )
+            TextField(value = password,
+                onValueChange = {
+                    viewModel.inputPassword(it)
+                },
+                label = { Text("Пароль") }
+            )
+        }
     }
 }
 
