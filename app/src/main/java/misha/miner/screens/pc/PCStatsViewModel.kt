@@ -12,6 +12,7 @@ import misha.miner.common.EthermineHelper
 import misha.miner.common.EtherscanHelper
 import misha.miner.common.fullEthAddr
 import misha.miner.models.coinmarketcap.currency.CurrencyType
+import misha.miner.models.storage.PCViewModel
 import misha.miner.services.api.ApiManager
 import misha.miner.services.ssh.SSHConnectionManager
 import misha.miner.services.storage.StorageManager
@@ -44,8 +45,6 @@ class PCStatsViewModel : ViewModel() {
         }
     }
 
-    private var opened = false
-
     fun runClicked() {
         run()
     }
@@ -57,29 +56,32 @@ class PCStatsViewModel : ViewModel() {
     }
 
     private fun makeSshStats() {
+        outputListField = mutableListOf("PC miner stats:\n")
+        val config = StorageManager.getStorage()
+        config.pcList.forEachIndexed { index, item ->
+            runSsh(index, item)
+        }
+    }
+
+    private fun runSsh(index: Int, item: PCViewModel) {
         CoroutineScope(Dispatchers.IO).launch {
-            val config = StorageManager.getStorage()
 
-            if (!opened) {
-                config.pcList.getOrNull(0)?.let {
-                    SSHConnectionManager.open(
-                        hostname = it.address,
-                        port = it.port.toInt(),
-                        username = it.name,
-                        password = it.password
-                    )
-                    opened = true
-                }
-            }
-            config.pcList.getOrNull(0)?.let {
-                _status.emit("Connection to ${it.name}@${it.address}:${it.port} is established")
+            SSHConnectionManager.open(
+                hostname = item.address,
+                port = item.port.toInt(),
+                username = item.name,
+                password = item.password
+            )
+            _status.emit("Connection to ${item.name}@${item.address}:${item.port} is established")
 
-                outputListField = mutableListOf("PC miner stats:\n")
-                commandList.forEach {
-                    outputListField.add("${it.first}: ${SSHConnectionManager.runCommand(command = it.second)}")
-                }
-                _outputList.postValue(outputListField)
+            val localList = mutableListOf("PC ${index + 1}:\n")
+            commandList.forEach {
+                localList.add("${it.first}: ${SSHConnectionManager.runCommand(command = it.second)}")
             }
+            outputListField.addAll(localList)
+            _outputList.postValue(outputListField)
+
+            SSHConnectionManager.close()
         }
     }
 }
