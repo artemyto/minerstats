@@ -16,7 +16,7 @@ object SSHConnectionManager {
     private var hostname = "myhost"
     private var port = 22
 
-    fun setup(hostname: String, port: Int, username: String, password: String) {
+    private fun setup(hostname: String, port: Int, username: String, password: String) {
         this.hostname = hostname
         this.port = port
         this.username = username
@@ -41,9 +41,7 @@ object SSHConnectionManager {
             config["StrictHostKeyChecking"] = "no" // not recommended
             it.setConfig(config)
             it.setPassword(password)
-            println("Connecting SSH to $hostname - Please wait for few seconds... ")
             it.connect()
-            println("Connected!")
         }
     }
 
@@ -64,7 +62,7 @@ object SSHConnectionManager {
             channel.setCommand(cmd)
             channel.inputStream = null
 
-            val `in`: InputStream = channel.inputStream // channel.getInputStream();
+            val iStr: InputStream = channel.inputStream
             channel.connect()
 
             if (sendPassword) {
@@ -73,21 +71,20 @@ object SSHConnectionManager {
                 out.flush()
             }
 
-            ret = getChannelOutput(channel, `in`)
+            ret = getChannelOutput(channel, iStr)
             channel.disconnect()
-            println("Finished sending commands!")
         }
         return ret
     }
 
     @Throws(IOException::class)
-    private fun getChannelOutput(channel: Channel, `in`: InputStream): String {
+    private fun getChannelOutput(channel: Channel, iStr: InputStream): String {
         val buffer = ByteArray(1024)
         val strBuilder = StringBuilder()
         val line = ""
         while (true) {
-            while (`in`.available() > 0) {
-                val i: Int = `in`.read(buffer, 0, 1024)
+            while (iStr.available() > 0) {
+                val i: Int = iStr.read(buffer, 0, 1024)
                 if (i < 0) {
                     break
                 }
@@ -110,6 +107,5 @@ object SSHConnectionManager {
 
     fun close() {
         session?.disconnect()
-        println("Disconnected channel and session")
     }
 }
