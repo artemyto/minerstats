@@ -67,7 +67,9 @@ class PCStatsViewModel : ViewModel() {
     private fun runSsh(index: Int, item: PCViewModel) {
         CoroutineScope(Dispatchers.IO).launch {
 
-            SSHConnectionManager.open(
+            val ssh = SSHConnectionManager()
+
+            ssh.open(
                 hostname = item.address,
                 port = item.port.toInt(),
                 username = item.name,
@@ -77,12 +79,12 @@ class PCStatsViewModel : ViewModel() {
 
             val localList = mutableListOf("PC ${index + 1}:\n")
             commandList.forEach {
-                localList.add("${it.first}: ${SSHConnectionManager.runCommand(command = it.second)}")
+                localList.add("${it.first}: ${ssh.runCommand(command = it.second)}")
             }
             outputListField.addAll(localList)
             _outputList.postValue(outputListField)
 
-            SSHConnectionManager.close()
+            ssh.close()
         }
     }
 }

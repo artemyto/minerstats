@@ -9,7 +9,7 @@ import java.lang.RuntimeException
 import java.lang.StringBuilder
 import java.util.*
 
-object SSHConnectionManager {
+class SSHConnectionManager() {
     private var session: Session? = null
     private var username = "user"
     private var password = "password"

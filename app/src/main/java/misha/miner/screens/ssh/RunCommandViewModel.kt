@@ -60,8 +60,13 @@ class RunCommandViewModel : ViewModel() {
     fun runClicked() {
         CoroutineScope(Dispatchers.IO).launch {
             val config = StorageManager.getStorage()
+
+            val ssh = SSHConnectionManager()
+
             config.pcList.getOrNull(index)?.let {
-                SSHConnectionManager.open(
+
+
+                ssh.open(
                     hostname = it.address,
                     port = it.port.toInt(),
                     username = it.name,
@@ -69,7 +74,7 @@ class RunCommandViewModel : ViewModel() {
                 )
 
                 _status.emit("Connection to ${it.name}@${it.address}:${it.port} is established")
-                _output.emit(SSHConnectionManager.runCommand(command = command))
+                _output.emit(ssh.runCommand(command = command))
             }
 
             commandList.value?.let {
@@ -82,7 +87,7 @@ class RunCommandViewModel : ViewModel() {
                 }
             }
 
-            SSHConnectionManager.close()
+            ssh.close()
         }
     }
 
