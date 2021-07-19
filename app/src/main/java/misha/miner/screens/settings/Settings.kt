@@ -88,11 +88,19 @@ fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
                         viewModel.selectedPC(it)
                     }
                 )
-                Button(
-                    onClick = {
-                        viewModel.newPC()
-                    }) {
-                    Text(text = "New pc")
+                Column {
+                    Button(
+                        onClick = {
+                            viewModel.newPC()
+                        }) {
+                        Text(text = "New pc")
+                    }
+                    Button(
+                        onClick = {
+                            viewModel.removePC()
+                        }) {
+                        Text(text = "Remove pc")
+                    }
                 }
             }
         }

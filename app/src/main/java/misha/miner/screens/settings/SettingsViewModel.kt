@@ -131,4 +131,18 @@ class SettingsViewModel : ViewModel() {
         _pcLabelList.value = list
         _pc.value = newPC
     }
+
+    fun removePC() {
+        val pc = storageContext.pcList.getOrNull(index)
+        pc?.let {
+            val list = _pcLabelList.value?.toMutableList()
+            list?.removeAt(index)
+            storageContext.pcList.removeAt(index)
+            _pcLabelList.value = list
+
+            if (index == storageContext.pcList.size)
+                index = storageContext.pcList.size - 1
+            selectedPC("PC $index")
+        }
+    }
 }
