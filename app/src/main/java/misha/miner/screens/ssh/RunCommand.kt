@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -18,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
 import misha.miner.R
+import misha.miner.models.common.ErrorState
 import misha.miner.ui.common.ExposedDropDownMenu
 
 @Composable
@@ -28,6 +27,8 @@ fun RunCommand(viewModel: RunCommandViewModel, openDrawer: () -> Job) {
     val status by viewModel.status.collectAsState()
     val output by viewModel.output.collectAsState()
     val pc: String by viewModel.pc.observeAsState("")
+
+    val error by viewModel.error.collectAsState()
 
     val commandList: MutableList<String> by viewModel.commandList.observeAsState(mutableListOf())
     val pcLabelList: MutableList<String> by viewModel.pcLabelList.observeAsState(mutableListOf())
@@ -82,6 +83,34 @@ fun RunCommand(viewModel: RunCommandViewModel, openDrawer: () -> Job) {
                 Text(text = output)
             }
         }
+    }
+
+    if (error is ErrorState.Error) {
+        val message = (error as ErrorState.Error).message
+        AlertDialog(
+            onDismissRequest = {  },
+            title = { Text(text = "Error") },
+            text = { Text(
+                text = message
+            ) },
+
+            confirmButton = {
+
+            },
+
+            dismissButton = {
+                Button(onClick = {
+                    viewModel.error.value = ErrorState.None
+                },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Blue,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text(text = "Okay")
+                }
+            }
+        )
     }
 }
 

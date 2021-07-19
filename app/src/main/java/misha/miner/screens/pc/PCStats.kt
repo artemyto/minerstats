@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import kotlinx.coroutines.Job
 import misha.miner.R
+import misha.miner.models.common.ErrorState
 
 @Composable
 fun PCStats(viewModel: PCStatsViewModel, openDrawer: () -> Job) {
@@ -23,6 +22,7 @@ fun PCStats(viewModel: PCStatsViewModel, openDrawer: () -> Job) {
     viewModel.initialize()
 
     val status by viewModel.status.collectAsState()
+    val error by viewModel.error.collectAsState()
 
     val outputList: MutableList<String> by viewModel.outputList.observeAsState(mutableListOf())
 
@@ -47,6 +47,34 @@ fun PCStats(viewModel: PCStatsViewModel, openDrawer: () -> Job) {
         }
         Text(text = status)
         StringList(items = outputList)
+    }
+
+    if (error is ErrorState.Error) {
+        val message = (error as ErrorState.Error).message
+        AlertDialog(
+            onDismissRequest = {  },
+            title = { Text(text = "Error") },
+            text = { Text(
+                text = message
+            ) },
+
+            confirmButton = {
+
+            },
+
+            dismissButton = {
+                Button(onClick = {
+                    viewModel.error.value = ErrorState.None
+                },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Blue,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text(text = "Okay")
+                }
+            }
+        )
     }
 }
 

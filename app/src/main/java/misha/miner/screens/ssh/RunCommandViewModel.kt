@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import misha.miner.models.common.ErrorState
 import misha.miner.models.storage.StorageViewModel
 import misha.miner.services.ssh.SSHConnectionManager
 import misha.miner.services.storage.StorageManager
@@ -30,6 +31,8 @@ class RunCommandViewModel : ViewModel() {
     private val _commandList: MutableLiveData<MutableList<String>> =
         MutableLiveData(mutableListOf())
     val commandList: LiveData<MutableList<String>> = _commandList
+
+    val error: MutableStateFlow<ErrorState> = MutableStateFlow(ErrorState.None)
 
     private var command = ""
 
@@ -65,16 +68,19 @@ class RunCommandViewModel : ViewModel() {
 
             config.pcList.getOrNull(index)?.let {
 
+                try {
+                    ssh.open(
+                        hostname = it.address,
+                        port = it.port.toInt(),
+                        username = it.name,
+                        password = it.password
+                    )
 
-                ssh.open(
-                    hostname = it.address,
-                    port = it.port.toInt(),
-                    username = it.name,
-                    password = it.password
-                )
-
-                _status.emit("Connection to ${it.name}@${it.address}:${it.port} is established")
-                _output.emit(ssh.runCommand(command = command))
+                    _status.emit("Connection to ${it.name}@${it.address}:${it.port} is established")
+                    _output.emit(ssh.runCommand(command = command))
+                } catch (e: Exception) {
+                    error.emit(ErrorState.Error(e.message ?: ""))
+                }
             }
 
             commandList.value?.let {

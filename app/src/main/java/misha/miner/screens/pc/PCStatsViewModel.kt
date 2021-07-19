@@ -8,12 +8,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import misha.miner.common.EthermineHelper
-import misha.miner.common.EtherscanHelper
-import misha.miner.common.fullEthAddr
-import misha.miner.models.coinmarketcap.currency.CurrencyType
+import misha.miner.models.common.ErrorState
 import misha.miner.models.storage.PCViewModel
-import misha.miner.services.api.ApiManager
 import misha.miner.services.ssh.SSHConnectionManager
 import misha.miner.services.storage.StorageManager
 
@@ -26,6 +22,8 @@ class PCStatsViewModel : ViewModel() {
         MutableLiveData(mutableListOf())
     val outputList: LiveData<MutableList<String>> = _outputList
     private lateinit var outputListField: MutableList<String>
+
+    val error: MutableStateFlow<ErrorState> = MutableStateFlow(ErrorState.None)
 
     private val commandList = mutableListOf(
         "CPU temp" to "sensors | grep Tdie | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'",
@@ -69,21 +67,24 @@ class PCStatsViewModel : ViewModel() {
 
             val ssh = SSHConnectionManager()
 
-            ssh.open(
-                hostname = item.address,
-                port = item.port.toInt(),
-                username = item.name,
-                password = item.password
-            )
-            _status.emit("Connection to ${item.name}@${item.address}:${item.port} is established")
+            try {
+                ssh.open(
+                    hostname = item.address,
+                    port = item.port.toInt(),
+                    username = item.name,
+                    password = item.password
+                )
+                _status.emit("Connection to ${item.name}@${item.address}:${item.port} is established")
 
-            val localList = mutableListOf("PC ${index + 1}:\n")
-            commandList.forEach {
-                localList.add("${it.first}: ${ssh.runCommand(command = it.second)}")
+                val localList = mutableListOf("PC ${index + 1}:\n")
+                commandList.forEach {
+                    localList.add("${it.first}: ${ssh.runCommand(command = it.second)}")
+                }
+                outputListField.addAll(localList)
+                _outputList.postValue(outputListField)
+            } catch (e: Exception) {
+                error.emit(ErrorState.Error(e.message ?: ""))
             }
-            outputListField.addAll(localList)
-            _outputList.postValue(outputListField)
-
             ssh.close()
         }
     }
