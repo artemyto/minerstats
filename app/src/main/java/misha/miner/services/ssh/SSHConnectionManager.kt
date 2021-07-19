@@ -3,6 +3,7 @@ package misha.miner.services.ssh
 import com.jcraft.jsch.*
 import java.io.IOException
 import java.io.InputStream
+import java.io.PrintStream
 import java.lang.Exception
 import java.lang.RuntimeException
 import java.lang.StringBuilder
@@ -51,17 +52,27 @@ object SSHConnectionManager {
         var ret = ""
         session?.let { session ->
             if (!session.isConnected) throw RuntimeException("Not connected to an open session.  Call open() first!")
+
+            val sendPassword = command.toString().contains("sudo")
+
+            val cmd =
+                if (sendPassword)
+                    command.toString().replace("sudo", "sudo -S -p ''")
+                else command
+
             val channel = session.openChannel("exec") as ChannelExec
-            channel.setCommand(command)
+            channel.setCommand(cmd)
             channel.inputStream = null
-//            val out = PrintStream(channel.outputStream)
+
             val `in`: InputStream = channel.inputStream // channel.getInputStream();
             channel.connect()
 
-            // you can also send input to your running process like so:
-            // String someInputToProcess = "something";
-            // out.println(someInputToProcess);
-            // out.flush();
+            if (sendPassword) {
+                val out = PrintStream(channel.outputStream)
+                out.println(password)
+                out.flush()
+            }
+
             ret = getChannelOutput(channel, `in`)
             channel.disconnect()
             println("Finished sending commands!")
