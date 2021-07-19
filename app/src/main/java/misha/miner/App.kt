@@ -2,15 +2,15 @@ package misha.miner
 
 import android.app.Application
 import android.content.Context
+import dagger.hilt.android.HiltAndroidApp
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
+@HiltAndroidApp
 class App: Application() {
 
     override fun onCreate() {
         super.onCreate()
-
-        mInstance = this
 
         Realm.init(this)
 
@@ -21,14 +21,5 @@ class App: Application() {
                 .allowWritesOnUiThread(true)
                 .build()
         )
-    }
-
-    companion object {
-
-        var mInstance: App? = null
-
-        fun getContext(): Context? {
-            return mInstance?.applicationContext
-        }
     }
 }

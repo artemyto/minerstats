@@ -11,10 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import misha.miner.services.storage.StorageManager
+import androidx.lifecycle.viewmodel.compose.viewModel
+import misha.miner.MainViewModel
 
 @Composable
-fun Wallet() {
+fun Wallet(
+    mainViewModel: MainViewModel = viewModel()
+) {
 
     val context = LocalContext.current
 
@@ -25,7 +28,7 @@ fun Wallet() {
             .clickable {
                 val openUrlIntent = Intent(Intent.ACTION_VIEW)
                 openUrlIntent.data =
-                    Uri.parse("https://www.etherchain.org/account/${StorageManager.getStorage().wallet}")
+                    Uri.parse("https://www.etherchain.org/account/${mainViewModel.getStorage().wallet}")
                 ContextCompat.startActivity(context, openUrlIntent, Bundle())
             }
             .fillMaxWidth()

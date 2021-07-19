@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
     id("realm-android")
 }
 
@@ -76,6 +77,10 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:${rootProject.extra["compose_version"]}")
+
+    //Hilt
+    kapt("com.google.dagger:hilt-compiler:${rootProject.extra["hilt_version"]}")
+    implementation("com.google.dagger:hilt-android:${rootProject.extra["hilt_version"]}")
 
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

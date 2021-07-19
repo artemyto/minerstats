@@ -3,14 +3,20 @@ package misha.miner.screens.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import misha.miner.common.EthermineHelper
 import misha.miner.common.EtherscanHelper
 import misha.miner.common.fullEthAddr
 import misha.miner.models.coinmarketcap.currency.CurrencyType
 import misha.miner.services.api.ApiManager
 import misha.miner.services.storage.StorageManager
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val storageManager: StorageManager,
+    private val apiManager: ApiManager
+): ViewModel() {
 
     private val _eth: MutableLiveData<String> = MutableLiveData()
     val eth: LiveData<String> = _eth
@@ -61,10 +67,10 @@ class HomeViewModel : ViewModel() {
     private fun makePoolStats() {
         if (poolStatus == RunStatus.Finished) {
 
-            val config = StorageManager.getStorage()
+            val config = storageManager.getStorage()
 
             poolStatus = RunStatus.Launched
-            ApiManager.getPoolStats(
+            apiManager.getPoolStats(
                 config.wallet,
                 completion = { data ->
                     val ethHelper = EthermineHelper(data)
@@ -95,10 +101,10 @@ class HomeViewModel : ViewModel() {
     private fun makeWalletStats() {
         if (walletStatus == RunStatus.Finished) {
 
-            val config = StorageManager.getStorage()
+            val config = storageManager.getStorage()
 
             walletStatus = RunStatus.Launched
-            ApiManager.getWalletStats(
+            apiManager.getWalletStats(
                 config.wallet.fullEthAddr(),
                 completion = { result ->
                     val ethHelper = EtherscanHelper(result)
@@ -117,7 +123,7 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun makeBalanceStats() {
-        ApiManager.convertCurrency(
+        apiManager.convertCurrency(
             from = CurrencyType.ETH,
             to = CurrencyType.RUB,
             amount = 1.0,
@@ -152,7 +158,7 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun getEth() {
-        ApiManager.convertCurrency(
+        apiManager.convertCurrency(
             from = CurrencyType.ETH,
             to = CurrencyType.USD,
             amount = 1.0,

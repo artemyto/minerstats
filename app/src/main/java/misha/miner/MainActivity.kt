@@ -3,14 +3,15 @@ package misha.miner
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import misha.miner.screens.drawer.Drawer
 import misha.miner.screens.drawer.DrawerScreens
@@ -24,23 +25,14 @@ import misha.miner.screens.ssh.RunCommand
 import misha.miner.screens.ssh.RunCommandViewModel
 import misha.miner.ui.theme.MyMinerTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    private val homeViewModel: HomeViewModel by viewModels()
-    private val settingsViewModel: SettingsViewModel by viewModels()
-    private val runCommandViewModel: RunCommandViewModel by viewModels()
-    private val pcStatsViewModel: PCStatsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyMinerTheme {
-                AppMainScreen(
-                    homeViewModel,
-                    settingsViewModel,
-                    runCommandViewModel,
-                    pcStatsViewModel
-                )
+                AppMainScreen()
             }
         }
     }
@@ -49,10 +41,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun AppMainScreen(
-    homeViewModel: HomeViewModel,
-    settingsViewModel: SettingsViewModel,
-    runCommandViewModel: RunCommandViewModel,
-    pcStatsViewModel: PCStatsViewModel
+    homeViewModel: HomeViewModel = viewModel(),
+    settingsViewModel: SettingsViewModel = viewModel(),
+    runCommandViewModel: RunCommandViewModel = viewModel(),
+    pcStatsViewModel: PCStatsViewModel = viewModel()
 ) {
     val navController = rememberNavController()
     Surface(color = MaterialTheme.colors.background) {
@@ -117,10 +109,6 @@ fun AppMainScreen(
 @Composable
 fun DefaultPreview() {
     MyMinerTheme {
-        val homeViewModel = HomeViewModel()
-        val settingsViewModel = SettingsViewModel()
-        val runCommandViewModel = RunCommandViewModel()
-        val pcStatsViewModel = PCStatsViewModel()
-        AppMainScreen(homeViewModel, settingsViewModel, runCommandViewModel, pcStatsViewModel)
+        AppMainScreen()
     }
 }

@@ -3,6 +3,7 @@ package misha.miner.screens.ssh
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,8 +13,12 @@ import misha.miner.models.common.ErrorState
 import misha.miner.models.storage.StorageViewModel
 import misha.miner.services.ssh.SSHConnectionManager
 import misha.miner.services.storage.StorageManager
+import javax.inject.Inject
 
-class RunCommandViewModel : ViewModel() {
+@HiltViewModel
+class RunCommandViewModel @Inject constructor(
+    private val storageManager: StorageManager
+): ViewModel() {
 
     private val _status: MutableStateFlow<String> = MutableStateFlow("Connection is not opened yet")
     val status: StateFlow<String> = _status
@@ -42,7 +47,7 @@ class RunCommandViewModel : ViewModel() {
 
     fun initialize() {
         if (notInitialized) {
-            storageContext = StorageManager.getStorage()
+            storageContext = storageManager.getStorage()
             _commandList.value = storageContext.commandList
             _pcLabelList.value = storageContext.pcList.mapIndexed { index, _ -> "PC ${index + 1}" }.toMutableList()
         }
@@ -62,7 +67,7 @@ class RunCommandViewModel : ViewModel() {
     @Suppress("BlockingMethodInNonBlockingContext")
     fun runClicked() {
         CoroutineScope(Dispatchers.IO).launch {
-            val config = StorageManager.getStorage()
+            val config = storageManager.getStorage()
 
             val ssh = SSHConnectionManager()
 
@@ -85,10 +90,10 @@ class RunCommandViewModel : ViewModel() {
 
             commandList.value?.let {
                 if (command !in it) {
-                    var storageContext = StorageManager.getStorage()
+                    var storageContext = storageManager.getStorage()
                     storageContext.commandList.add(command)
-                    StorageManager.update(storageContext)
-                    storageContext = StorageManager.getStorage()
+                    storageManager.update(storageContext)
+                    storageContext = storageManager.getStorage()
                     _commandList.postValue(storageContext.commandList)
                 }
             }

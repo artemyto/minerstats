@@ -4,13 +4,19 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import misha.miner.models.storage.PCViewModel
 import misha.miner.models.storage.StorageViewModel
 import misha.miner.services.storage.StorageManager
+import misha.miner.services.storage.StorageManagerImpl
+import javax.inject.Inject
 
-class SettingsViewModel : ViewModel() {
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    private val storageManager: StorageManager
+): ViewModel() {
 
     private val _wallet: MutableStateFlow<String> = MutableStateFlow("")
     val wallet: StateFlow<String> = _wallet
@@ -46,7 +52,7 @@ class SettingsViewModel : ViewModel() {
 
     fun initialization() {
         if (notInitialized) {
-            storageContext = StorageManager.getStorage()
+            storageContext = storageManager.getStorage()
 
             _wallet.value = storageContext.wallet
             _commandList.value = storageContext.commandList
@@ -92,7 +98,7 @@ class SettingsViewModel : ViewModel() {
 
         Log.d("mytag", storageContext.toString())
 
-        StorageManager.update(storageContext)
+        storageManager.update(storageContext)
     }
 
     fun addToCommandList(command: String) {

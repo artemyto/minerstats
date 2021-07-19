@@ -3,6 +3,7 @@ package misha.miner.screens.pc
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,8 +13,12 @@ import misha.miner.models.common.ErrorState
 import misha.miner.models.storage.PCViewModel
 import misha.miner.services.ssh.SSHConnectionManager
 import misha.miner.services.storage.StorageManager
+import javax.inject.Inject
 
-class PCStatsViewModel : ViewModel() {
+@HiltViewModel
+class PCStatsViewModel @Inject constructor(
+    private val storageManager: StorageManager
+): ViewModel() {
 
     private val _status: MutableStateFlow<String> = MutableStateFlow("Connection is not opened yet")
     val status: StateFlow<String> = _status
@@ -56,7 +61,7 @@ class PCStatsViewModel : ViewModel() {
 
     private fun makeSshStats() {
         outputListField = mutableListOf("PC miner stats:\n")
-        val config = StorageManager.getStorage()
+        val config = storageManager.getStorage()
         config.pcList.forEachIndexed { index, item ->
             runSsh(index, item)
         }

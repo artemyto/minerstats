@@ -11,10 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import misha.miner.services.storage.StorageManager
+import androidx.lifecycle.viewmodel.compose.viewModel
+import misha.miner.MainViewModel
+import misha.miner.services.storage.StorageManagerImpl
 
 @Composable
-fun Pool() {
+fun Pool(
+    mainViewModel: MainViewModel = viewModel()
+) {
 
     val context = LocalContext.current
 
@@ -25,7 +29,7 @@ fun Pool() {
             .clickable {
                 val openUrlIntent = Intent(Intent.ACTION_VIEW)
                 openUrlIntent.data =
-                    Uri.parse("https://ethermine.org/miners/${StorageManager.getStorage().wallet}/dashboard")
+                    Uri.parse("https://ethermine.org/miners/${mainViewModel.getStorage().wallet}/dashboard")
                 ContextCompat.startActivity(context, openUrlIntent, Bundle())
             }
             .fillMaxWidth()
