@@ -22,8 +22,8 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
         refreshClicked = { viewModel.runClicked() },
         list = mutableListOf<String>().apply {
             if (eth.isNotBlank()) add(eth)
-            addAll(poolOutputList)
             addAll(balanceOutputList)
+            addAll(poolOutputList)
         }
     )
 }
