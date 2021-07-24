@@ -1,17 +1,13 @@
 package misha.miner.screens.pc
 
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.Job
 import misha.miner.models.common.ErrorState
 import misha.miner.ui.common.BaseScreen
+import misha.miner.ui.common.ErrorAlert
 
 @Composable
 fun PCStats(viewModel: PCStatsViewModel, openDrawer: () -> Job) {
@@ -31,29 +27,9 @@ fun PCStats(viewModel: PCStatsViewModel, openDrawer: () -> Job) {
 
     if (error is ErrorState.Error) {
         val message = (error as ErrorState.Error).message
-        AlertDialog(
-            onDismissRequest = {  },
-            title = { Text(text = "Error") },
-            text = { Text(
-                text = message
-            ) },
 
-            confirmButton = {
-
-            },
-
-            dismissButton = {
-                Button(onClick = {
-                    viewModel.error.value = ErrorState.None
-                },
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.Blue,
-                        contentColor = Color.White
-                    )
-                ) {
-                    Text(text = "Okay")
-                }
-            }
-        )
+        ErrorAlert(message = message) {
+            viewModel.error.value = ErrorState.None
+        }
     }
 }
