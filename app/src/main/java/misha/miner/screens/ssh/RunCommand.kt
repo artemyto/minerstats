@@ -1,7 +1,8 @@
 package misha.miner.screens.ssh
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -11,11 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import kotlinx.coroutines.Job
 import misha.miner.R
 import misha.miner.models.common.ErrorState
@@ -36,52 +37,91 @@ fun RunCommand(viewModel: RunCommandViewModel, openDrawer: () -> Job) {
     val commandList: MutableList<String> by viewModel.commandList.observeAsState(mutableListOf())
     val pcLabelList: MutableList<String> by viewModel.pcLabelList.observeAsState(mutableListOf())
 
-    Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .background(Color.LightGray)
+    ConstraintLayout(
+        modifier = Modifier.fillMaxSize()
     ) {
 
-        Button(onClick = {
-            openDrawer()
-        }) {
+        val (menu, pcDropDown, statusText, commandDropDown, run, lazyList) = createRefs()
+
+        Button(
+            modifier = Modifier.constrainAs(menu) {
+                top.linkTo(parent.top, 16.dp)
+                start.linkTo(parent.start, 16.dp)
+            },
+            onClick = {
+                openDrawer()
+            }
+        ) {
             Icon(
                 painter = painterResource(id = R.drawable.img_burger_menu),
                 contentDescription = null
             )
         }
 
-        Box(Modifier.padding(top = 16.dp, bottom = 16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically,modifier = Modifier.fillMaxWidth()) {
-                ExposedDropDownMenu(
-                    label = { Text("Выбрать ПК") },
-                    text = pc,
-                    suggestions = pcLabelList,
-                    onTextChanged = {
-                        viewModel.selectedPC(it)
-                    }
-                )
+        ExposedDropDownMenu(
+            modifier = Modifier.constrainAs(pcDropDown) {
+                top.linkTo(menu.bottom, 16.dp)
+                linkTo(parent.start, parent.end, startMargin = 16.dp, endMargin = 16.dp)
+                width = Dimension.fillToConstraints
+            },
+            label = { Text("Выбрать ПК") },
+            text = pc,
+            suggestions = pcLabelList,
+            onTextChanged = {
+                viewModel.selectedPC(it)
             }
-        }
+        )
 
         if (pc.isNotBlank()) {
-            Text(text = status)
-            Row(modifier = Modifier.fillMaxWidth()) {
-                ExposedDropDownMenu(
-                    label = { Text("Выбрать или добавить команду") },
-                    suggestions = commandList,
-                    onTextChanged = {
-                        viewModel.commandSelected(it)
-                    }
-                )
-                Button(onClick = { viewModel.runClicked() }) {
-                    Text(text = "run")
+
+            Text(
+                modifier = Modifier.constrainAs(statusText) {
+                    top.linkTo(pcDropDown.bottom, 16.dp)
+                    linkTo(
+                        parent.start,
+                        parent.end,
+                        startMargin = 16.dp,
+                        endMargin = 16.dp,
+                        bias = 0F
+                    )
+                },
+                text = status
+            )
+
+            ExposedDropDownMenu(
+                modifier = Modifier.constrainAs(commandDropDown) {
+                    top.linkTo(statusText.bottom, 16.dp)
+                    linkTo(parent.start, run.start, startMargin = 16.dp, endMargin = 16.dp)
+                    width = Dimension.fillToConstraints
+                },
+                label = { Text("Выбрать или добавить команду") },
+                suggestions = commandList,
+                onTextChanged = {
+                    viewModel.commandSelected(it)
                 }
+            )
+
+            Button(
+                modifier = Modifier.constrainAs(run) {
+                    top.linkTo(commandDropDown.top, 8.dp)
+                    height = Dimension.value(56.dp)
+                    end.linkTo(parent.end, 16.dp)
+                },
+                onClick = { viewModel.runClicked() }
+            ) {
+                Text(text = "run")
             }
+
             Column(
                 modifier = Modifier
+                    .constrainAs(lazyList) {
+                        linkTo(run.bottom, parent.bottom, topMargin = 16.dp)
+                        height = Dimension.fillToConstraints
+                        linkTo(parent.start, parent.end, startMargin = 16.dp, endMargin = 16.dp)
+                        width = Dimension.fillToConstraints
+                    }
                     .verticalScroll(rememberScrollState())
-                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
             ) {
                 Text(text = output)
             }
