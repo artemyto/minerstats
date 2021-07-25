@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import misha.miner.ui.common.icons.ArrowDropUp
 
 @SuppressLint("ModifierParameter")
 @Composable
@@ -28,7 +28,7 @@ fun ExposedDropDownMenu(
     var selectedText by remember { mutableStateOf(text) }
 
     val icon = if (expanded)
-        Icons.Filled.ArrowForward
+        Icons.Filled.ArrowDropUp
     else Icons.Filled.ArrowDropDown
 
     ConstraintLayout(
