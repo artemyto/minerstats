@@ -1,6 +1,5 @@
 package misha.miner.screens.settings
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +9,6 @@ import kotlinx.coroutines.flow.StateFlow
 import misha.miner.models.storage.PCViewModel
 import misha.miner.models.storage.StorageViewModel
 import misha.miner.services.storage.StorageManager
-import misha.miner.services.storage.StorageManagerImpl
 import javax.inject.Inject
 
 @HiltViewModel
@@ -59,8 +57,6 @@ class SettingsViewModel @Inject constructor(
 
             _pcLabelList.value = storageContext.pcList.mapIndexed { index, _ -> "PC ${index + 1}" }.toMutableList()
 
-            Log.d("mytag", storageContext.toString())
-
             notInitialized = false
         }
     }
@@ -95,9 +91,6 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun save() {
-
-        Log.d("mytag", storageContext.toString())
-
         storageManager.update(storageContext)
     }
 
@@ -136,6 +129,7 @@ class SettingsViewModel @Inject constructor(
         storageContext.pcList.add(PCViewModel("","","",""))
         _pcLabelList.value = list
         _pc.value = newPC
+        selectedPC(newPC)
     }
 
     fun removePC() {

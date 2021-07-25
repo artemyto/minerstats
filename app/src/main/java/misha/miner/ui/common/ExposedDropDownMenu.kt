@@ -44,7 +44,7 @@ fun ExposedDropDownMenu(
                 width = Dimension.fillToConstraints
             },
             label = label,
-            value = selectedText,
+            value = if (text.isNotBlank()) text else selectedText,
             onValueChange = {
                 selectedText = it
                 onTextChanged(it)
