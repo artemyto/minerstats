@@ -22,11 +22,23 @@ class PCStatsViewModel @Inject constructor(
 
     private val _status: MutableStateFlow<String> = MutableStateFlow("Connection is not opened yet")
     val status: StateFlow<String> = _status
+    private var statuses: MutableList<String> = mutableListOf()
 
     private val _outputList: MutableLiveData<MutableList<String>> =
         MutableLiveData(mutableListOf())
     val outputList: LiveData<MutableList<String>> = _outputList
     private lateinit var outputListField: MutableList<String>
+
+    private var listOfOutputs: MutableList<MutableList<String>> = mutableListOf()
+
+    private val _pcLabelList: MutableLiveData<MutableList<String>> =
+        MutableLiveData(mutableListOf())
+    val pcLabelList: LiveData<MutableList<String>> = _pcLabelList
+    private var pcLabelListValue: MutableList<String> = mutableListOf()
+
+    private val _selectedPC: MutableStateFlow<Int> = MutableStateFlow(-1)
+    val selectedPC: StateFlow<Int> = _selectedPC
+    private var selectedIndex = -1
 
     val error: MutableStateFlow<ErrorState> = MutableStateFlow(ErrorState.None)
 
@@ -45,6 +57,10 @@ class PCStatsViewModel @Inject constructor(
     fun initialize() {
         if (!initialized) {
             initialized = true
+
+            _selectedPC.value = 0
+            selectedIndex = 0
+
             run()
         }
     }
@@ -62,9 +78,19 @@ class PCStatsViewModel @Inject constructor(
     private fun makeSshStats() {
         outputListField = mutableListOf("PC miner stats:\n")
         val config = storageManager.getStorage()
+
+        listOfOutputs = mutableListOf()
+        statuses = mutableListOf()
+        pcLabelListValue = mutableListOf()
+
         config.pcList.forEachIndexed { index, item ->
+            listOfOutputs.add(mutableListOf())
+            statuses.add("")
+            pcLabelListValue.add("PC ${index + 1}")
             runSsh(index, item)
         }
+
+        _pcLabelList.value = pcLabelListValue
     }
 
     private fun runSsh(index: Int, item: PCViewModel) {
@@ -79,18 +105,31 @@ class PCStatsViewModel @Inject constructor(
                     username = item.name,
                     password = item.password
                 )
-                _status.emit("Connection to ${item.name}@${item.address}:${item.port} is established")
+                statuses[index] =
+                    "Connection to ${item.name}@${item.address}:${item.port} is established"
 
                 val localList = mutableListOf("PC ${index + 1}:\n")
                 commandList.forEach {
                     localList.add("${it.first}: ${ssh.runCommand(command = it.second)}")
                 }
-                outputListField.addAll(localList)
-                _outputList.postValue(outputListField)
+                listOfOutputs[index].addAll(localList)
+                if (index == selectedIndex) {
+                    _outputList.postValue(listOfOutputs[index])
+                    _status.emit(statuses[index])
+                }
             } catch (e: Exception) {
                 error.emit(ErrorState.Error(e.message ?: ""))
             }
             ssh.close()
+        }
+    }
+
+    fun selectPC(index: Int) {
+        _selectedPC.value = index
+        selectedIndex = index
+
+        listOfOutputs.getOrNull(index)?.let {
+            _outputList.value = it
         }
     }
 }
