@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    val compose_version by extra("1.0.0-rc02")
-    val hilt_version by extra ("2.37")
+    val compose_version by extra("1.0.0")
+    val hilt_version by extra ("2.38.1")
     repositories {
         google()
         mavenCentral()
@@ -14,7 +14,7 @@ buildscript {
         // in the individual module build.gradle.kts files
 
         classpath("com.google.dagger:hilt-android-gradle-plugin:$hilt_version")
-        classpath("io.realm:realm-gradle-plugin:10.6.1")
+        classpath("io.realm:realm-gradle-plugin:10.7.0")
     }
 }
 
