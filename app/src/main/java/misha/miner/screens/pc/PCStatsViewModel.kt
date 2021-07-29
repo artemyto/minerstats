@@ -1,5 +1,6 @@
 package misha.miner.screens.pc
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -108,14 +109,15 @@ class PCStatsViewModel @Inject constructor(
                 statuses[index] =
                     "Connection to ${item.name}@${item.address}:${item.port} is established"
 
-                val localList = mutableListOf("PC ${index + 1}:\n")
+                listOfOutputs[index] = mutableListOf("PC ${index + 1}:\n")
                 commandList.forEach {
-                    localList.add("${it.first}: ${ssh.runCommand(command = it.second)}")
-                }
-                listOfOutputs[index].addAll(localList)
-                if (index == selectedIndex) {
-                    _outputList.postValue(listOfOutputs[index])
-                    _status.emit(statuses[index])
+                    listOfOutputs[index].add("${it.first}: ${ssh.runCommand(command = it.second)}")
+
+                    if (index == selectedIndex) {
+                        Log.e("mytag", "we")
+                        _outputList.postValue(listOfOutputs[index].toMutableList())
+                        _status.emit(statuses[index])
+                    }
                 }
             } catch (e: Exception) {
                 error.emit(ErrorState.Error(e.message ?: ""))
