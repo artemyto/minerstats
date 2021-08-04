@@ -22,9 +22,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofitService(@ApplicationContext context: Context): RetrofitService {
+    fun provideOkHttpClient(@ApplicationContext context: Context): OkHttpClient {
 
-        val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+        return OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .addInterceptor(
                 ChuckerInterceptor.Builder(context)
@@ -35,6 +35,11 @@ object NetworkModule {
                     .build()
             )
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofitService(okHttpClient: OkHttpClient): RetrofitService {
 
         return Retrofit.Builder()
             .baseUrl(Constants.exampleBaseUrl)
