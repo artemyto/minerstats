@@ -1,6 +1,5 @@
 package misha.miner.screens.pc
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -114,7 +113,6 @@ class PCStatsViewModel @Inject constructor(
                     listOfOutputs[index].add("${it.first}: ${ssh.runCommand(command = it.second)}")
 
                     if (index == selectedIndex) {
-                        Log.e("mytag", "we")
                         _outputList.postValue(listOfOutputs[index].toMutableList())
                         _status.emit(statuses[index])
                     }
