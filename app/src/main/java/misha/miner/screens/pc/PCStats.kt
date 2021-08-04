@@ -1,9 +1,6 @@
 package misha.miner.screens.pc
 
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Monitor
 import androidx.compose.runtime.Composable
@@ -33,7 +30,7 @@ fun PCStats(viewModel: PCStatsViewModel, openDrawer: () -> Job) {
             BottomNavigation {
                 pcLabelList.forEachIndexed { index, label ->
                     BottomNavigationItem(
-                        icon = { Icons.Outlined.Monitor },
+                        icon = { Icon(Icons.Outlined.Monitor, null) },
                         label = { Text(label) },
                         selected = index == selectedPC,
                         onClick = {
