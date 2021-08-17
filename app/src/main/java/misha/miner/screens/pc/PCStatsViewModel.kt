@@ -110,7 +110,9 @@ class PCStatsViewModel @Inject constructor(
 
                 listOfOutputs[index] = mutableListOf("PC ${index + 1}:\n")
                 commandList.forEach {
-                    listOfOutputs[index].add("${it.first}: ${ssh.runCommand(command = it.second)}")
+                    val commandResult = ssh.runCommand(command = it.second)
+                    if (commandResult.isNotBlank())
+                        listOfOutputs[index].add("${it.first}: $commandResult")
 
                     if (index == selectedIndex) {
                         _outputList.postValue(listOfOutputs[index].toMutableList())
