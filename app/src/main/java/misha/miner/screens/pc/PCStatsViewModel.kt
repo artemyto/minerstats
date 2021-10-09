@@ -127,6 +127,10 @@ class PCStatsViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 error.emit(ErrorState.Error(e.message ?: ""))
+
+                if (index == selectedIndex) {
+                    _isRefreshing.postValue(false)
+                }
             }
             ssh.close()
         }

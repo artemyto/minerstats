@@ -55,13 +55,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun runClicked() {
-        _isRefreshing.value = true
         run()
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
     private fun run() {
-
+        _isRefreshing.value = true
         getEth()
         makePoolStats()
         makeWalletStats()
@@ -157,7 +156,7 @@ class HomeViewModel @Inject constructor(
                 _isRefreshing.value = false
             },
             onError = {
-
+                _isRefreshing.value = false
             }
         )
     }
