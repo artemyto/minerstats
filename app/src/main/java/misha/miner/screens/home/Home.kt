@@ -16,10 +16,13 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
     val balanceOutputList: MutableList<String> by viewModel.balanceOutputList.observeAsState(
         mutableListOf()
     )
+    val isRefreshing: Boolean by viewModel.isRefreshing.observeAsState(false)
 
     BaseScreen(
+        swipeEnabled = true,
+        isRefreshing = isRefreshing,
         openDrawer = openDrawer,
-        refreshClicked = { viewModel.runClicked() },
+        refreshClicked = viewModel::runClicked,
         list = mutableListOf<String>().apply {
             if (eth.isNotBlank()) add(eth)
             addAll(balanceOutputList)

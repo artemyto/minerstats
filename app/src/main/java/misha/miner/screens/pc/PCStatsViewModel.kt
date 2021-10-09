@@ -42,6 +42,9 @@ class PCStatsViewModel @Inject constructor(
 
     val error: MutableStateFlow<ErrorState> = MutableStateFlow(ErrorState.None)
 
+    private val _isRefreshing: MutableLiveData<Boolean> = MutableLiveData()
+    val isRefreshing: LiveData<Boolean> = _isRefreshing
+
     private val commandList = mutableListOf(
         "CPU temp" to "sensors | grep Tdie | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'",
         "Nvidia temp" to "nvidia-smi | grep -o \"[0-9]\\+C\"",
@@ -67,6 +70,7 @@ class PCStatsViewModel @Inject constructor(
     }
 
     fun runClicked() {
+        _isRefreshing.value = true
         run()
     }
 
@@ -118,6 +122,7 @@ class PCStatsViewModel @Inject constructor(
                     if (index == selectedIndex) {
                         _outputList.postValue(listOfOutputs[index].toMutableList())
                         _status.emit(statuses[index])
+                        _isRefreshing.postValue(false)
                     }
                 }
             } catch (e: Exception) {

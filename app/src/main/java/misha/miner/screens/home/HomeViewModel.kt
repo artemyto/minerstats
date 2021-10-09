@@ -18,6 +18,8 @@ class HomeViewModel @Inject constructor(
     private val apiManager: ApiManager
 ): ViewModel() {
 
+    private val _isRefreshing: MutableLiveData<Boolean> = MutableLiveData()
+    val isRefreshing: LiveData<Boolean> = _isRefreshing
     private val _eth: MutableLiveData<String> = MutableLiveData()
     val eth: LiveData<String> = _eth
 
@@ -53,6 +55,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun runClicked() {
+        _isRefreshing.value = true
         run()
     }
 
@@ -150,6 +153,8 @@ class HomeViewModel @Inject constructor(
                         "${String.format("%.5f", estimated)} ETH / " +
                         "${String.format("%.0f", estimatedRub)} ₽\n")
                 _balanceOutputList.value = balanceOutputListField
+
+                _isRefreshing.value = false
             },
             onError = {
 

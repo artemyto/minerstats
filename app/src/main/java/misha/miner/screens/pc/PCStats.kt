@@ -25,6 +25,8 @@ fun PCStats(viewModel: PCStatsViewModel, openDrawer: () -> Job) {
     val selectedPC by viewModel.selectedPC.collectAsState()
     val pcLabelList: MutableList<String> by viewModel.pcLabelList.observeAsState(mutableListOf())
 
+    val isRefreshing: Boolean by viewModel.isRefreshing.observeAsState(false)
+
     Scaffold(
         bottomBar = {
             BottomNavigation {
@@ -42,6 +44,8 @@ fun PCStats(viewModel: PCStatsViewModel, openDrawer: () -> Job) {
         }
     ) {
         BaseScreen(
+            swipeEnabled = true,
+            isRefreshing = isRefreshing,
             openDrawer = openDrawer,
             refreshClicked = { viewModel.runClicked() },
             list = mutableListOf(status).apply { addAll(outputList) }
