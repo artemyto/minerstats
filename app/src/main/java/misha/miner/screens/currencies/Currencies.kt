@@ -8,9 +8,12 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -20,6 +23,8 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.Job
 import misha.miner.R
 import misha.miner.models.coinmarketcap.data.Listing
+import misha.miner.ui.common.SearchView
+import java.util.*
 
 @Composable
 fun Currencies(viewModel: CurrenciesViewModel, openDrawer: () -> Job) {
@@ -58,7 +63,7 @@ fun ListingsScreen(
     ) {
         ConstraintLayout(Modifier.fillMaxWidth()) {
 
-            val (menu, lazyList) = createRefs()
+            val (menu, search, lazyList) = createRefs()
 
             Button(
                 onClick = {
@@ -75,6 +80,17 @@ fun ListingsScreen(
                 )
             }
 
+            val textState = remember { mutableStateOf(TextFieldValue("")) }
+
+            SearchView(
+                state = textState,
+                modifier = Modifier.constrainAs(search) {
+                    linkTo(menu.end, parent.end, startMargin = 8.dp, endMargin = 16.dp)
+                    linkTo(menu.top, menu.bottom)
+                    width = Dimension.fillToConstraints
+                }
+            )
+
             LazyColumn(
                 modifier = Modifier.constrainAs(lazyList) {
                     linkTo(parent.start, parent.end, startMargin = 16.dp, endMargin = 16.dp)
@@ -83,18 +99,35 @@ fun ListingsScreen(
                 }
             ) {
 
-                items(list.size) { index ->
+                val searchedText = textState.value.text
+
+                val filteredListings = if (searchedText.isEmpty()) {
+                    list
+                } else {
+                    val resultList = mutableListOf<Listing>()
+                    for (listing in list) {
+                        if (
+                            listing.name.lowercase(Locale.getDefault())
+                                .contains(searchedText.lowercase(Locale.getDefault()))
+                        ) {
+                            resultList.add(listing)
+                        }
+                    }
+                    resultList
+                }
+
+                items(filteredListings.size) { index ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = list[index].name,
+                            text = filteredListings[index].name,
                             style = MaterialTheme.typography.h5
                         )
 
                         Text(
-                            text = "%.2f".format(list[index].quote.usd.price),
+                            text = "%.2f".format(filteredListings[index].quote.usd.price),
                             style = MaterialTheme.typography.h5
                         )
                     }
