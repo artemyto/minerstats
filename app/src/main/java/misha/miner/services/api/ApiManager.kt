@@ -2,6 +2,7 @@ package misha.miner.services.api
 
 import misha.miner.models.BaseError
 import misha.miner.models.coinmarketcap.currency.CurrencyType
+import misha.miner.models.coinmarketcap.data.Listing
 import misha.miner.models.ethermine.EthermineData
 
 interface ApiManager {
@@ -19,4 +20,6 @@ interface ApiManager {
         completion: (Double) -> Unit,
         onError: (BaseError) -> Unit
     )
+
+    fun getListings(completion: (List<Listing>) -> Unit, onError: (BaseError) -> Unit)
 }

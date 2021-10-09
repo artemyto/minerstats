@@ -1,6 +1,8 @@
 package misha.miner.services.api
 
 import misha.miner.models.coinmarketcap.CoinMarketCapResponse
+import misha.miner.models.coinmarketcap.data.Converted
+import misha.miner.models.coinmarketcap.data.Listing
 import misha.miner.models.ehterscan.EtherscanResponse
 import misha.miner.models.ethermine.EthermineResponse
 import retrofit2.Response
@@ -30,5 +32,13 @@ interface RetrofitService {
         headers: Map<String, String>,
         @QueryMap
         queries: Map<String, String>
-    ): Response<CoinMarketCapResponse>
+    ): Response<CoinMarketCapResponse<Converted>>
+
+    @GET
+    suspend fun getListings(
+        @Url
+        url: String,
+        @HeaderMap
+        headers: Map<String, String>,
+    ): Response<CoinMarketCapResponse<List<Listing>>>
 }

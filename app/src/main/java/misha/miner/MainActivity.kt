@@ -13,6 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import misha.miner.screens.currencies.Currencies
+import misha.miner.screens.currencies.CurrenciesViewModel
 import misha.miner.screens.drawer.Drawer
 import misha.miner.screens.drawer.DrawerScreens
 import misha.miner.screens.home.Home
@@ -44,7 +46,8 @@ fun AppMainScreen(
     homeViewModel: HomeViewModel = viewModel(),
     settingsViewModel: SettingsViewModel = viewModel(),
     runCommandViewModel: RunCommandViewModel = viewModel(),
-    pcStatsViewModel: PCStatsViewModel = viewModel()
+    pcStatsViewModel: PCStatsViewModel = viewModel(),
+    currenciesViewModel: CurrenciesViewModel = viewModel(),
 ) {
     val navController = rememberNavController()
     Surface(color = MaterialTheme.colors.background) {
@@ -91,6 +94,12 @@ fun AppMainScreen(
                 composable(DrawerScreens.RunCommand.route) {
                     RunCommand(
                         viewModel = runCommandViewModel,
+                        openDrawer
+                    )
+                }
+                composable(DrawerScreens.Currencies.route) {
+                    Currencies(
+                        viewModel = currenciesViewModel,
                         openDrawer
                     )
                 }

@@ -21,6 +21,7 @@ object Constants {
         private const val base = "https://pro-api.coinmarketcap.com/v1/"
 
         const val priceConversion = "${base}tools/price-conversion"
+        const val listings = "${base}cryptocurrency/listings/latest"
     }
 
     const val exampleBaseUrl = "https://ya.ru"

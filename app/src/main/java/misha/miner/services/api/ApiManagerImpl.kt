@@ -4,13 +4,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import misha.miner.App
 import misha.miner.BuildConfig
 import misha.miner.common.Constants
 import misha.miner.models.BaseError
 import misha.miner.models.coinmarketcap.CoinMarketCapStatus
 import misha.miner.models.coinmarketcap.Quote
 import misha.miner.models.coinmarketcap.currency.CurrencyType
+import misha.miner.models.coinmarketcap.data.Listing
 import misha.miner.models.ehterscan.EtherscanResponseStatus
 import misha.miner.models.ethermine.EthermineData
 import java.io.IOException
@@ -147,6 +147,49 @@ class ApiManagerImpl(private val retrofitService: RetrofitService) : ApiManager 
                                 onError(BaseError(response.body()?.status?.errorMessage ?: "Что-то пошло не так"))
                             } else {
                                 completion(currencyAmountToReturn(to, body.data.quote))
+                            }
+                        } ?: run {
+                            onError(BaseError("Пустой ответ"))
+                        }
+                    } else {
+                        onError(BaseError(response.message() ?: "Что-то пошло не так"))
+                    }
+                }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) {
+                    onError(BaseError(e.message ?: "Нет интернета"))
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    onError(BaseError(e.message ?: "Что-то пошло не так"))
+                }
+            }
+        }
+    }
+
+    override fun getListings(
+        completion: (List<Listing>) -> Unit,
+        onError: (BaseError) -> Unit
+    ) {
+
+        val service = retrofitService
+
+        val headers = mapOf(
+            Constants.CoinMarketCap.apiKeyName to BuildConfig.COINMARKETCAP_API_KEY
+        )
+        val endPoint = Constants.CoinMarketCap.listings
+        val apiCall = service::getListings
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiCall(endPoint, headers)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        response.body()?.let { body ->
+                            if (body.status.errorCode != CoinMarketCapStatus.OK) {
+                                onError(BaseError(response.body()?.status?.errorMessage ?: "Что-то пошло не так"))
+                            } else {
+                                completion(body.data)
                             }
                         } ?: run {
                             onError(BaseError("Пустой ответ"))
