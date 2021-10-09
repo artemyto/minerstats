@@ -1,6 +1,8 @@
 package misha.miner.screens.settings
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -33,7 +35,11 @@ fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
     val commandList: MutableList<String> by viewModel.commandList.observeAsState(mutableListOf())
     val pcLabelList: MutableList<String> by viewModel.pcLabelList.observeAsState(mutableListOf())
 
-    ConstraintLayout(Modifier.fillMaxWidth()) {
+    ConstraintLayout(
+        Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+    ) {
 
         val (
             menu,
