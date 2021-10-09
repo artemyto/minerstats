@@ -14,6 +14,7 @@ import misha.miner.models.storage.PCViewModel
 import misha.miner.services.ssh.SSHConnectionManager
 import misha.miner.services.storage.StorageManager
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class PCStatsViewModel @Inject constructor(
@@ -46,14 +47,42 @@ class PCStatsViewModel @Inject constructor(
     val isRefreshing: LiveData<Boolean> = _isRefreshing
 
     private val commandList = mutableListOf(
-        "CPU temp" to "sensors | grep Tdie | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'",
-        "Nvidia temp" to "nvidia-smi | grep -o \"[0-9]\\+C\"",
-        "Amd temp" to "sensors | grep 'junction' | grep -o \"+[0-9]*\\.[0-9]*.C \"",
-        "Amd mem temp" to "sensors | grep 'mem' | grep -o \"+[0-9]*\\.[0-9]*.C \"",
-        "Amd power" to "sensors | grep 'power' | grep -o \"[0-9]*\\.[0-9]* W \"",
-        "Nvidia driver" to "nvidia-smi | grep -o '[0-9]\\{3\\}\\.[0-9]\\{2\\}\\.\\{0,1\\}[0-9]\\{0,2\\}' | head -1",
-        "Amd driver" to "DISPLAY=:0 glxinfo | grep \"OpenGL version\" | grep -o '[0-9]\\{2\\}\\.[0-9].[0-9]'",
-        "Kernel" to "uname -r",
+        Command.SimpleCommand(
+            name = "CPU temp",
+            command = "sensors | grep Tdie | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'"
+        ),
+        Command.SimpleCommand(
+            name = "Nvidia temp",
+            command = "nvidia-smi | grep -o \"[0-9]\\+C\""
+        ),
+        Command.SimpleCommand(
+            name = "Amd temp",
+            command = "sensors | grep 'junction' | grep -o \"+[0-9]*\\.[0-9]*.C \""
+        ),
+        Command.SimpleCommand(
+            name = "Amd mem temp",
+            command = "sensors | grep 'mem' | grep -o \"+[0-9]*\\.[0-9]*.C \""
+        ),
+        Command.ActionCommand(
+            name = "Amd fan",
+            command = "sensors | grep 'fan'",
+            action = this::processFanOutput
+        ),
+        Command.SimpleCommand(
+            name = "Amd power",
+            command = "sensors | grep 'power' | grep -o \"[0-9]*\\.[0-9]* W \""
+        ),
+        Command.SimpleCommand(
+            name = "Nvidia driver",
+            command = "nvidia-smi | grep -o '[0-9]\\{3\\}\\.[0-9]\\{2\\}\\.\\{0,1\\}[0-9]\\{0,2\\}' | head -1"
+        ),
+        Command.SimpleCommand(
+            name = "Amd driver",
+            command = "DISPLAY=:0 glxinfo | grep \"OpenGL version\" | grep -o '[0-9]\\{2\\}\\.[0-9].[0-9]'"
+        ),
+        Command.SimpleCommand(name = "Kernel",
+            command = "uname -r"
+        ),
     )
 
     private var initialized = false
@@ -115,9 +144,22 @@ class PCStatsViewModel @Inject constructor(
 
                 listOfOutputs[index] = mutableListOf("PC ${index + 1}:\n")
                 commandList.forEach {
-                    val commandResult = ssh.runCommand(command = it.second)
-                    if (commandResult.isNotBlank())
-                        listOfOutputs[index].add("${it.first}: $commandResult")
+                    when (it) {
+                        is Command.SimpleCommand -> {
+                            val commandResult = ssh.runCommand(command = it.command)
+                            if (commandResult.isNotBlank()) {
+                                listOfOutputs[index].add("${it.name}: $commandResult")
+                            }
+                        }
+
+                        is Command.ActionCommand -> {
+                            val commandResult = ssh.runCommand(command = it.command)
+                            if (commandResult.isNotBlank()) {
+                                val processed = it.action(commandResult)
+                                listOfOutputs[index].add("${it.name}: $processed")
+                            }
+                        }
+                    }
 
                     if (index == selectedIndex) {
                         _outputList.postValue(listOfOutputs[index].toMutableList())
@@ -143,5 +185,33 @@ class PCStatsViewModel @Inject constructor(
         listOfOutputs.getOrNull(index)?.let {
             _outputList.value = it
         }
+    }
+
+    /* Example string:
+       fan1:        3266 RPM  (min =    0 RPM, max = 4600 RPM) */
+    private fun processFanOutput(string: String): String {
+
+        val list = """\d+""".toRegex().findAll(string).toList()
+
+        val currentRate = list[1].value.toDouble()
+        val maxRate = list.last().value.toDouble()
+
+        val percentage = (currentRate / maxRate * 100).roundToInt()
+
+        return "${currentRate.toInt()} RPM / $percentage%\n"
+    }
+
+    sealed class Command {
+
+        data class SimpleCommand(
+            val name: String,
+            val command: String,
+        ) : Command()
+
+        data class ActionCommand(
+            val name: String,
+            val command: String,
+            val action: (String) -> String,
+        ) : Command()
     }
 }
