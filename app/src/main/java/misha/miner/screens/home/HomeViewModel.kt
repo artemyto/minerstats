@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import misha.miner.common.EthermineHelper
-import misha.miner.common.EtherscanHelper
 import misha.miner.common.fullEthAddr
+import misha.miner.common.util.getEthValue
 import misha.miner.models.coinmarketcap.currency.CurrencyType
 import misha.miner.services.api.ApiManager
 import misha.miner.services.storage.StorageManager
@@ -109,9 +109,7 @@ class HomeViewModel @Inject constructor(
             apiManager.getWalletStats(
                 config.wallet.fullEthAddr(),
                 completion = { result ->
-                    val ethHelper = EtherscanHelper(result)
-
-                    balance = ethHelper.getBalanceValue()
+                    balance = result.getEthValue()
 
                     if (poolStatus == RunStatus.Finished)
                         makeBalanceStats()

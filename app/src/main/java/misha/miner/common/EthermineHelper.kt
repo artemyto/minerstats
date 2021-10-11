@@ -1,5 +1,6 @@
 package misha.miner.common
 
+import misha.miner.common.util.getEthValue
 import misha.miner.models.ethermine.EthermineData
 
 class EthermineHelper(private val data: EthermineData) {
@@ -7,7 +8,6 @@ class EthermineHelper(private val data: EthermineData) {
     private companion object {
         const val MINUTES_IN_MONTH = 43800
         const val MEGAHASH = 1000000
-        const val WEI_IN_ETH = 1e18
     }
 
     fun getShares() =
@@ -23,7 +23,7 @@ class EthermineHelper(private val data: EthermineData) {
         "${String.format("%.2f", data.averageHashrate / MEGAHASH)} MH/s"
 
     fun getUnpaidBalanceValue() =
-        data.unpaid / WEI_IN_ETH
+        data.unpaid.getEthValue()
 
     fun getUnpaidBalanceLabel() =
         "${String.format("%.5f", getUnpaidBalanceValue())} ETH"
