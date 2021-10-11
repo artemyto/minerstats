@@ -13,6 +13,7 @@ import misha.miner.models.coinmarketcap.currency.CurrencyType
 import misha.miner.models.coinmarketcap.data.Listing
 import misha.miner.models.ehterscan.EtherscanResponse
 import misha.miner.models.ehterscan.EtherscanResponseStatus
+import misha.miner.models.ehterscan.EtherscanTransaction
 import misha.miner.models.ethermine.EthermineData
 import retrofit2.Response
 import java.io.IOException
@@ -81,6 +82,36 @@ class ApiManagerImpl(private val retrofitService: RetrofitService) : ApiManager 
         )
         val endPoint = Constants.Etherscan.api
         val apiCall = service::getWalletStats
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiCall(endPoint, queries)
+                doOnFinish(response = response, completion = completion, onError = onError)
+            } catch (e: Exception) {
+                doOnException(onError, e)
+            }
+        }
+    }
+
+    override fun getWalletTransactions(
+        address: String,
+        completion: (List<EtherscanTransaction>) -> Unit,
+        onError: (BaseError) -> Unit
+    ) {
+
+        val service = retrofitService
+
+        val queries = mapOf(
+            "module" to "account",
+            "action" to "txlist",
+            "address" to address,
+            "startblock" to "0",
+            "endblock" to "99999999",
+            "sort" to "asc",
+            "apikey" to BuildConfig.ETHERSCAN_API_KEY
+        )
+        val endPoint = Constants.Etherscan.api
+        val apiCall = service::getWalletTransactions
 
         CoroutineScope(Dispatchers.IO).launch {
             try {

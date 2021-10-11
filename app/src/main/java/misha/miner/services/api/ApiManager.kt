@@ -3,6 +3,7 @@ package misha.miner.services.api
 import misha.miner.models.BaseError
 import misha.miner.models.coinmarketcap.currency.CurrencyType
 import misha.miner.models.coinmarketcap.data.Listing
+import misha.miner.models.ehterscan.EtherscanTransaction
 import misha.miner.models.ethermine.EthermineData
 
 interface ApiManager {
@@ -13,6 +14,13 @@ interface ApiManager {
     )
 
     fun getWalletStats(address: String, completion: (String) -> Unit, onError: (BaseError) -> Unit)
+
+    fun getWalletTransactions(
+        address: String,
+        completion: (List<EtherscanTransaction>) -> Unit,
+        onError: (BaseError) -> Unit
+    )
+
     fun convertCurrency(
         from: CurrencyType,
         to: CurrencyType,
