@@ -11,8 +11,10 @@ import misha.miner.models.coinmarketcap.CoinMarketCapStatus
 import misha.miner.models.coinmarketcap.Quote
 import misha.miner.models.coinmarketcap.currency.CurrencyType
 import misha.miner.models.coinmarketcap.data.Listing
+import misha.miner.models.ehterscan.EtherscanResponse
 import misha.miner.models.ehterscan.EtherscanResponseStatus
 import misha.miner.models.ethermine.EthermineData
+import retrofit2.Response
 import java.io.IOException
 import java.lang.Exception
 
@@ -56,14 +58,8 @@ class ApiManagerImpl(private val retrofitService: RetrofitService) : ApiManager 
                         onError(BaseError(response.message() ?: "Что-то пошло не так"))
                     }
                 }
-            } catch (e: IOException) {
-                withContext(Dispatchers.Main) {
-                    onError(BaseError(e.message ?: "Нет интернета"))
-                }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    onError(BaseError(e.message ?: "Что-то пошло не так"))
-                }
+                doOnException(onError, e)
             }
         }
     }
@@ -89,29 +85,9 @@ class ApiManagerImpl(private val retrofitService: RetrofitService) : ApiManager 
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiCall(endPoint, queries)
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        response.body()?.let { body ->
-                            if (body.status != EtherscanResponseStatus.OK) {
-                                onError(BaseError(response.body()?.result ?: "Что-то пошло не так"))
-                            } else {
-                                completion(body.result)
-                            }
-                        } ?: run {
-                            onError(BaseError("Пустой ответ"))
-                        }
-                    } else {
-                        onError(BaseError(response.message() ?: "Что-то пошло не так"))
-                    }
-                }
-            } catch (e: IOException) {
-                withContext(Dispatchers.Main) {
-                    onError(BaseError(e.message ?: "Нет интернета"))
-                }
+                doOnFinish(response = response, completion = completion, onError = onError)
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    onError(BaseError(e.message ?: "Что-то пошло не так"))
-                }
+                doOnException(onError, e)
             }
         }
     }
@@ -155,14 +131,8 @@ class ApiManagerImpl(private val retrofitService: RetrofitService) : ApiManager 
                         onError(BaseError(response.message() ?: "Что-то пошло не так"))
                     }
                 }
-            } catch (e: IOException) {
-                withContext(Dispatchers.Main) {
-                    onError(BaseError(e.message ?: "Нет интернета"))
-                }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    onError(BaseError(e.message ?: "Что-то пошло не так"))
-                }
+                doOnException(onError, e)
             }
         }
     }
@@ -198,14 +168,8 @@ class ApiManagerImpl(private val retrofitService: RetrofitService) : ApiManager 
                         onError(BaseError(response.message() ?: "Что-то пошло не так"))
                     }
                 }
-            } catch (e: IOException) {
-                withContext(Dispatchers.Main) {
-                    onError(BaseError(e.message ?: "Нет интернета"))
-                }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    onError(BaseError(e.message ?: "Что-то пошло не так"))
-                }
+                doOnException(onError, e)
             }
         }
     }
@@ -214,5 +178,35 @@ class ApiManagerImpl(private val retrofitService: RetrofitService) : ApiManager 
         CurrencyType.RUB -> quote.rub.price
         CurrencyType.USD -> quote.usd.price
         CurrencyType.ETH -> quote.eth.price
+    }
+
+    private suspend fun <T>doOnFinish(
+        response: Response<EtherscanResponse<T>>,
+        completion: (T) -> Unit,
+        onError: (BaseError) -> Unit,
+    ) {
+        withContext(Dispatchers.Main) {
+            if (response.isSuccessful) {
+                response.body()?.let { body ->
+                    if (body.status == EtherscanResponseStatus.OK) {
+                        completion(body.result)
+                    }
+                } ?: run {
+                    onError(BaseError("Пустой ответ"))
+                }
+            } else {
+                onError(BaseError(response.message() ?: "Что-то пошло не так"))
+            }
+        }
+    }
+
+    private suspend fun doOnException(
+        onError: (BaseError) -> Unit,
+        e: Exception
+    ) {
+        val error = if (e is IOException) "Нет интернета" else "Что-то пошло не так"
+        withContext(Dispatchers.Main) {
+            onError(BaseError(e.message ?: error))
+        }
     }
 }

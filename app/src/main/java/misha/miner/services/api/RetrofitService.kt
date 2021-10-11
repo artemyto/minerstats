@@ -22,7 +22,7 @@ interface RetrofitService {
         url: String,
         @QueryMap
         queries: Map<String, String>
-    ): Response<EtherscanResponse>
+    ): Response<EtherscanResponse<String>>
 
     @GET
     suspend fun convertCurrency(
