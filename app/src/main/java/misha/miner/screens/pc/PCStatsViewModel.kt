@@ -51,9 +51,10 @@ class PCStatsViewModel @Inject constructor(
             name = "CPU temp",
             command = "sensors | grep Tdie | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'"
         ),
-        Command.SimpleCommand(
-            name = "Nvidia temp",
-            command = "nvidia-smi | grep -o \"[0-9]\\+C\""
+        Command.ActionCommand(
+            name = "Nvidia",
+            command = "nvidia-smi | grep \"[0-9]\\+C\"",
+            action = this::processNvidia
         ),
         Command.SimpleCommand(
             name = "Amd temp",
@@ -155,8 +156,8 @@ class PCStatsViewModel @Inject constructor(
                         is Command.ActionCommand -> {
                             val commandResult = ssh.runCommand(command = it.command)
                             if (commandResult.isNotBlank()) {
-                                val processed = it.action(commandResult)
-                                listOfOutputs[index].add("${it.name}: $processed")
+                                val processed = it.action(it.name, commandResult)
+                                listOfOutputs[index].addAll(processed)
                             }
                         }
                     }
@@ -189,7 +190,7 @@ class PCStatsViewModel @Inject constructor(
 
     /* Example string:
        fan1:        3266 RPM  (min =    0 RPM, max = 4600 RPM) */
-    private fun processFanOutput(string: String): String {
+    private fun processFanOutput(name: String, string: String): List<String> {
 
         val list = """\d+""".toRegex().findAll(string).toList()
 
@@ -198,7 +199,24 @@ class PCStatsViewModel @Inject constructor(
 
         val percentage = (currentRate / maxRate * 100).roundToInt()
 
-        return "${currentRate.toInt()} RPM / $percentage%\n"
+        return listOf("$name: ${currentRate.toInt()} RPM / $percentage%\n")
+    }
+
+    /*
+        | Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+        | 70%   84C    P2    90W / 200W |   4679MiB /  8117MiB |    100%      Default |
+     */
+    private fun processNvidia(name: String, string: String): List<String> {
+
+        if (name != "Nvidia") return listOf()
+
+        val list = """\d+""".toRegex().findAll(string).toList()
+
+        return listOf(
+            "Nvidia temp: ${list[1].value} C\n",
+            "Nvidia fan: ${list[0].value}%\n",
+            "Nvidia power: ${list[3].value} W\n",
+        )
     }
 
     sealed class Command {
@@ -211,7 +229,7 @@ class PCStatsViewModel @Inject constructor(
         data class ActionCommand(
             val name: String,
             val command: String,
-            val action: (String) -> String,
+            val action: (String, String) -> List<String>,
         ) : Command()
     }
 }
