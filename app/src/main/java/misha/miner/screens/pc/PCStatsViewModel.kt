@@ -21,6 +21,11 @@ class PCStatsViewModel @Inject constructor(
     private val storageManager: StorageManager
 ): ViewModel() {
 
+    companion object {
+        const val Amd = "Amd"
+        const val Nvidia = "Nvidia"
+    }
+
     private val _status: MutableStateFlow<String> = MutableStateFlow("Connection is not opened yet")
     val status: StateFlow<String> = _status
     private var statuses: MutableList<String> = mutableListOf()
@@ -52,26 +57,14 @@ class PCStatsViewModel @Inject constructor(
             command = "sensors | grep Tdie | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'"
         ),
         Command.ActionCommand(
-            name = "Nvidia",
+            name = Nvidia,
             command = "nvidia-smi | grep \"[0-9]\\+C\"",
             action = this::processNvidia
         ),
-        Command.SimpleCommand(
-            name = "Amd temp",
-            command = "sensors | grep 'junction' | grep -o \"+[0-9]*\\.[0-9]*.C \""
-        ),
-        Command.SimpleCommand(
-            name = "Amd mem temp",
-            command = "sensors | grep 'mem' | grep -o \"+[0-9]*\\.[0-9]*.C \""
-        ),
         Command.ActionCommand(
-            name = "Amd fan",
-            command = "sensors | grep 'fan'",
-            action = this::processFanOutput
-        ),
-        Command.SimpleCommand(
-            name = "Amd power",
-            command = "sensors | grep 'power' | grep -o \"[0-9]*\\.[0-9]* W \""
+            name = Amd,
+            command = "sensors | grep 'fan\\|junction\\|mem\\|power'",
+            action = this::processAmd
         ),
         Command.SimpleCommand(
             name = "Nvidia driver",
@@ -188,18 +181,35 @@ class PCStatsViewModel @Inject constructor(
         }
     }
 
-    /* Example string:
-       fan1:        3266 RPM  (min =    0 RPM, max = 4600 RPM) */
-    private fun processFanOutput(name: String, string: String): List<String> {
+    /* Example strings:
+        fan1:        3266 RPM  (min =    0 RPM, max = 4600 RPM)     // 0 1 2 3            // fanRpm = 1, fanRpmMax = 3
+        junction:     +85.0°C  (crit = +105.0°C, hyst = -273.1°C)   // 4 5 6 7 8 9        // temp = 4
+        mem:         +104.0°C  (crit = +105.0°C, hyst = -273.1°C)   // 10 11 12 13 14 15  // mem = 10
+        power1:       94.00 W  (cap = 140.00 W)                     // 16 17 18 19 20     // power = 17
+     */
+    private fun processAmd(name: String, string: String): List<String> {
+
+        val fanRpm = 1
+        val fanRpmMax = 3
+        val temp = 4
+        val mem = 10
+        val power = 17
+
+        if (name != Amd) return listOf()
 
         val list = """\d+""".toRegex().findAll(string).toList()
 
-        val currentRate = list[1].value.toDouble()
-        val maxRate = list.last().value.toDouble()
+        val currentRate = list[fanRpm].value.toDouble()
+        val maxRate = list[fanRpmMax].value.toDouble()
 
         val percentage = (currentRate / maxRate * 100).roundToInt()
 
-        return listOf("$name: ${currentRate.toInt()} RPM / $percentage%\n")
+        return listOf(
+            "Amd temp: ${list[temp].value} C\n",
+            "Amd mem temp: ${list[mem].value} C\n",
+            "$name: ${currentRate.toInt()} RPM / $percentage%\n",
+            "Amd power: ${list[power].value} W\n",
+        )
     }
 
     /*
@@ -208,7 +218,7 @@ class PCStatsViewModel @Inject constructor(
      */
     private fun processNvidia(name: String, string: String): List<String> {
 
-        if (name != "Nvidia") return listOf()
+        if (name != Nvidia) return listOf()
 
         val list = """\d+""".toRegex().findAll(string).toList()
 
