@@ -58,7 +58,7 @@ class PCStatsViewModel @Inject constructor(
         ),
         Command.ActionCommand(
             name = Nvidia,
-            command = "nvidia-smi | grep \"[0-9]\\+C\"",
+            command = "nvidia-smi | grep '[0-9]\\+C\\|Driver'",
             action = this::processNvidia
         ),
         Command.ActionCommand(
@@ -66,13 +66,10 @@ class PCStatsViewModel @Inject constructor(
             command = "sensors | grep 'fan\\|junction\\|mem\\|power'",
             action = this::processAmd
         ),
+        //Amd driver
         Command.SimpleCommand(
-            name = "Nvidia driver",
-            command = "nvidia-smi | grep -o '[0-9]\\{3\\}\\.[0-9]\\{2\\}\\.\\{0,1\\}[0-9]\\{0,2\\}' | head -1"
-        ),
-        Command.SimpleCommand(
-            name = "Amd driver",
-            command = "DISPLAY=:0 glxinfo | grep \"OpenGL version\" | grep -o '[0-9]\\{2\\}\\.[0-9].[0-9]'"
+            name = "       driver",
+            command = "DISPLAY=:0 glxinfo | grep 'OpenGL version' | grep -o '[0-9]\\{2\\}\\.[0-9].[0-9]'"
         ),
         Command.SimpleCommand(name = "Kernel",
             command = "uname -r"
@@ -205,27 +202,39 @@ class PCStatsViewModel @Inject constructor(
         val percentage = (currentRate / maxRate * 100).roundToInt()
 
         return listOf(
-            "Amd temp: ${list[temp].value} C\n",
-            "Amd mem temp: ${list[mem].value} C\n",
-            "$name: ${currentRate.toInt()} RPM / $percentage%\n",
-            "Amd power: ${list[power].value} W\n",
+            "AMD\n",
+            "       temp: ${list[temp].value} C\n",
+            "       mem temp: ${list[mem].value} C\n",
+            "       fan: ${currentRate.toInt()} RPM / $percentage%\n",
+            "       power: ${list[power].value} W\n",
         )
     }
 
     /*
+        First line:
+        | NVIDIA-SMI 470.74       Driver Version: 470.74       CUDA Version: 11.4     |  // 0 1 2  // driver = 1, cuda = 2
+        Legend and second line:
         | Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
-        | 70%   84C    P2    90W / 200W |   4679MiB /  8117MiB |    100%      Default |
+        | 70%   84C    P2    90W / 200W |   4679MiB /  8117MiB |    100%      Default |  // 3 4 5 6 // fan = 3, temp = 4, power = 6
      */
     private fun processNvidia(name: String, string: String): List<String> {
 
+        val driver = 1
+        val cuda = 2
+        val fan = 3
+        val temp = 4
+        val power = 6
+
         if (name != Nvidia) return listOf()
 
-        val list = """\d+""".toRegex().findAll(string).toList()
+        val list = """\d+\.?\d*""".toRegex().findAll(string).toList()
 
         return listOf(
-            "Nvidia temp: ${list[1].value} C\n",
-            "Nvidia fan: ${list[0].value}%\n",
-            "Nvidia power: ${list[3].value} W\n",
+            "NVIDIA\n",
+            "       temp: ${list[temp].value.toInt()} C\n",
+            "       fan: ${list[fan].value.toInt()}%\n",
+            "       power: ${list[power].value.toInt()} W\n",
+            "       driver: ${list[driver].value} / CUDA ${list[cuda].value}\n"
         )
     }
 
