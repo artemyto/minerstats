@@ -15,6 +15,7 @@ sealed class DrawerScreens(val title: String, val route: String) {
     object PCStats : DrawerScreens("PC", "pc")
     object RunCommand : DrawerScreens("Запустить команду ssh", "runCommand")
     object Currencies : DrawerScreens("Криптовалюты", "currencies")
+    object Wallet : DrawerScreens("Кошелек", "wallet")
     object Settings : DrawerScreens("Настройки", "settings")
 }
 
@@ -23,7 +24,8 @@ private val screens = listOf(
     DrawerScreens.PCStats,
     DrawerScreens.RunCommand,
     DrawerScreens.Currencies,
-    DrawerScreens.Settings
+    DrawerScreens.Wallet,
+    DrawerScreens.Settings,
 )
 
 @Composable

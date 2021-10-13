@@ -25,6 +25,8 @@ import misha.miner.screens.settings.Settings
 import misha.miner.screens.settings.SettingsViewModel
 import misha.miner.screens.ssh.RunCommand
 import misha.miner.screens.ssh.RunCommandViewModel
+import misha.miner.screens.wallet.Wallet
+import misha.miner.screens.wallet.WalletViewModel
 import misha.miner.ui.theme.MyMinerTheme
 
 @AndroidEntryPoint
@@ -48,6 +50,7 @@ fun AppMainScreen(
     runCommandViewModel: RunCommandViewModel = viewModel(),
     pcStatsViewModel: PCStatsViewModel = viewModel(),
     currenciesViewModel: CurrenciesViewModel = viewModel(),
+    walletViewModel: WalletViewModel = viewModel(),
 ) {
     val navController = rememberNavController()
     Surface(color = MaterialTheme.colors.background) {
@@ -106,6 +109,12 @@ fun AppMainScreen(
                 composable(DrawerScreens.Settings.route) {
                     Settings(
                         viewModel = settingsViewModel,
+                        openDrawer
+                    )
+                }
+                composable(DrawerScreens.Wallet.route) {
+                    Wallet(
+                        viewModel = walletViewModel,
                         openDrawer
                     )
                 }
