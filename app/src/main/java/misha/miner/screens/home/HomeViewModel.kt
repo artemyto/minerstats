@@ -81,12 +81,15 @@ class HomeViewModel @Inject constructor(
                     estimated = ethHelper.getEstimatedEthForMonthValue()
 
                     poolOutputListField = mutableListOf()
-                    poolOutputListField.add("Pool miner stats:\n")
-                    poolOutputListField.add("Average hashrate: ${ethHelper.getAverageHashrate()}\n")
-                    poolOutputListField.add("Reported hashrate: ${ethHelper.getReportedHashrate()}\n")
-                    poolOutputListField.add("Current hashrate: ${ethHelper.getCurrentHashrate()}\n")
+                    poolOutputListField.add("Hashrate:\n")
+                    poolOutputListField.add("       Average: ${ethHelper.getAverageHashrate()}\n")
+                    poolOutputListField.add("       Reported: ${ethHelper.getReportedHashrate()}\n")
+                    poolOutputListField.add("       Current: ${ethHelper.getCurrentHashrate()}\n")
                     poolOutputListField.add("Workers: ${ethHelper.getWorkers()}\n")
-                    poolOutputListField.add("Shares during last hour (valid/stale/invalid): ${ethHelper.getShares()}\n")
+                    poolOutputListField.add("Shares (1 hour):\n")
+                    poolOutputListField.add("       valid: ${ethHelper.getValidShares()}\n")
+                    poolOutputListField.add("       stale: ${ethHelper.getStaleShares()}\n")
+                    poolOutputListField.add("       invalid: ${ethHelper.getInvalidShares()}\n")
                     _poolOutputList.value = poolOutputListField
 
                     if (walletStatus == RunStatus.Finished)
@@ -136,18 +139,18 @@ class HomeViewModel @Inject constructor(
                 val walletPoolSumRub = oneEth * walletPoolSum
 
                 balanceOutputListField = mutableListOf()
-                balanceOutputListField.add("Balance stats:\n")
-                balanceOutputListField.add("Wallet balance: " +
+                balanceOutputListField.add("Balance:\n")
+                balanceOutputListField.add("       Wallet: " +
                         "${String.format("%.5f", balance)} ETH / " +
                         "${String.format("%.0f", balanceRub)} ₽\n")
-                balanceOutputListField.add("Pool unpaid: " +
+                balanceOutputListField.add("       Unpaid: " +
                         "${String.format("%.5f", unpaid)} ETH / " +
                         "${String.format("%.0f", unpaidRub)} ₽\n")
-                balanceOutputListField.add("Wallet + unpaid: " +
+                balanceOutputListField.add("       Wallet + unpaid: " +
                         "${String.format("%.5f", walletPoolSum)} ETH / " +
                         "${String.format("%.0f", walletPoolSumRub)} ₽\n")
-                balanceOutputListField.add("Estimated for one month: " +
-                        "${String.format("%.5f", estimated)} ETH / " +
+                balanceOutputListField.add("Estimated for one month:\n")
+                balanceOutputListField.add("       ${String.format("%.5f", estimated)} ETH / " +
                         "${String.format("%.0f", estimatedRub)} ₽\n")
                 _balanceOutputList.value = balanceOutputListField
 

@@ -10,8 +10,9 @@ class EthermineHelper(private val data: EthermineData) {
         const val MEGAHASH = 1000000
     }
 
-    fun getShares() =
-        "${data.validShares}/${data.staleShares}/${data.invalidShares}"
+    fun getValidShares() = data.validShares
+    fun getStaleShares() = data.staleShares
+    fun getInvalidShares() = data.invalidShares
 
     fun getReportedHashrate() =
         "${String.format("%.2f", data.reportedHashrate / MEGAHASH)} MH/s"
