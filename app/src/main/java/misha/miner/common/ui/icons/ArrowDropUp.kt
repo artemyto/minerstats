@@ -1,4 +1,4 @@
-package misha.miner.ui.common.icons
+package misha.miner.common.ui.icons
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.materialIcon

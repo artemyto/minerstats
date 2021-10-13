@@ -27,7 +27,7 @@ import misha.miner.screens.ssh.RunCommand
 import misha.miner.screens.ssh.RunCommandViewModel
 import misha.miner.screens.wallet.Wallet
 import misha.miner.screens.wallet.WalletViewModel
-import misha.miner.ui.theme.MyMinerTheme
+import misha.miner.common.ui.theme.MyMinerTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

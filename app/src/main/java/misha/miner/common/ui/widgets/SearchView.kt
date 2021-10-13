@@ -1,4 +1,4 @@
-package misha.miner.ui.common
+package misha.miner.common.ui.widgets
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.ZeroCornerSize

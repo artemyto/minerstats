@@ -1,4 +1,4 @@
-package misha.miner.ui.theme
+package misha.miner.common.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

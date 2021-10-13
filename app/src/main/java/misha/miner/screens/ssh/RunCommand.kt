@@ -20,8 +20,8 @@ import androidx.constraintlayout.compose.Dimension
 import kotlinx.coroutines.Job
 import misha.miner.R
 import misha.miner.models.common.ErrorState
-import misha.miner.ui.common.ErrorAlert
-import misha.miner.ui.common.ExposedDropDownMenu
+import misha.miner.common.ui.widgets.ErrorAlert
+import misha.miner.common.ui.widgets.ExposedDropDownMenu
 
 @Composable
 fun RunCommand(viewModel: RunCommandViewModel, openDrawer: () -> Job) {

@@ -23,7 +23,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.Job
 import misha.miner.R
 import misha.miner.models.coinmarketcap.data.Listing
-import misha.miner.ui.common.SearchView
+import misha.miner.common.ui.widgets.SearchView
 import java.util.*
 
 @Composable

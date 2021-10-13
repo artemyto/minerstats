@@ -9,8 +9,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import kotlinx.coroutines.Job
 import misha.miner.models.common.ErrorState
-import misha.miner.ui.common.BaseScreen
-import misha.miner.ui.common.ErrorAlert
+import misha.miner.common.ui.widgets.BaseScreen
+import misha.miner.common.ui.widgets.ErrorAlert
 
 @Composable
 fun PCStats(viewModel: PCStatsViewModel, openDrawer: () -> Job) {

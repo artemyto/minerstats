@@ -1,4 +1,4 @@
-package misha.miner.ui.common
+package misha.miner.common.ui.widgets
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn

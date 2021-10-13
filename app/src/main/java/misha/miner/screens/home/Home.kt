@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import kotlinx.coroutines.Job
-import misha.miner.ui.common.BaseScreen
+import misha.miner.common.ui.widgets.BaseScreen
 
 @Composable
 fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {

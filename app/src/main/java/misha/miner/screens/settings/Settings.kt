@@ -17,7 +17,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import kotlinx.coroutines.Job
 import misha.miner.R
-import misha.miner.ui.common.ExposedDropDownMenu
+import misha.miner.common.ui.widgets.ExposedDropDownMenu
 
 @Composable
 fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {

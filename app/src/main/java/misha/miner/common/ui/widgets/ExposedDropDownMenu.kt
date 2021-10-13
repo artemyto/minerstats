@@ -1,4 +1,4 @@
-package misha.miner.ui.common
+package misha.miner.common.ui.widgets
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -12,7 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import misha.miner.ui.common.icons.ArrowDropUp
+import misha.miner.common.ui.icons.ArrowDropUp
 
 @SuppressLint("ModifierParameter")
 @Composable
