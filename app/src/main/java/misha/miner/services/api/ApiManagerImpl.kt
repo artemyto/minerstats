@@ -6,7 +6,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import misha.miner.BuildConfig
 import misha.miner.common.Constants
-import misha.miner.models.BaseError
+import misha.miner.models.common.BaseError
 import misha.miner.models.coinmarketcap.CoinMarketCapStatus
 import misha.miner.models.coinmarketcap.Quote
 import misha.miner.models.coinmarketcap.currency.CurrencyType

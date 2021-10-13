@@ -1,6 +1,6 @@
 package misha.miner.services.api
 
-import misha.miner.models.BaseError
+import misha.miner.models.common.BaseError
 import misha.miner.models.coinmarketcap.currency.CurrencyType
 import misha.miner.models.coinmarketcap.data.Listing
 import misha.miner.models.ehterscan.EtherscanTransaction
