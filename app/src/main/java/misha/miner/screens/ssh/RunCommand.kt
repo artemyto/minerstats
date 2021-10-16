@@ -1,9 +1,9 @@
 package misha.miner.screens.ssh
 
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
@@ -19,9 +19,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import kotlinx.coroutines.Job
 import misha.miner.R
-import misha.miner.models.common.ErrorState
 import misha.miner.common.ui.widgets.ErrorAlert
 import misha.miner.common.ui.widgets.ExposedDropDownMenu
+import misha.miner.models.common.ErrorState
 
 @Composable
 fun RunCommand(viewModel: RunCommandViewModel, openDrawer: () -> Job) {
@@ -112,7 +112,7 @@ fun RunCommand(viewModel: RunCommandViewModel, openDrawer: () -> Job) {
                 Text(text = "run")
             }
 
-            Column(
+            SelectionContainer(
                 modifier = Modifier
                     .constrainAs(lazyList) {
                         linkTo(run.bottom, parent.bottom, topMargin = 16.dp)

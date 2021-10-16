@@ -2,6 +2,7 @@ package misha.miner.common.ui.widgets
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -57,16 +58,19 @@ fun BaseScreen(
                 )
             }
 
-            LazyColumn(
+            SelectionContainer(
                 modifier = Modifier.constrainAs(lazyList) {
                     linkTo(parent.start, parent.end, startMargin = 16.dp, endMargin = 16.dp)
                     linkTo(menu.bottom, parent.bottom, topMargin = 16.dp, bias = 0F)
                     width = Dimension.fillToConstraints
                 }
             ) {
+                LazyColumn {
 
-                items(list.size) { index ->
-                    Text(list[index])
+                    items(list.size) { index ->
+
+                        Text(list[index])
+                    }
                 }
             }
         }
