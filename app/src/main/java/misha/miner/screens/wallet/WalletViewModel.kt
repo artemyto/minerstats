@@ -6,10 +6,14 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import misha.miner.common.fullEthAddr
+import misha.miner.common.util.getEthValue
 import misha.miner.models.common.ErrorState
 import misha.miner.models.ehterscan.EtherscanTransaction
 import misha.miner.services.api.ApiManager
 import misha.miner.services.storage.StorageManager
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -64,6 +68,18 @@ class WalletViewModel @Inject constructor(
     }
 
     private fun processList(list: List<EtherscanTransaction>): List<String> {
-        return list.map { it.toString() }
+
+        val zoneOffset = ZoneId.systemDefault().rules.getOffset(Instant.now())
+
+        return list
+            .map {
+
+                val value = "%.5f".format(it.value.getEthValue())
+                val fee = "%.5f".format((it.gasUsed * it.gasPrice).getEthValue())
+                val date = LocalDateTime.ofEpochSecond(it.timeStamp, 0, zoneOffset)
+
+                "value = $value\nfee = $fee\ndate = $date\n"
+            }
+            .reversed()
     }
 }
