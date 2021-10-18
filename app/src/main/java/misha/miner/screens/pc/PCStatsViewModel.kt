@@ -192,22 +192,29 @@ class PCStatsViewModel @Inject constructor(
         val mem = 10
         val power = 17
 
+        val iteration = 21
+
         if (name != Amd) return listOf()
 
         val list = """\d+""".toRegex().findAll(string).toList()
 
-        val currentRate = list[fanRpm].value.toDouble()
-        val maxRate = list[fanRpmMax].value.toDouble()
+        val outputList = mutableListOf<String>()
 
-        val percentage = (currentRate / maxRate * 100).roundToInt()
+        for (buffer in list.indices step iteration) {
 
-        return listOf(
-            "AMD\n",
-            "       temp: ${list[temp].value} C\n",
-            "       mem temp: ${list[mem].value} C\n",
-            "       fan: ${currentRate.toInt()} RPM / $percentage%\n",
-            "       power: ${list[power].value} W\n",
-        )
+            val currentRate = list[buffer + fanRpm].value.toDouble()
+            val maxRate = list[buffer + fanRpmMax].value.toDouble()
+
+            val percentage = (currentRate / maxRate * 100).roundToInt()
+
+            outputList.add("AMD\n")
+            outputList.add("       temp: ${list[buffer + temp].value} C\n")
+            outputList.add("       mem temp: ${list[buffer + mem].value} C\n")
+            outputList.add("       fan: ${currentRate.toInt()} RPM / $percentage%\n")
+            outputList.add("       power: ${list[buffer + power].value} W\n")
+        }
+
+        return outputList
     }
 
     /*
