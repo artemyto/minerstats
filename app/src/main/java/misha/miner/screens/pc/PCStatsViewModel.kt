@@ -244,9 +244,9 @@ class PCStatsViewModel @Inject constructor(
 
         return listOf(
             "NVIDIA GPU\n",
-            "       temp: ${list[temp].value.toInt()} C\n",
-            "       fan: ${list[fan].value.toInt()}%\n",
-            "       power: ${list[power].value.toInt()} W\n",
+            "       temp: ${list[temp].value} C\n",
+            "       fan: ${list[fan].value}%\n",
+            "       power: ${list[power].value} W\n",
             "       driver: ${list[driver].value} / CUDA ${list[cuda].value}\n"
         )
     }
