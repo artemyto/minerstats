@@ -23,6 +23,7 @@ class PCStatsViewModel @Inject constructor(
 
     companion object {
         const val Amd = "Amd"
+        const val Intel = "Intel"
         const val Nvidia = "Nvidia"
     }
 
@@ -55,6 +56,11 @@ class PCStatsViewModel @Inject constructor(
         Command.SimpleCommand(
             name = "AMD CPU\n\n       temp: ",
             command = "sensors | grep Tdie | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'"
+        ),
+        Command.ActionCommand(
+            name = Intel,
+            command = "sensors | grep 'Physical id 0'",
+            action = this::processIntel
         ),
         Command.ActionCommand(
             name = Nvidia,
@@ -242,6 +248,21 @@ class PCStatsViewModel @Inject constructor(
             "       fan: ${list[fan].value.toInt()}%\n",
             "       power: ${list[power].value.toInt()} W\n",
             "       driver: ${list[driver].value} / CUDA ${list[cuda].value}\n"
+        )
+    }
+
+    // Physical id 0:  +37.0°C  (high = +80.0°C, crit = +100.0°C)
+    private fun processIntel(name: String, string: String): List<String> {
+
+        val temp = 1
+
+        if (name != Intel) return listOf()
+
+        val list = """\d+\.?\d*""".toRegex().findAll(string).toList()
+
+        return listOf(
+            "INTEL CPU\n",
+            "       temp: ${list[temp].value} C\n"
         )
     }
 
