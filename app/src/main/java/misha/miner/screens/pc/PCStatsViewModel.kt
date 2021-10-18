@@ -53,7 +53,7 @@ class PCStatsViewModel @Inject constructor(
 
     private val commandList = mutableListOf(
         Command.SimpleCommand(
-            name = "CPU temp",
+            name = "AMD CPU\n\n       temp: ",
             command = "sensors | grep Tdie | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'"
         ),
         Command.ActionCommand(
@@ -68,10 +68,10 @@ class PCStatsViewModel @Inject constructor(
         ),
         //Amd driver
         Command.SimpleCommand(
-            name = "       driver",
+            name = "       driver: ",
             command = "DISPLAY=:0 glxinfo | grep 'OpenGL version' | grep -o '[0-9]\\{2\\}\\.[0-9].[0-9]'"
         ),
-        Command.SimpleCommand(name = "Kernel",
+        Command.SimpleCommand(name = "Linux Kernel\n\n       ",
             command = "uname -r"
         ),
     )
@@ -139,7 +139,7 @@ class PCStatsViewModel @Inject constructor(
                         is Command.SimpleCommand -> {
                             val commandResult = ssh.runCommand(command = it.command)
                             if (commandResult.isNotBlank()) {
-                                listOfOutputs[index].add("${it.name}: $commandResult")
+                                listOfOutputs[index].add("${it.name}$commandResult")
                             }
                         }
 
@@ -207,7 +207,7 @@ class PCStatsViewModel @Inject constructor(
 
             val percentage = (currentRate / maxRate * 100).roundToInt()
 
-            outputList.add("AMD\n")
+            outputList.add("AMD GPU\n")
             outputList.add("       temp: ${list[buffer + temp].value} C\n")
             outputList.add("       mem temp: ${list[buffer + mem].value} C\n")
             outputList.add("       fan: ${currentRate.toInt()} RPM / $percentage%\n")
@@ -237,7 +237,7 @@ class PCStatsViewModel @Inject constructor(
         val list = """\d+\.?\d*""".toRegex().findAll(string).toList()
 
         return listOf(
-            "NVIDIA\n",
+            "NVIDIA GPU\n",
             "       temp: ${list[temp].value.toInt()} C\n",
             "       fan: ${list[fan].value.toInt()}%\n",
             "       power: ${list[power].value.toInt()} W\n",
