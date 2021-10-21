@@ -69,7 +69,7 @@ class PCStatsViewModel @Inject constructor(
         ),
         Command.ActionCommand(
             name = Amd,
-            command = "sensors | grep 'fan\\|junction\\|mem\\|power'",
+            command = "sensors | grep amdgpu -A 10 | grep 'fan\\|junction\\|mem\\|power'",
             action = this::processAmd
         ),
         //Amd driver
