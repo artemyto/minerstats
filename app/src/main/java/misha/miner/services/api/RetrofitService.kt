@@ -5,6 +5,8 @@ import misha.miner.models.coinmarketcap.data.Converted
 import misha.miner.models.coinmarketcap.data.Listing
 import misha.miner.models.ehterscan.EtherscanResponse
 import misha.miner.models.ehterscan.EtherscanTransaction
+import misha.miner.models.ethermine.EthermineCurrentStats
+import misha.miner.models.ethermine.EthermineDashboard
 import misha.miner.models.ethermine.EthermineResponse
 import retrofit2.Response
 import retrofit2.http.*
@@ -15,7 +17,13 @@ interface RetrofitService {
     suspend fun getPoolStats(
         @Url
         url: String
-    ): Response<EthermineResponse>
+    ): Response<EthermineResponse<EthermineCurrentStats>>
+
+    @GET
+    suspend fun getPoolDashboard(
+        @Url
+        url: String
+    ): Response<EthermineResponse<EthermineDashboard>>
 
     @GET
     suspend fun getWalletStats(

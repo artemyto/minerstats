@@ -14,7 +14,10 @@ import misha.miner.models.coinmarketcap.data.Listing
 import misha.miner.models.ehterscan.EtherscanResponse
 import misha.miner.models.ehterscan.EtherscanResponseStatus
 import misha.miner.models.ehterscan.EtherscanTransaction
-import misha.miner.models.ethermine.EthermineData
+import misha.miner.models.ethermine.EthermineCurrentStats
+import misha.miner.models.ethermine.EthermineDashboard
+import misha.miner.models.ethermine.EthermineResponse
+import misha.miner.models.ethermine.EthermineResponseStatus
 import retrofit2.Response
 import java.io.IOException
 import java.lang.Exception
@@ -23,7 +26,7 @@ class ApiManagerImpl(private val retrofitService: RetrofitService) : ApiManager 
 
     override fun getPoolStats(
         address: String,
-        completion: (EthermineData) -> Unit,
+        completion: (EthermineCurrentStats) -> Unit,
         onError: (BaseError) -> Unit
     ) {
 
@@ -35,30 +38,28 @@ class ApiManagerImpl(private val retrofitService: RetrofitService) : ApiManager 
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiCall(endPoint)
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        when {
-                            response.body() == null -> {
-                                onError(BaseError("Пустой ответ"))
-                            }
-                            response.body()?.error != null -> {
+                doOnEthermineFinish(response = response, completion = completion, onError = onError)
+            } catch (e: Exception) {
+                doOnException(onError, e)
+            }
+        }
+    }
 
-                                onError(
-                                    BaseError(
-                                        response.body()?.error?.error ?: "Что-то пошло не так"
-                                    )
-                                )
-                            }
-                            else -> try {
-                                completion(response.body()?.data!!)
-                            } catch (e: NullPointerException) {
-                                onError(BaseError("Пустой ответ"))
-                            }
-                        }
-                    } else {
-                        onError(BaseError(response.message() ?: "Что-то пошло не так"))
-                    }
-                }
+    override fun getPoolDashboard(
+        address: String,
+        completion: (EthermineDashboard) -> Unit,
+        onError: (BaseError) -> Unit
+    ) {
+
+        val service = retrofitService
+
+        val endPoint = Constants.Ethermine.statsByAddress(address)
+        val apiCall = service::getPoolDashboard
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiCall(endPoint)
+                doOnEthermineFinish(response = response, completion = completion, onError = onError)
             } catch (e: Exception) {
                 doOnException(onError, e)
             }
@@ -86,7 +87,7 @@ class ApiManagerImpl(private val retrofitService: RetrofitService) : ApiManager 
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiCall(endPoint, queries)
-                doOnFinish(response = response, completion = completion, onError = onError)
+                doOnEtherscanFinish(response = response, completion = completion, onError = onError)
             } catch (e: Exception) {
                 doOnException(onError, e)
             }
@@ -116,7 +117,7 @@ class ApiManagerImpl(private val retrofitService: RetrofitService) : ApiManager 
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiCall(endPoint, queries)
-                doOnFinish(response = response, completion = completion, onError = onError)
+                doOnEtherscanFinish(response = response, completion = completion, onError = onError)
             } catch (e: Exception) {
                 doOnException(onError, e)
             }
@@ -211,7 +212,27 @@ class ApiManagerImpl(private val retrofitService: RetrofitService) : ApiManager 
         CurrencyType.ETH -> quote.eth.price
     }
 
-    private suspend fun <T>doOnFinish(
+    private suspend fun <T>doOnEthermineFinish(
+        response: Response<EthermineResponse<T>>,
+        completion: (T) -> Unit,
+        onError: (BaseError) -> Unit,
+    ) {
+        withContext(Dispatchers.Main) {
+            if (response.isSuccessful) {
+                response.body()?.let { body ->
+                    if (body.status == EthermineResponseStatus.Ok) {
+                        completion(body.data)
+                    }
+                } ?: run {
+                    onError(BaseError("Пустой ответ"))
+                }
+            } else {
+                onError(BaseError(response.message() ?: "Что-то пошло не так"))
+            }
+        }
+    }
+
+    private suspend fun <T>doOnEtherscanFinish(
         response: Response<EtherscanResponse<T>>,
         completion: (T) -> Unit,
         onError: (BaseError) -> Unit,

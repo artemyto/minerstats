@@ -4,12 +4,13 @@ import misha.miner.models.common.BaseError
 import misha.miner.models.coinmarketcap.currency.CurrencyType
 import misha.miner.models.coinmarketcap.data.Listing
 import misha.miner.models.ehterscan.EtherscanTransaction
-import misha.miner.models.ethermine.EthermineData
+import misha.miner.models.ethermine.EthermineCurrentStats
+import misha.miner.models.ethermine.EthermineDashboard
 
 interface ApiManager {
     fun getPoolStats(
         address: String,
-        completion: (EthermineData) -> Unit,
+        completion: (EthermineCurrentStats) -> Unit,
         onError: (BaseError) -> Unit
     )
 
@@ -30,4 +31,9 @@ interface ApiManager {
     )
 
     fun getListings(completion: (List<Listing>) -> Unit, onError: (BaseError) -> Unit)
+    fun getPoolDashboard(
+        address: String,
+        completion: (EthermineDashboard) -> Unit,
+        onError: (BaseError) -> Unit
+    )
 }

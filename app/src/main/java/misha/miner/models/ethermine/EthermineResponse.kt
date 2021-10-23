@@ -1,7 +1,7 @@
 package misha.miner.models.ethermine
 
-data class EthermineResponse(
+data class EthermineResponse<T>(
     val status: EthermineResponseStatus,
-    val data: EthermineData,
+    val data: T,
     val error: EthermineError
 )

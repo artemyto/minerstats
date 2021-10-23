@@ -1,6 +1,6 @@
 package misha.miner.models.ethermine
 
-data class EthermineData(
+data class EthermineCurrentStats(
     val reportedHashrate : Double,
     val currentHashrate: Double,
     val validShares: Int,
