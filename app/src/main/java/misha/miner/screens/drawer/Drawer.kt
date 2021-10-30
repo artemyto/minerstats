@@ -39,7 +39,6 @@ fun Drawer(
             .padding(start = 24.dp, top = 48.dp)
     ) {
         screens.forEach { screen ->
-            Spacer(Modifier.height(24.dp))
             Text(
                 text = screen.title,
                 style = MaterialTheme.typography.h5,
@@ -48,13 +47,11 @@ fun Drawer(
                         onDestinationClicked(screen.route)
                     }
                     .fillMaxWidth()
+                    .padding(vertical = 12.dp)
             )
         }
-        Spacer(Modifier.height(24.dp))
         Pool()
-        Spacer(Modifier.height(24.dp))
         Wallet()
-        Spacer(Modifier.height(24.dp))
         Rate()
     }
 }
