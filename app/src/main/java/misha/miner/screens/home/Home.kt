@@ -16,6 +16,12 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
     val balanceOutputList: MutableList<String> by viewModel.balanceOutputList.observeAsState(
         mutableListOf()
     )
+    val workerOutputList: MutableList<String> by viewModel.workerOutputList.observeAsState(
+        mutableListOf()
+    )
+    val sharesOutputList: MutableList<String> by viewModel.sharesOutputList.observeAsState(
+        mutableListOf()
+    )
     val isRefreshing: Boolean by viewModel.isRefreshing.observeAsState(false)
 
     BaseScreen(
@@ -27,6 +33,8 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
             if (eth.isNotBlank()) add(eth)
             addAll(balanceOutputList)
             addAll(poolOutputList)
+            addAll(workerOutputList)
+            addAll(sharesOutputList)
         }
     )
 }

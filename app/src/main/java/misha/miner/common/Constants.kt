@@ -7,6 +7,8 @@ object Constants {
         private const val base = "https://api.ethermine.org/"
 
         fun statsByAddress(address: String) = "${base}miner/${address}/currentStats"
+
+        fun dashboardByAddress(address: String) = "${base}miner/${address}/dashboard"
     }
 
     object Etherscan {

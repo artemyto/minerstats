@@ -53,7 +53,7 @@ class ApiManagerImpl(private val retrofitService: RetrofitService) : ApiManager 
 
         val service = retrofitService
 
-        val endPoint = Constants.Ethermine.statsByAddress(address)
+        val endPoint = Constants.Ethermine.dashboardByAddress(address)
         val apiCall = service::getPoolDashboard
 
         CoroutineScope(Dispatchers.IO).launch {
