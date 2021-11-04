@@ -29,14 +29,10 @@ class PCStatsViewModel @Inject constructor(
 
     private val _status: MutableStateFlow<String> = MutableStateFlow("Connection is not opened yet")
     val status: StateFlow<String> = _status
-    private var statuses: MutableList<String> = mutableListOf()
 
     private val _outputList: MutableLiveData<MutableList<String>> =
         MutableLiveData(mutableListOf())
     val outputList: LiveData<MutableList<String>> = _outputList
-    private lateinit var outputListField: MutableList<String>
-
-    private var listOfOutputs: MutableList<MutableList<String>> = mutableListOf()
 
     private val _pcLabelList: MutableLiveData<MutableList<String>> =
         MutableLiveData(mutableListOf())
@@ -96,7 +92,6 @@ class PCStatsViewModel @Inject constructor(
     }
 
     fun runClicked() {
-        _isRefreshing.value = true
         run()
     }
 
@@ -107,25 +102,25 @@ class PCStatsViewModel @Inject constructor(
     }
 
     private fun makeSshStats() {
-        outputListField = mutableListOf("PC miner stats:\n")
         val config = storageManager.getStorage()
 
-        listOfOutputs = mutableListOf()
-        statuses = mutableListOf()
         pcLabelListValue = mutableListOf()
 
         config.pcList.forEachIndexed { index, item ->
-            listOfOutputs.add(mutableListOf())
-            statuses.add("")
             pcLabelListValue.add("PC ${index + 1}")
-            runSsh(index, item)
         }
+
+        runSsh(selectedIndex, config.pcList[selectedIndex])
 
         _pcLabelList.value = pcLabelListValue
     }
 
     private fun runSsh(index: Int, item: PCViewModel) {
         CoroutineScope(Dispatchers.IO).launch {
+
+            _outputList.postValue(mutableListOf())
+            _status.emit("")
+            _isRefreshing.postValue(true)
 
             val ssh = SSHConnectionManager()
 
@@ -136,16 +131,17 @@ class PCStatsViewModel @Inject constructor(
                     username = item.name,
                     password = item.password
                 )
-                statuses[index] =
+                _status.emit(
                     "Connection to ${item.name}@${item.address}:${item.port} is established"
+                )
 
-                listOfOutputs[index] = mutableListOf("PC ${index + 1}:\n")
+                val outputListField = mutableListOf("PC ${index + 1} miner stats:\n")
                 commandList.forEach {
                     when (it) {
                         is Command.SimpleCommand -> {
                             val commandResult = ssh.runCommand(command = it.command)
                             if (commandResult.isNotBlank()) {
-                                listOfOutputs[index].add("${it.name}$commandResult")
+                                outputListField.add("${it.name}$commandResult")
                             }
                         }
 
@@ -153,18 +149,19 @@ class PCStatsViewModel @Inject constructor(
                             val commandResult = ssh.runCommand(command = it.command)
                             if (commandResult.isNotBlank()) {
                                 val processed = it.action(it.name, commandResult)
-                                listOfOutputs[index].addAll(processed)
+                                outputListField.addAll(processed)
                             }
                         }
                     }
 
                     if (index == selectedIndex) {
-                        _outputList.postValue(listOfOutputs[index].toMutableList())
-                        _status.emit(statuses[index])
+                        _outputList.postValue(outputListField.toMutableList())
                         _isRefreshing.postValue(false)
                     }
                 }
             } catch (e: Exception) {
+                _status.emit("Connection to ${item.name}@${item.address}:${item.port} is not established")
+
                 error.emit(ErrorState.Error(e.message ?: ""))
 
                 if (index == selectedIndex) {
@@ -179,9 +176,7 @@ class PCStatsViewModel @Inject constructor(
         _selectedPC.value = index
         selectedIndex = index
 
-        listOfOutputs.getOrNull(index)?.let {
-            _outputList.value = it
-        }
+        run()
     }
 
     /* Example strings:
