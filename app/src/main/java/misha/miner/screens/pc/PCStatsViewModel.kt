@@ -51,7 +51,7 @@ class PCStatsViewModel @Inject constructor(
     private val commandList = mutableListOf(
         Command.SimpleCommand(
             name = "AMD CPU\n\n       temp: ",
-            command = "sensors | grep Tdie | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'"
+            command = "sensors | grep Tctl | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'"
         ),
         Command.ActionCommand(
             name = Intel,
@@ -71,7 +71,7 @@ class PCStatsViewModel @Inject constructor(
         //Amd driver
         Command.SimpleCommand(
             name = "       driver: ",
-            command = "DISPLAY=:0 glxinfo | grep 'OpenGL version' | grep -o '[0-9]\\{2\\}\\.[0-9].[0-9]'"
+            command = "pacman -Q mesa | grep -o '[0-9]\\{2\\}\\.[0-9].[0-9]'"
         ),
         Command.SimpleCommand(name = "Linux Kernel\n\n       ",
             command = "uname -r"
@@ -156,19 +156,17 @@ class PCStatsViewModel @Inject constructor(
 
                     if (index == selectedIndex) {
                         _outputList.postValue(outputListField.toMutableList())
-                        _isRefreshing.postValue(false)
                     }
                 }
             } catch (e: Exception) {
                 _status.emit("Connection to ${item.name}@${item.address}:${item.port} is not established")
 
                 error.emit(ErrorState.Error(e.message ?: ""))
-
-                if (index == selectedIndex) {
-                    _isRefreshing.postValue(false)
-                }
             }
             ssh.close()
+            if (index == selectedIndex) {
+                _isRefreshing.postValue(false)
+            }
         }
     }
 
