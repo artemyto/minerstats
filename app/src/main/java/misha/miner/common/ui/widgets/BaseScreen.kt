@@ -1,5 +1,6 @@
 package misha.miner.common.ui.widgets
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -65,7 +66,7 @@ fun BaseScreen(
                     width = Dimension.fillToConstraints
                 }
             ) {
-                LazyColumn {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
 
                     items(list.size) { index ->
 
