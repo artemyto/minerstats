@@ -23,6 +23,7 @@ class PCStatsViewModel @Inject constructor(
 
     companion object {
         const val Amd = "Amd"
+        const val AmdDriver = "AmdDriver"
         const val Intel = "Intel"
         const val Nvidia = "Nvidia"
     }
@@ -69,9 +70,11 @@ class PCStatsViewModel @Inject constructor(
             action = this::processAmd
         ),
         //Amd driver
-        Command.SimpleCommand(
-            name = "       driver: ",
-            command = "pacman -Q mesa | grep -o '[0-9]\\{2\\}\\.[0-9].[0-9]'"
+        Command.ActionCommand(
+            name = AmdDriver,
+            command = "pacman -Q mesa | grep -o '[0-9]\\{2\\}\\.[0-9].[0-9]' ; " +
+                    "pacman -Q opencl-amd | grep -o '[0-9]\\{2\\}\\.[0-9]\\{2\\}'",
+            action = this::processAmdDriver
         ),
         Command.SimpleCommand(name = "Linux Kernel\n\n       ",
             command = "uname -r"
@@ -214,6 +217,14 @@ class PCStatsViewModel @Inject constructor(
         }
 
         return outputList
+    }
+
+    private fun processAmdDriver(name: String, string: String): List<String> {
+        if (name != AmdDriver) return listOf()
+
+        val (mesa, opencl) = string.split('\n')
+
+        return listOf("       driver: mesa $mesa / opencl $opencl\n")
     }
 
     /*
