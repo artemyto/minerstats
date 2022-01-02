@@ -1,11 +1,6 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 buildscript {
-    val hilt_version by extra ("2.40.5")
-    val gradle_version by extra ("7.0.4")
-    val realm_version by extra ("10.9.0")
-    val gradle_versions_plugin_version by extra ("0.40.0")
-    val kotlin_version by extra ("1.6.0")
 
     repositories {
         google()
@@ -13,15 +8,15 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:$gradle_version")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+        classpath(libs.androidGradlePlugin)
+        classpath(libs.kotlinGradlePlugin)
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle.kts files
 
-        classpath("com.google.dagger:hilt-android-gradle-plugin:$hilt_version")
-        classpath("io.realm:realm-gradle-plugin:$realm_version")
-        classpath("com.github.ben-manes:gradle-versions-plugin:$gradle_versions_plugin_version")
+        classpath(libs.hilt.gradlePlugin)
+        classpath(libs.realm)
+        classpath(libs.gradleVersionPlugin)
     }
 }
 

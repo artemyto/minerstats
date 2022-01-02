@@ -7,6 +7,7 @@ androidx-core = "1.7.0"
 androidx-junit = "1.1.3"
 androidx-lifecycle = "2.4.0"
 androidx-navigation = "2.4.0-rc01"
+android-gradle-plugin = "7.0.4"
 compose = "1.1.0-rc01"
 chucker = "3.5.2"
 desugaring = "1.1.5"
@@ -15,6 +16,7 @@ gradleDependencyUpdate = "0.40.0"
 hilt = "2.40.5"
 jsch = "0.1.55"
 junit = "4.13.2"
+kotlin = "1.6.0"
 material = "1.4.0"
 minSdk = "21"
 okhttp = "5.0.0-alpha.3"
@@ -49,6 +51,10 @@ desugaring = { module = "com.android.tools:desugar_jdk_libs", version.ref = "des
 
 espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 
+androidGradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
+
+gradleVersionPlugin = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "gradleDependencyUpdate" }
+
 jsch = { module = "com.jcraft:jsch", version.ref = "jsch" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -56,6 +62,8 @@ junit = { module = "junit:junit", version.ref = "junit" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-gradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+
+kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 
