@@ -7,3 +7,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "My Miner"
 include(":app")
+enableFeaturePreview("VERSION_CATALOGS")

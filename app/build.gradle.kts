@@ -10,7 +10,7 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = libs.versions.sdk.get().toInt()
 
     val buildPropsFile = file("build.properties")
 
@@ -24,8 +24,8 @@ android {
 
     defaultConfig {
         applicationId = "misha.miner"
-        minSdk = 21
-        targetSdk = 31
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.sdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
         buildConfigField("String", "ETHERSCAN_API_KEY", etherScanApiKey)
@@ -55,46 +55,46 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = rootProject.extra["compose_version"] as String
+        kotlinCompilerExtensionVersion = libs.versions.compose.get()
     }
 }
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.6.0")
-    implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.compose.ui:ui:${rootProject.extra["compose_version"]}")
-    implementation("androidx.compose.material:material:${rootProject.extra["compose_version"]}")
-    implementation("androidx.compose.ui:ui-tooling:${rootProject.extra["compose_version"]}")
-    implementation("androidx.compose.runtime:runtime:${rootProject.extra["compose_version"]}")
-    implementation("androidx.compose.runtime:runtime-livedata:${rootProject.extra["compose_version"]}")
-    implementation("androidx.compose.material:material-icons-extended:${rootProject.extra["compose_version"]}")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    implementation("androidx.activity:activity-compose:1.3.1")
-    implementation("androidx.navigation:navigation-compose:2.4.0-alpha10")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01")
-    implementation("com.google.accompanist:accompanist-swiperefresh:0.19.0")
-    implementation("com.jcraft:jsch:0.1.55")
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.material)
+    implementation(libs.compose.uiTooling)
+    implementation(libs.compose.runtime)
+    implementation(libs.compose.runtimeLivedata)
+    implementation(libs.compose.materialIconsExtended)
+    implementation(libs.androidx.lifecycle)
+    implementation(libs.activity.compose)
+    implementation(libs.navigation.compose)
+    implementation(libs.constraintlayout.compose)
+    implementation(libs.accompanist.swiperefresh)
+    implementation(libs.jsch)
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    coreLibraryDesugaring(libs.desugaring)
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${rootProject.extra["compose_version"]}")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.espresso)
+    androidTestImplementation(libs.compose.junit)
 
     //Hilt
-    kapt("com.google.dagger:hilt-compiler:${rootProject.extra["hilt_version"]}")
-    implementation("com.google.dagger:hilt-android:${rootProject.extra["hilt_version"]}")
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.android)
 
     //Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
+    implementation(libs.retrofit)
+    implementation(libs.retrofitGson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttpLoggingInterceptor)
 
     //Chuck HTTP interceptor
-    debugImplementation("com.github.chuckerteam.chucker:library:3.5.2")
-    releaseImplementation("com.github.chuckerteam.chucker:library-no-op:3.5.2")
+    debugImplementation(libs.chucker)
+    releaseImplementation(libs.chuckerNoOp)
 }
