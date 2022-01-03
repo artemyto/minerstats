@@ -112,7 +112,7 @@ fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
 
         Button(
             modifier = Modifier.constrainAs(add) {
-                top.linkTo(commandDropDown.top, 8.dp)
+                top.linkTo(commandDropDown.top)
                 height = Dimension.value(56.dp)
                 end.linkTo(parent.end, 16.dp)
             },
@@ -140,7 +140,7 @@ fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
 
         Button(
             modifier = Modifier.constrainAs(new) {
-                top.linkTo(pcDropDown.top, 8.dp)
+                top.linkTo(pcDropDown.top)
                 height = Dimension.value(56.dp)
                 end.linkTo(remove.start, 16.dp)
             },
@@ -153,7 +153,7 @@ fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
 
         Button(
             modifier = Modifier.constrainAs(remove) {
-                top.linkTo(pcDropDown.top, 8.dp)
+                top.linkTo(pcDropDown.top)
                 height = Dimension.value(56.dp)
                 end.linkTo(parent.end, 16.dp)
             },

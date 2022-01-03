@@ -1,28 +1,24 @@
 package misha.miner.common.ui.widgets
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import misha.miner.common.ui.icons.ArrowDropUp
 
+@OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("ModifierParameter")
 @Composable
 fun ExposedDropDownMenu(
-    modifier: Modifier = Modifier.fillMaxWidth(),
+    modifier: Modifier = Modifier,
     text: String = "",
     suggestions: List<String>,
     onTextChanged: (String) -> Unit,
     disableListAction: Boolean = false,
-    label: @Composable (() -> Unit)? = null
+    label: @Composable (() -> Unit)? = null,
+    readOnly: Boolean = false,
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf(text) }
@@ -31,53 +27,42 @@ fun ExposedDropDownMenu(
         Icons.Filled.ArrowDropUp
     else Icons.Filled.ArrowDropDown
 
-    ConstraintLayout(
-        modifier = modifier
+    ExposedDropdownMenuBox(
+        modifier = modifier,
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = !expanded
+        }
     ) {
-
-        val (textField, menu) = createRefs()
-
-        OutlinedTextField(
-            modifier = Modifier.constrainAs(textField) {
-                linkTo(parent.top, menu.top)
-                linkTo(parent.start, parent.end)
-                width = Dimension.fillToConstraints
-            },
-            label = label,
-            value = if (text.isNotBlank()) text else selectedText,
+        TextField(
+            readOnly = readOnly,
+            value = selectedText,
             onValueChange = {
                 selectedText = it
                 onTextChanged(it)
             },
+            label = label,
             trailingIcon = {
-                Icon(icon, null, Modifier.clickable { expanded = !expanded })
-            }
+                Icon(icon, null)
+            },
         )
-
-        BoxWithConstraints(
-            modifier = Modifier.constrainAs(menu) {
-                linkTo(textField.bottom, parent.bottom)
-                linkTo(textField.start, textField.end)
-                width = Dimension.fillToConstraints
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = {
+                expanded = false
             },
         ) {
-            val scope = this
-
-            DropdownMenu(
-                modifier = modifier.width(scope.maxWidth),
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-            ) {
-                suggestions.forEach { label ->
-                    DropdownMenuItem(onClick = {
+            suggestions.forEach { selectionOption ->
+                DropdownMenuItem(
+                    onClick = {
                         if (!disableListAction) {
-                            selectedText = label
+                            selectedText = selectionOption
                             expanded = false
-                            onTextChanged(label)
+                            onTextChanged(selectionOption)
                         }
-                    }) {
-                        Text(text = label)
                     }
+                ) {
+                    Text(text = selectionOption)
                 }
             }
         }
