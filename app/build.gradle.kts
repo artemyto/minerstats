@@ -94,7 +94,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttpLoggingInterceptor)
 
-    //Chuck HTTP interceptor
-    debugImplementation(libs.chucker)
-    releaseImplementation(libs.chuckerNoOp)
+    //Pluto HTTP interceptor
+    debugImplementation(libs.pluto)
+    releaseImplementation(libs.plutoNoOp)
 }
