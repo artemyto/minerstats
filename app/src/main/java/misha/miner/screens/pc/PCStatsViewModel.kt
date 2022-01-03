@@ -3,6 +3,7 @@ package misha.miner.screens.pc
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mocklets.pluto.PlutoLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -165,6 +166,7 @@ class PCStatsViewModel @Inject constructor(
                 _status.emit("Connection to ${item.name}@${item.address}:${item.port} is not established")
 
                 error.emit(ErrorState.Error(e.message ?: ""))
+                PlutoLog.e("ssh", e.message)
             }
             ssh.close()
             if (index == selectedIndex) {
