@@ -8,8 +8,10 @@ import misha.miner.models.ehterscan.EtherscanTransaction
 import misha.miner.models.ethermine.EthermineCurrentStats
 import misha.miner.models.ethermine.EthermineDashboard
 import misha.miner.models.ethermine.EthermineResponse
-import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.HeaderMap
+import retrofit2.http.QueryMap
+import retrofit2.http.Url
 
 interface RetrofitService {
 
@@ -17,13 +19,13 @@ interface RetrofitService {
     suspend fun getPoolStats(
         @Url
         url: String
-    ): Response<EthermineResponse<EthermineCurrentStats>>
+    ): EthermineResponse<EthermineCurrentStats>
 
     @GET
     suspend fun getPoolDashboard(
         @Url
         url: String
-    ): Response<EthermineResponse<EthermineDashboard>>
+    ): EthermineResponse<EthermineDashboard>
 
     @GET
     suspend fun getWalletStats(
@@ -31,7 +33,7 @@ interface RetrofitService {
         url: String,
         @QueryMap
         queries: Map<String, String>
-    ): Response<EtherscanResponse<String>>
+    ): EtherscanResponse<String>
 
     @GET
     suspend fun getWalletTransactions(
@@ -39,7 +41,7 @@ interface RetrofitService {
         url: String,
         @QueryMap
         queries: Map<String, String>
-    ): Response<EtherscanResponse<List<EtherscanTransaction>>>
+    ): EtherscanResponse<List<EtherscanTransaction>>
 
     @GET
     suspend fun convertCurrency(
@@ -49,7 +51,7 @@ interface RetrofitService {
         headers: Map<String, String>,
         @QueryMap
         queries: Map<String, String>
-    ): Response<CoinMarketCapResponse<Converted>>
+    ): CoinMarketCapResponse<Converted>
 
     @GET
     suspend fun getListings(
@@ -57,5 +59,5 @@ interface RetrofitService {
         url: String,
         @HeaderMap
         headers: Map<String, String>,
-    ): Response<CoinMarketCapResponse<List<Listing>>>
+    ): CoinMarketCapResponse<List<Listing>>
 }

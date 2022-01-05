@@ -3,20 +3,28 @@ package misha.miner.screens.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import misha.miner.common.EthermineHelper
-import misha.miner.common.fullEthAddr
 import misha.miner.common.util.getEthValue
 import misha.miner.common.util.hashrateToMegahashLabel
+import misha.miner.domain.ConvertCurrencyUseCase
+import misha.miner.domain.GetPoolDashboardUseCase
+import misha.miner.domain.GetPoolStatsUseCase
+import misha.miner.domain.GetWalletStatsUseCase
 import misha.miner.models.coinmarketcap.currency.CurrencyType
-import misha.miner.services.api.ApiManager
 import misha.miner.services.storage.StorageManager
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     storageManager: StorageManager,
-    private val apiManager: ApiManager
+    private val getPoolStats: GetPoolStatsUseCase,
+    private val getWalletStats: GetWalletStatsUseCase,
+    private val getPoolDashboard: GetPoolDashboardUseCase,
+    private val convertCurrency: ConvertCurrencyUseCase,
 ) : ViewModel() {
 
     private val _isRefreshing: MutableLiveData<Boolean> = MutableLiveData()
@@ -87,36 +95,37 @@ class HomeViewModel @Inject constructor(
         if (poolStatus == RunStatus.Finished) {
 
             poolStatus = RunStatus.Launched
-            apiManager.getPoolStats(
-                address = address,
-                completion = { data ->
-                    val ethHelper = EthermineHelper(data)
+            viewModelScope.launch(Dispatchers.IO) {
+                getPoolStats
+                    .execute(address)
+                    .onSuccess { data ->
+                        val ethHelper = EthermineHelper(data)
 
-                    unpaid = ethHelper.getUnpaidBalanceValue()
-                    estimated = ethHelper.getEstimatedEthForMonthValue()
+                        unpaid = ethHelper.getUnpaidBalanceValue()
+                        estimated = ethHelper.getEstimatedEthForMonthValue()
 
-                    poolOutputListField = mutableListOf()
-                    poolOutputListField.add("Hashrate:\n")
-                    poolOutputListField.add("       Average: ${ethHelper.getAverageHashrate()}\n")
-                    poolOutputListField.add("       Reported: ${ethHelper.getReportedHashrate()}\n")
-                    poolOutputListField.add("       Current: ${ethHelper.getCurrentHashrate()}\n")
-                    _poolOutputList.value = poolOutputListField
+                        poolOutputListField = mutableListOf(
+                            "Hashrate:\n",
+                            "       Average: ${ethHelper.getAverageHashrate()}\n",
+                            "       Reported: ${ethHelper.getReportedHashrate()}\n",
+                            "       Current: ${ethHelper.getCurrentHashrate()}\n",
+                        )
+                        _poolOutputList.postValue(poolOutputListField)
 
-                    sharesOutputListField = mutableListOf()
-                    sharesOutputListField.add("Shares (1 hour):\n")
-                    sharesOutputListField.add("       valid: ${ethHelper.getValidShares()}\n")
-                    sharesOutputListField.add("       stale: ${ethHelper.getStaleShares()}\n")
-                    sharesOutputListField.add("       invalid: ${ethHelper.getInvalidShares()}\n")
-                    _sharesOutputList.value = sharesOutputListField
+                        sharesOutputListField = mutableListOf(
+                            "Shares (1 hour):\n",
+                            "       valid: ${ethHelper.getValidShares()}\n",
+                            "       stale: ${ethHelper.getStaleShares()}\n",
+                            "       invalid: ${ethHelper.getInvalidShares()}\n",
+                        )
+                        _sharesOutputList.postValue(sharesOutputListField)
 
-                    if (walletStatus == RunStatus.Finished)
-                        makeBalanceStats()
-                    poolStatus = RunStatus.Finished
-                },
-                onError = {
-                    poolStatus = RunStatus.Finished
-                }
-            )
+                        if (walletStatus == RunStatus.Finished)
+                            makeBalanceStats()
+                        poolStatus = RunStatus.Finished
+                    }
+                    .onFailure { poolStatus = RunStatus.Finished }
+            }
         }
     }
 
@@ -124,101 +133,99 @@ class HomeViewModel @Inject constructor(
         if (walletStatus == RunStatus.Finished) {
 
             walletStatus = RunStatus.Launched
-            apiManager.getWalletStats(
-                address = address.fullEthAddr(),
-                completion = { result ->
-                    balance = result.getEthValue()
+            viewModelScope.launch(Dispatchers.IO) {
+                getWalletStats
+                    .execute(address)
+                    .onSuccess { result ->
+                        balance = result.getEthValue()
 
-                    if (poolStatus == RunStatus.Finished)
-                        makeBalanceStats()
-                    walletStatus = RunStatus.Finished
-                },
-                onError = {
-                    walletStatus = RunStatus.Finished
-                }
-            )
+                        if (poolStatus == RunStatus.Finished)
+                            makeBalanceStats()
+                        walletStatus = RunStatus.Finished
+                    }
+                    .onFailure {
+                        walletStatus = RunStatus.Finished
+                    }
+            }
         }
     }
 
     private fun makeBalanceStats() {
-        apiManager.convertCurrency(
-            from = CurrencyType.ETH,
-            to = CurrencyType.RUB,
-            amount = 1.0,
-            completion = { oneEth ->
+        viewModelScope.launch(Dispatchers.IO) {
+            convertCurrency
+                .execute(
+                    from = CurrencyType.ETH,
+                    to = CurrencyType.RUB,
+                    amount = 1.0,
+                )
+                .onSuccess { oneEth ->
 
-                val balanceRub = oneEth * balance
-                val unpaidRub = oneEth * unpaid
-                val estimatedRub = oneEth * estimated
-                val walletPoolSum = balance + unpaid
-                val walletPoolSumRub = oneEth * walletPoolSum
+                    val balanceRub = oneEth * balance
+                    val unpaidRub = oneEth * unpaid
+                    val estimatedRub = oneEth * estimated
+                    val walletPoolSum = balance + unpaid
+                    val walletPoolSumRub = oneEth * walletPoolSum
 
-                balanceOutputListField = mutableListOf()
-                balanceOutputListField.add("Balance:\n")
-                balanceOutputListField.add(
-                    "       Wallet: " +
-                            "${String.format("%.5f", balance)} ETH / " +
-                            "${String.format("%.0f", balanceRub)} ₽\n"
-                )
-                balanceOutputListField.add(
-                    "       Unpaid: " +
-                            "${String.format("%.5f", unpaid)} ETH / " +
-                            "${String.format("%.0f", unpaidRub)} ₽\n"
-                )
-                balanceOutputListField.add(
-                    "       Wallet + unpaid: " +
-                            "${String.format("%.5f", walletPoolSum)} ETH / " +
-                            "${String.format("%.0f", walletPoolSumRub)} ₽\n"
-                )
-                balanceOutputListField.add("Estimated for one month:\n")
-                balanceOutputListField.add(
-                    "       ${String.format("%.5f", estimated)} ETH / " +
-                            "${String.format("%.0f", estimatedRub)} ₽\n"
-                )
-                _balanceOutputList.value = balanceOutputListField
+                    balanceOutputListField = mutableListOf(
+                        "Balance:\n",
 
-                _isRefreshing.value = false
-            },
-            onError = {
-                _isRefreshing.value = false
-            }
-        )
+                        "       Wallet: " +
+                                "${String.format("%.5f", balance)} ETH / " +
+                                "${String.format("%.0f", balanceRub)} ₽\n",
+
+                        "       Unpaid: " +
+                                "${String.format("%.5f", unpaid)} ETH / " +
+                                "${String.format("%.0f", unpaidRub)} ₽\n",
+
+                        "       Wallet + unpaid: " +
+                                "${String.format("%.5f", walletPoolSum)} ETH / " +
+                                "${String.format("%.0f", walletPoolSumRub)} ₽\n",
+                        "Estimated for one month:\n",
+
+                        "       ${String.format("%.5f", estimated)} ETH / " +
+                                "${String.format("%.0f", estimatedRub)} ₽\n",
+                    )
+                    _balanceOutputList.postValue(balanceOutputListField)
+
+                    _isRefreshing.postValue(false)
+
+                }
+                .onFailure {
+                    _isRefreshing.postValue(false)
+                }
+        }
     }
 
     private fun makeAdditionalPoolStats() {
-        apiManager.getPoolDashboard(
-            address = address,
-            completion = {
-                workerOutputListField = mutableListOf()
-                workerOutputListField.add("Workers:\n")
-                for (worker in it.workers) {
-                    workerOutputListField.add(
-                        "       ${worker.worker} / reported: " +
-                                "${worker.reportedHashrate.hashrateToMegahashLabel()} / " +
-                                "current: ${worker.currentHashrate.hashrateToMegahashLabel()}\n"
-                    )
+        viewModelScope.launch(Dispatchers.IO) {
+            getPoolDashboard
+                .execute(address)
+                .onSuccess {
+                    workerOutputListField = mutableListOf("Workers:\n")
+                    for (worker in it.workers) {
+                        workerOutputListField.add(
+                            "       ${worker.worker} / reported: " +
+                                    "${worker.reportedHashrate.hashrateToMegahashLabel()} / " +
+                                    "current: ${worker.currentHashrate.hashrateToMegahashLabel()}\n"
+                        )
+                    }
+                    _workerOutputList.postValue(workerOutputListField)
                 }
-                _workerOutputList.value = workerOutputListField
-            },
-            onError = {
-
-            }
-        )
+        }
     }
 
     private fun getEth() {
-        apiManager.convertCurrency(
-            from = CurrencyType.ETH,
-            to = CurrencyType.USD,
-            amount = 1.0,
-            completion = { oneEth ->
-
-                _eth.value = "1 eth = ${String.format("%.2f", oneEth)} $\n"
-            },
-            onError = {
-
-            }
-        )
+        viewModelScope.launch(Dispatchers.IO) {
+            convertCurrency
+                .execute(
+                    from = CurrencyType.ETH,
+                    to = CurrencyType.USD,
+                    amount = 1.0,
+                )
+                .onSuccess { oneEth ->
+                    _eth.postValue("1 eth = ${String.format("%.2f", oneEth)} $\n")
+                }
+        }
     }
 
     enum class RunStatus {

@@ -3,17 +3,20 @@ package misha.miner.screens.currencies
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import misha.miner.domain.GetListingsUseCase
 import misha.miner.models.coinmarketcap.data.Listing
 import misha.miner.models.common.ErrorState
-import misha.miner.services.api.ApiManager
 import javax.inject.Inject
 
 @HiltViewModel
 class CurrenciesViewModel @Inject constructor(
-    private val apiManager: ApiManager,
-): ViewModel() {
+    private val getListings: GetListingsUseCase,
+) : ViewModel() {
 
     private val _currencies: MutableLiveData<MutableList<Listing>> =
         MutableLiveData(mutableListOf())
@@ -46,14 +49,16 @@ class CurrenciesViewModel @Inject constructor(
     }
 
     private fun getCurrencies() {
-        apiManager.getListings(
-            completion = {
-                _currencies.value = it.toMutableList()
-                _isRefreshing.value = false
-            },
-            onError = {
-                _isRefreshing.value = false
-            }
-        )
+        viewModelScope.launch(Dispatchers.IO) {
+            getListings
+                .execute()
+                .onSuccess {
+                    _currencies.postValue(it.toMutableList())
+                    _isRefreshing.postValue(false)
+                }
+                .onFailure {
+                    _isRefreshing.postValue(false)
+                }
+        }
     }
 }
