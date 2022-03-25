@@ -17,6 +17,7 @@ sealed class DrawerScreens(val title: String, val route: String) {
     object Currencies : DrawerScreens("Криптовалюты", "currencies")
     object Wallet : DrawerScreens("Кошелек", "wallet")
     object Settings : DrawerScreens("Настройки", "settings")
+    object ScanIp : DrawerScreens("Сканировать ip", "scanIp")
 }
 
 private val screens = listOf(
@@ -26,6 +27,7 @@ private val screens = listOf(
     DrawerScreens.Currencies,
     DrawerScreens.Wallet,
     DrawerScreens.Settings,
+    DrawerScreens.ScanIp,
 )
 
 @Composable

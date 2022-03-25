@@ -28,6 +28,8 @@ import misha.miner.screens.ssh.RunCommandViewModel
 import misha.miner.screens.wallet.Wallet
 import misha.miner.screens.wallet.WalletViewModel
 import misha.miner.common.ui.theme.MyMinerTheme
+import misha.miner.screens.scanip.ScanIp
+import misha.miner.screens.scanip.ScanIpViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -51,6 +53,7 @@ fun AppMainScreen(
     pcStatsViewModel: PCStatsViewModel = viewModel(),
     currenciesViewModel: CurrenciesViewModel = viewModel(),
     walletViewModel: WalletViewModel = viewModel(),
+    scanIpViewModel: ScanIpViewModel = viewModel(),
 ) {
     val navController = rememberNavController()
     Surface(color = MaterialTheme.colors.background) {
@@ -115,6 +118,12 @@ fun AppMainScreen(
                 composable(DrawerScreens.Wallet.route) {
                     Wallet(
                         viewModel = walletViewModel,
+                        openDrawer
+                    )
+                }
+                composable(DrawerScreens.ScanIp.route) {
+                    ScanIp(
+                        viewModel = scanIpViewModel,
                         openDrawer
                     )
                 }
