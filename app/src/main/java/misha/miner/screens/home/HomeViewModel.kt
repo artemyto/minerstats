@@ -92,7 +92,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun makePoolStats() {
-        if (poolStatus == RunStatus.Finished) {
+        if (poolStatus != RunStatus.Launched) {
 
             poolStatus = RunStatus.Launched
             viewModelScope.launch(Dispatchers.IO) {
@@ -133,7 +133,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun makeWalletStats() {
-        if (walletStatus == RunStatus.Finished) {
+        if (walletStatus != RunStatus.Launched) {
 
             walletStatus = RunStatus.Launched
             viewModelScope.launch(Dispatchers.IO) {
