@@ -114,9 +114,15 @@ class PCStatsViewModel @Inject constructor(
             pcLabelListValue.add("PC ${index + 1}")
         }
 
-        runSsh(selectedIndex, config.pcList[selectedIndex])
+        try {
+            runSsh(selectedIndex, config.pcList[selectedIndex])
 
-        _pcLabelList.value = pcLabelListValue
+            _pcLabelList.value = pcLabelListValue
+        } catch (e: IndexOutOfBoundsException) {
+            CoroutineScope(Dispatchers.IO).launch {
+                _status.emit("Add pc in settings")
+            }
+        }
     }
 
     private fun runSsh(index: Int, item: PCViewModel) {
