@@ -1,6 +1,6 @@
 package misha.miner.hilt
 
-import com.mocklets.pluto.PlutoInterceptor
+import com.pluto.plugins.network.PlutoInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -3,7 +3,7 @@ package misha.miner.screens.ssh
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mocklets.pluto.PlutoLog
+import com.pluto.plugins.logger.PlutoLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -86,7 +86,7 @@ class RunCommandViewModel @Inject constructor(
                     _output.emit(ssh.runCommand(command = command))
                 } catch (e: Exception) {
                     error.emit(ErrorState.Error(e.message ?: ""))
-                    PlutoLog.e("ssh", e.message)
+                    PlutoLog.e("ssh", e.message.toString())
                 }
             }
 

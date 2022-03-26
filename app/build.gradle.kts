@@ -94,7 +94,15 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttpLoggingInterceptor)
 
-    //Pluto HTTP interceptor
+    //Pluto
     debugImplementation(libs.pluto)
     releaseImplementation(libs.plutoNoOp)
+    debugImplementation(libs.plutoExceptions)
+    releaseImplementation(libs.plutoExceptionsNoOp)
+    debugImplementation(libs.plutoLogger)
+    releaseImplementation(libs.plutoLoggerNoOp)
+    debugImplementation(libs.plutoNetwork)
+    releaseImplementation(libs.plutoNetworkNoOp)
+    debugImplementation(libs.plutoPreferences)
+    releaseImplementation(libs.plutoPreferencesNoOp)
 }

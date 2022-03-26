@@ -1,7 +1,11 @@
 package misha.miner
 
 import android.app.Application
-import com.mocklets.pluto.Pluto
+import com.pluto.Pluto
+import com.pluto.plugins.exceptions.PlutoExceptionsPlugin
+import com.pluto.plugins.logger.PlutoLoggerPlugin
+import com.pluto.plugins.network.PlutoNetworkPlugin
+import com.pluto.plugins.preferences.PlutoSharePreferencesPlugin
 import dagger.hilt.android.HiltAndroidApp
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -22,6 +26,12 @@ class App: Application() {
                 .build()
         )
 
-        Pluto.initialize(this)
+        Pluto
+            .Installer(this)
+            .addPlugin(PlutoExceptionsPlugin("exceptions"))
+            .addPlugin(PlutoLoggerPlugin("logger"))
+            .addPlugin(PlutoNetworkPlugin("network"))
+            .addPlugin(PlutoSharePreferencesPlugin("preferences"))
+            .install()
     }
 }
