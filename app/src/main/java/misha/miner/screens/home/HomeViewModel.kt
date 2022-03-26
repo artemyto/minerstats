@@ -124,7 +124,10 @@ class HomeViewModel @Inject constructor(
                             makeBalanceStats()
                         poolStatus = RunStatus.Finished
                     }
-                    .onFailure { poolStatus = RunStatus.Finished }
+                    .onFailure {
+                        poolStatus = RunStatus.Error
+                        _isRefreshing.postValue(false)
+                    }
             }
         }
     }
@@ -144,7 +147,8 @@ class HomeViewModel @Inject constructor(
                         walletStatus = RunStatus.Finished
                     }
                     .onFailure {
-                        walletStatus = RunStatus.Finished
+                        walletStatus = RunStatus.Error
+                        _isRefreshing.postValue(false)
                     }
             }
         }
@@ -229,6 +233,6 @@ class HomeViewModel @Inject constructor(
     }
 
     enum class RunStatus {
-        Launched, Finished
+        Launched, Finished, Error
     }
 }
