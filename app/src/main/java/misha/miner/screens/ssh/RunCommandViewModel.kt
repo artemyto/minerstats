@@ -3,9 +3,9 @@ package misha.miner.screens.ssh
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.pluto.plugins.logger.PlutoLog
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -67,7 +67,7 @@ class RunCommandViewModel @Inject constructor(
 
     @Suppress("BlockingMethodInNonBlockingContext")
     fun runClicked() {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val config = storageManager.getStorage()
 
             val ssh = SSHConnectionManager()

@@ -3,9 +3,9 @@ package misha.miner.screens.pc
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.pluto.plugins.logger.PlutoLog
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -119,14 +119,14 @@ class PCStatsViewModel @Inject constructor(
 
             _pcLabelList.value = pcLabelListValue
         } catch (e: IndexOutOfBoundsException) {
-            CoroutineScope(Dispatchers.IO).launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 _status.emit("Add pc in settings")
             }
         }
     }
 
     private fun runSsh(index: Int, item: PCViewModel) {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch(Dispatchers.IO) {
 
             _outputList.postValue(mutableListOf())
             _status.emit("")
