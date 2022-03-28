@@ -67,7 +67,7 @@ class PCStatsViewModel @Inject constructor(
         ),
         Command.ActionCommand(
             name = Amd,
-            command = "sensors | grep amdgpu -A 10 | grep 'fan\\|junction\\|mem\\|power'",
+            command = "sensors | grep amdgpu -A 10 | grep 'fan\\|junction\\|mem\\|power\\|slowPPT'",
             action = this::processAmd
         ),
         //Amd driver
@@ -192,7 +192,7 @@ class PCStatsViewModel @Inject constructor(
         fan1:        3266 RPM  (min =    0 RPM, max = 4600 RPM)     // 0 1 2 3            // fanRpm = 1, fanRpmMax = 3
         junction:     +85.0°C  (crit = +105.0°C, hyst = -273.1°C)   // 4 5 6 7 8 9        // temp = 4
         mem:         +104.0°C  (crit = +105.0°C, hyst = -273.1°C)   // 10 11 12 13 14 15  // mem = 10
-        power1:       94.00 W  (cap = 140.00 W)                     // 16 17 18 19 20     // power = 17
+        slowPPT:       94.00 W  (cap = 140.00 W)                     // 16 17 18 19     // power = 16
      */
     private fun processAmd(name: String, string: String): List<String> {
 
@@ -200,7 +200,7 @@ class PCStatsViewModel @Inject constructor(
         val fanRpmMax = 3
         val temp = 4
         val mem = 10
-        val power = 17
+        val power = 16
 
         val iteration = 21
 
