@@ -5,6 +5,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -16,6 +17,8 @@ import misha.miner.models.common.ErrorState
 
 @Composable
 fun ScanIp(viewModel: ScanIpViewModel, openDrawer: () -> Job) {
+
+    viewModel.initialize()
 
     val error by viewModel.error.collectAsState()
 
