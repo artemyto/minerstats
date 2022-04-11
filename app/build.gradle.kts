@@ -26,8 +26,8 @@ android {
         applicationId = "misha.miner"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.sdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = libs.versions.appVersionCode.get().toInt()
+        versionName = libs.versions.appVersion.get()
         buildConfigField("String", "ETHERSCAN_API_KEY", etherScanApiKey)
         buildConfigField("String", "COINMARKETCAP_API_KEY", cmcApiKey)
 
