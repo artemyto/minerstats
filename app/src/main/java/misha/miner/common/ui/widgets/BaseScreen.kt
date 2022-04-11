@@ -26,7 +26,9 @@ fun BaseScreen(
     isRefreshing: Boolean,
     openDrawer: () -> Job,
     refreshClicked: () -> Unit,
-    list: List<String>
+    list: List<String>,
+    customTopComposable: @Composable (() -> Unit)? = null,
+    onRunClicked: (() -> Unit)? = null,
 ) {
     SwipeRefresh(
         swipeEnabled = swipeEnabled,
@@ -42,7 +44,7 @@ fun BaseScreen(
     ) {
         ConstraintLayout(Modifier.fillMaxWidth()) {
 
-            val (menu, lazyList) = createRefs()
+            val (menu, lazyList, run) = createRefs()
 
             Button(
                 onClick = {
@@ -59,6 +61,20 @@ fun BaseScreen(
                 )
             }
 
+            onRunClicked?.let {
+                Button(
+                    modifier = Modifier.constrainAs(run) {
+                        top.linkTo(menu.top)
+                        bottom.linkTo(menu.bottom)
+                        end.linkTo(parent.end, 16.dp)
+                        height = Dimension.fillToConstraints
+                    },
+                    onClick = { onRunClicked() }
+                ) {
+                    Text(text = "run")
+                }
+            }
+
             SelectionContainer(
                 modifier = Modifier.constrainAs(lazyList) {
                     linkTo(parent.start, parent.end, startMargin = 16.dp, endMargin = 16.dp)
@@ -67,6 +83,12 @@ fun BaseScreen(
                 }
             ) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
+
+                    customTopComposable?.let {
+                        item {
+                            customTopComposable.invoke()
+                        }
+                    }
 
                     items(list.size) { index ->
 
