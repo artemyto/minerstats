@@ -21,7 +21,7 @@ class ScanIpViewModel @Inject constructor(
     private val _status: MutableStateFlow<String> = MutableStateFlow("Connection is not opened yet")
     val status: StateFlow<String> = _status
 
-    private val _selectedAddress: MutableLiveData<String> = MutableLiveData()
+    private val _selectedAddress: MutableLiveData<String> = MutableLiveData("192.168.")
     val selectedAddress: LiveData<String> = _selectedAddress
 
     private val _outputList: MutableLiveData<List<String>> = MutableLiveData(listOf())
