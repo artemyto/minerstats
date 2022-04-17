@@ -1,12 +1,14 @@
 package misha.miner.models.coinmarketcap
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class CoinMarketCapStatus(
-    @SerializedName("error_code")
+    @SerialName("error_code")
     val errorCode: Int,
-    @SerializedName("error_message")
-    val errorMessage: String,
+    @SerialName("error_message")
+    val errorMessage: String?,
 ) {
     companion object {
         const val OK = 0

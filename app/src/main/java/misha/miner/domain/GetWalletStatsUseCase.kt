@@ -1,5 +1,6 @@
 package misha.miner.domain
 
+import com.pluto.plugins.logger.PlutoLog
 import misha.miner.BuildConfig
 import misha.miner.common.Constants
 import misha.miner.models.ehterscan.EtherscanResponseStatus
@@ -23,6 +24,8 @@ class GetWalletStatsUseCase @Inject constructor(
             val response = api.getWalletStats(endPoint, queries)
             if (response.status != EtherscanResponseStatus.OK) throw Exception(response.message)
             response.result
+        }.onFailure {
+            PlutoLog.d("api", it.message.toString())
         }
     }
 }

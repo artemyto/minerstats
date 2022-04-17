@@ -1,5 +1,8 @@
 package misha.miner.models.ethermine
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class EthermineCurrentStats(
     val reportedHashrate : Double,
     val currentHashrate: Double,
@@ -9,7 +12,6 @@ data class EthermineCurrentStats(
     val averageHashrate: Double,
     val activeWorkers: Int,
     val unpaid: Double,
-    val unconfirmed: Double,
     val coinsPerMin: Double,
     val usdPerMin: Double,
 )

@@ -7,6 +7,7 @@ plugins {
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
     id("realm-android")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -90,7 +91,7 @@ dependencies {
 
     //Retrofit
     implementation(libs.retrofit)
-    implementation(libs.retrofitGson)
+    implementation(libs.retrofitSerialization)
     implementation(libs.okhttp)
     implementation(libs.okhttpLoggingInterceptor)
 
@@ -105,4 +106,6 @@ dependencies {
     releaseImplementation(libs.plutoNetworkNoOp)
     debugImplementation(libs.plutoPreferences)
     releaseImplementation(libs.plutoPreferencesNoOp)
+
+    implementation(libs.kotlinxSerializationJson)
 }

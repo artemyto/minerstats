@@ -1,10 +1,12 @@
 package misha.miner.models.ethermine
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 enum class EthermineResponseStatus(val value: String) {
-    @SerializedName("OK")
+    @SerialName("OK")
     Ok("OK"),
-    @SerializedName("ERROR")
+    @SerialName("ERROR")
     Error("ERROR"),
 }

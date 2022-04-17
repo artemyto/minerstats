@@ -1,5 +1,6 @@
 package misha.miner.domain
 
+import com.pluto.plugins.logger.PlutoLog
 import misha.miner.common.Constants
 import misha.miner.models.ethermine.EthermineDashboard
 import misha.miner.models.ethermine.EthermineResponseStatus
@@ -14,8 +15,10 @@ class GetPoolDashboardUseCase @Inject constructor(
         val endPoint = Constants.Ethermine.dashboardByAddress(address)
         return runCatching {
             val response = api.getPoolDashboard(endPoint)
-            if (response.status != EthermineResponseStatus.Ok) throw Exception(response.error.error)
-            response.data
+            if (response.status != EthermineResponseStatus.Ok) throw Exception(response.error?.error)
+            response.data!!
+        }.onFailure {
+            PlutoLog.d("api", it.message.toString())
         }
     }
 }

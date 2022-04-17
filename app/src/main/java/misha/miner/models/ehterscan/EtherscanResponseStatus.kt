@@ -1,10 +1,12 @@
 package misha.miner.models.ehterscan
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 enum class EtherscanResponseStatus(val value: String) {
-    @SerializedName("1")
+    @SerialName("1")
     OK("1"),
-    @SerializedName("0")
+    @SerialName("0")
     Error("0"),
 }

@@ -1,7 +1,9 @@
 package misha.miner.models.ehterscan
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class EtherscanTransaction(
     val blockNumber: Int,
     val timeStamp: Long,
@@ -15,7 +17,7 @@ data class EtherscanTransaction(
     val gas: Int,
     val gasPrice: Double,
     val isError: Int,
-    @SerializedName("txreceipt_status")
+    @SerialName("txreceipt_status")
     val txReceiptStatus: Int,
     val cumulativeGasUsed: Int,
     val gasUsed: Int,

@@ -1,5 +1,6 @@
 package misha.miner.domain
 
+import com.pluto.plugins.logger.PlutoLog
 import misha.miner.BuildConfig
 import misha.miner.common.Constants
 import misha.miner.models.coinmarketcap.CoinMarketCapStatus
@@ -20,6 +21,8 @@ class GetListingsUseCase @Inject constructor(
             val response = api.getListings(endPoint, headers)
             if (response.status.errorCode != CoinMarketCapStatus.OK) throw Exception(response.status.errorMessage)
             response.data
+        }.onFailure {
+            PlutoLog.d("api", it.message.toString())
         }
     }
 }

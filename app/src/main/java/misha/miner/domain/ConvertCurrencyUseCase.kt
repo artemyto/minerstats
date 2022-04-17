@@ -1,5 +1,6 @@
 package misha.miner.domain
 
+import com.pluto.plugins.logger.PlutoLog
 import misha.miner.BuildConfig
 import misha.miner.common.Constants
 import misha.miner.models.coinmarketcap.CoinMarketCapStatus
@@ -30,12 +31,14 @@ class ConvertCurrencyUseCase @Inject constructor(
             val response = api.convertCurrency(endPoint, headers, queries)
             if (response.status.errorCode != CoinMarketCapStatus.OK) throw Exception(response.status.errorMessage)
             currencyAmountToReturn(to, response.data.quote)
+        }.onFailure {
+            PlutoLog.d("mytag", it.message.toString())
         }
     }
 
     private fun currencyAmountToReturn(type: CurrencyType, quote: Quote) = when (type) {
-        CurrencyType.RUB -> quote.rub.price
-        CurrencyType.USD -> quote.usd.price
-        CurrencyType.ETH -> quote.eth.price
+        CurrencyType.RUB -> quote.rub?.price ?: 0.0
+        CurrencyType.USD -> quote.usd?.price ?: 0.0
+        CurrencyType.ETH -> quote.eth?.price ?: 0.0
     }
 }

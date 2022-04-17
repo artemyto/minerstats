@@ -127,7 +127,7 @@ fun ListingsScreen(
                         )
 
                         Text(
-                            text = "%.2f".format(filteredListings[index].quote.usd.price),
+                            text = "%.2f".format(filteredListings[index].quote.usd?.price),
                             style = MaterialTheme.typography.h5
                         )
                     }

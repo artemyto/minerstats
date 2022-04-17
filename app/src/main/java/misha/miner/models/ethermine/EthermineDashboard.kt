@@ -1,11 +1,15 @@
 package misha.miner.models.ethermine
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class EthermineDashboard(
     val statistics: List<Statistics>,
     val workers: List<Worker>,
     val currentStatistics: Statistics,
     val settings: Settings,
 ) {
+    @Serializable
     data class Worker(
         val worker: String,
         val reportedHashrate: Double,
@@ -15,6 +19,7 @@ data class EthermineDashboard(
         val staleShares: Int,
     )
 
+    @Serializable
     data class Statistics(
         val time: Long,
         val lastSeen: Long?,
@@ -24,9 +29,9 @@ data class EthermineDashboard(
         val invalidShares: Int,
         val staleShares: Int,
         val activeWorkers: Int,
-        val unpaid: Double?,
     )
 
+    @Serializable
     data class Settings(
         val email: String,
         val monitor: Int,

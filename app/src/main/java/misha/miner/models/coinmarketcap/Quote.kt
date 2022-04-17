@@ -1,13 +1,15 @@
 package misha.miner.models.coinmarketcap
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import misha.miner.models.coinmarketcap.currency.Currency
 
+@Serializable
 data class Quote(
-    @SerializedName("RUB")
-    val rub: Currency,
-    @SerializedName("USD")
-    val usd: Currency,
-    @SerializedName("ETH")
-    val eth: Currency
+    @SerialName("RUB")
+    val rub: Currency? = null,
+    @SerialName("USD")
+    val usd: Currency? = null,
+    @SerialName("ETH")
+    val eth: Currency? = null,
 )
