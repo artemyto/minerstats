@@ -8,6 +8,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("realm-android")
     kotlin("plugin.serialization")
+    alias(libs.plugins.kotlinter)
 }
 
 android {
