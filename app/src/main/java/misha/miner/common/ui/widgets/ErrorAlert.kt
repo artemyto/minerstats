@@ -10,18 +10,20 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun ErrorAlert(message: String, onClick: () -> Unit) {
     AlertDialog(
-        onDismissRequest = {  },
+        onDismissRequest = { },
         title = { Text(text = "Error") },
-        text = { Text(
-            text = message
-        ) },
+        text = {
+            Text(
+                text = message
+            )
+        },
 
         confirmButton = {
-
         },
 
         dismissButton = {
-            Button(onClick = onClick,
+            Button(
+                onClick = onClick,
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Blue,
                     contentColor = Color.White

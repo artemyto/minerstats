@@ -11,7 +11,7 @@ import javax.inject.Inject
 class GetListingsUseCase @Inject constructor(
     private val api: RetrofitService
 ) {
-    suspend fun execute() : Result<List<Listing>> {
+    suspend fun execute(): Result<List<Listing>> {
 
         val headers = mapOf(
             Constants.CoinMarketCap.apiKeyName to BuildConfig.COINMARKETCAP_API_KEY

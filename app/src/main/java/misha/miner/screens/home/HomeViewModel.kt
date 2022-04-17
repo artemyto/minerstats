@@ -174,25 +174,24 @@ class HomeViewModel @Inject constructor(
                         "Balance:\n",
 
                         "       Wallet: " +
-                                "${String.format("%.5f", balance)} ETH / " +
-                                "${String.format("%.0f", balanceRub)} ₽\n",
+                            "${String.format("%.5f", balance)} ETH / " +
+                            "${String.format("%.0f", balanceRub)} ₽\n",
 
                         "       Unpaid: " +
-                                "${String.format("%.5f", unpaid)} ETH / " +
-                                "${String.format("%.0f", unpaidRub)} ₽\n",
+                            "${String.format("%.5f", unpaid)} ETH / " +
+                            "${String.format("%.0f", unpaidRub)} ₽\n",
 
                         "       Wallet + unpaid: " +
-                                "${String.format("%.5f", walletPoolSum)} ETH / " +
-                                "${String.format("%.0f", walletPoolSumRub)} ₽\n",
+                            "${String.format("%.5f", walletPoolSum)} ETH / " +
+                            "${String.format("%.0f", walletPoolSumRub)} ₽\n",
                         "Estimated for one month:\n",
 
                         "       ${String.format("%.5f", estimated)} ETH / " +
-                                "${String.format("%.0f", estimatedRub)} ₽\n",
+                            "${String.format("%.0f", estimatedRub)} ₽\n",
                     )
                     _balanceOutputList.postValue(balanceOutputListField)
 
                     _isRefreshing.postValue(false)
-
                 }
                 .onFailure {
                     _isRefreshing.postValue(false)
@@ -209,8 +208,8 @@ class HomeViewModel @Inject constructor(
                     for (worker in it.workers) {
                         workerOutputListField.add(
                             "       ${worker.worker} / reported: " +
-                                    "${worker.reportedHashrate.hashrateToMegahashLabel()} / " +
-                                    "current: ${worker.currentHashrate.hashrateToMegahashLabel()}\n"
+                                "${worker.reportedHashrate.hashrateToMegahashLabel()} / " +
+                                "current: ${worker.currentHashrate.hashrateToMegahashLabel()}\n"
                         )
                     }
                     _workerOutputList.postValue(workerOutputListField)

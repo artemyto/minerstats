@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import misha.miner.common.ui.theme.MyMinerTheme
 import misha.miner.screens.currencies.Currencies
 import misha.miner.screens.currencies.CurrenciesViewModel
 import misha.miner.screens.drawer.Drawer
@@ -21,15 +22,14 @@ import misha.miner.screens.home.Home
 import misha.miner.screens.home.HomeViewModel
 import misha.miner.screens.pc.PCStats
 import misha.miner.screens.pc.PCStatsViewModel
+import misha.miner.screens.scanip.ScanIp
+import misha.miner.screens.scanip.ScanIpViewModel
 import misha.miner.screens.settings.Settings
 import misha.miner.screens.settings.SettingsViewModel
 import misha.miner.screens.ssh.RunCommand
 import misha.miner.screens.ssh.RunCommandViewModel
 import misha.miner.screens.wallet.Wallet
 import misha.miner.screens.wallet.WalletViewModel
-import misha.miner.common.ui.theme.MyMinerTheme
-import misha.miner.screens.scanip.ScanIp
-import misha.miner.screens.scanip.ScanIpViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -43,7 +43,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 
 @Composable
 fun AppMainScreen(

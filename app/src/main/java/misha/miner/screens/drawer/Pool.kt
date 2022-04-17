@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import misha.miner.MainViewModel
-import misha.miner.services.storage.StorageManagerImpl
 
 @Composable
 fun Pool(

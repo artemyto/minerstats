@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RunCommandViewModel @Inject constructor(
     private val storageManager: StorageManager
-): ViewModel() {
+) : ViewModel() {
 
     private val _status: MutableStateFlow<String> = MutableStateFlow("Connection is not opened yet")
     val status: StateFlow<String> = _status
@@ -42,7 +42,7 @@ class RunCommandViewModel @Inject constructor(
 
     private var command = ""
 
-    private lateinit var storageContext : StorageViewModel
+    private lateinit var storageContext: StorageViewModel
 
     private var notInitialized = true
 
@@ -53,7 +53,7 @@ class RunCommandViewModel @Inject constructor(
             _pcLabelList.value = storageContext.pcList.mapIndexed { index, _ -> "PC ${index + 1}" }.toMutableList()
         }
     }
-    
+
     fun commandSelected(command: String) {
         this.command = command
     }

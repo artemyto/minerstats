@@ -20,7 +20,7 @@ import kotlin.math.roundToInt
 @HiltViewModel
 class PCStatsViewModel @Inject constructor(
     private val storageManager: StorageManager
-): ViewModel() {
+) : ViewModel() {
 
     companion object {
         const val Amd = "Amd"
@@ -70,14 +70,15 @@ class PCStatsViewModel @Inject constructor(
             command = "sensors | grep amdgpu -A 10 | grep 'fan\\|junction\\|mem\\|power\\|slowPPT'",
             action = this::processAmd
         ),
-        //Amd driver
+        // Amd driver
         Command.ActionCommand(
             name = AmdDriver,
             command = "pacman -Q mesa | grep -o '[0-9]\\{2\\}\\.[0-9].[0-9]' ; " +
-                    "pacman -Q opencl-amd | grep -o '[0-9]\\{2\\}\\.[0-9]\\{2\\}'",
+                "pacman -Q opencl-amd | grep -o '[0-9]\\{2\\}\\.[0-9]\\{2\\}'",
             action = this::processAmdDriver
         ),
-        Command.SimpleCommand(name = "Linux Kernel\n\n       ",
+        Command.SimpleCommand(
+            name = "Linux Kernel\n\n       ",
             command = "uname -r"
         ),
     )

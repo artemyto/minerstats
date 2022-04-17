@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val storageManager: StorageManager
-): ViewModel() {
+) : ViewModel() {
 
     private val _wallet: MutableStateFlow<String> = MutableStateFlow("")
     val wallet: StateFlow<String> = _wallet
@@ -42,7 +42,7 @@ class SettingsViewModel @Inject constructor(
         MutableLiveData(mutableListOf())
     val pcLabelList: LiveData<MutableList<String>> = _pcLabelList
 
-    private lateinit var storageContext : StorageViewModel
+    private lateinit var storageContext: StorageViewModel
 
     private var index = -1
 
@@ -126,7 +126,7 @@ class SettingsViewModel @Inject constructor(
         val newPC = "PC ${num + 1}"
         val list = _pcLabelList.value?.toMutableList()
         list?.add(newPC)
-        storageContext.pcList.add(PCViewModel("","","",""))
+        storageContext.pcList.add(PCViewModel("", "", "", ""))
         _pcLabelList.value = list
         _pc.value = newPC
         selectedPC(newPC)

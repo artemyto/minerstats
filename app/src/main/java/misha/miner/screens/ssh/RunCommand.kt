@@ -137,11 +137,11 @@ fun RunCommand(viewModel: RunCommandViewModel, openDrawer: () -> Job) {
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun HomePreview() {
+// @Preview(showBackground = true)
+// @Composable
+// fun HomePreview() {
 //    MyMinerTheme() {
 //        val homeViewModel = HomeViewModel()
 //        Home(homeViewModel, openDrawer)
 //    }
-//}
+// }

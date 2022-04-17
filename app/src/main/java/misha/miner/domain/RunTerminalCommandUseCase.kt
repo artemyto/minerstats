@@ -6,7 +6,7 @@ import kotlin.math.min
 
 class RunTerminalCommandUseCase @Inject constructor() {
 
-    fun execute(command: List<String>) : String {
+    fun execute(command: List<String>): String {
 
         val pb = ProcessBuilder(command)
 
@@ -22,7 +22,7 @@ class RunTerminalCommandUseCase @Inject constructor() {
         val out = process?.inputStream
 
         out?.let {
-        val buffer = ByteArray(4000)
+            val buffer = ByteArray(4000)
             while (out.available() > 0 || process.isStillAlive()) {
 
                 val no: Int = out.available()
@@ -34,7 +34,6 @@ class RunTerminalCommandUseCase @Inject constructor() {
                 try {
                     Thread.sleep(10)
                 } catch (e: InterruptedException) {
-
                 }
             }
         }

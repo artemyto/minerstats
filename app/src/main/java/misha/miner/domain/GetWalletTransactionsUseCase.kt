@@ -2,7 +2,6 @@ package misha.miner.domain
 
 import com.pluto.plugins.logger.PlutoLog
 import misha.miner.BuildConfig
-import misha.miner.common.Constants
 import misha.miner.models.ehterscan.EtherscanResponseStatus
 import misha.miner.models.ehterscan.EtherscanTransaction
 import misha.miner.services.api.RetrofitService
@@ -11,7 +10,7 @@ import javax.inject.Inject
 class GetWalletTransactionsUseCase @Inject constructor(
     private val api: RetrofitService
 ) {
-    suspend fun execute(address: String) : Result<List<EtherscanTransaction>> {
+    suspend fun execute(address: String): Result<List<EtherscanTransaction>> {
 
         val queries = mapOf(
             "module" to "account",

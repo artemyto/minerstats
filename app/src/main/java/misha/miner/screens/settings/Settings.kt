@@ -217,11 +217,11 @@ fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun SettingsPreview() {
+// @Preview(showBackground = true)
+// @Composable
+// fun SettingsPreview() {
 //    MyMinerTheme() {
 //        val settingsViewModel = SettingsViewModel()
 //        Settings(settingsViewModel, openDrawer)
 //    }
-//}
+// }

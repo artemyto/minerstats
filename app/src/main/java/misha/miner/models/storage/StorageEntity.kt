@@ -3,7 +3,7 @@ package misha.miner.models.storage
 import io.realm.RealmList
 import io.realm.RealmObject
 
-open class StorageEntity: RealmObject() {
+open class StorageEntity : RealmObject() {
 
     var wallet = ""
 

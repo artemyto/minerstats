@@ -2,7 +2,7 @@ package misha.miner.models.storage
 
 import io.realm.RealmObject
 
-open class PCEntity: RealmObject() {
+open class PCEntity : RealmObject() {
 
     var address = ""
     var port = ""

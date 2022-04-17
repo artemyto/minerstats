@@ -1,7 +1,6 @@
 package misha.miner.domain
 
 import com.pluto.plugins.logger.PlutoLog
-import misha.miner.common.Constants
 import misha.miner.models.ethermine.EthermineCurrentStats
 import misha.miner.models.ethermine.EthermineResponseStatus
 import misha.miner.services.api.RetrofitService
@@ -10,7 +9,7 @@ import javax.inject.Inject
 class GetPoolStatsUseCase @Inject constructor(
     private val api: RetrofitService
 ) {
-    suspend fun execute(address: String) : Result<EthermineCurrentStats> {
+    suspend fun execute(address: String): Result<EthermineCurrentStats> {
 
         return runCatching {
             val response = api.getPoolStats(address)

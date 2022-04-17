@@ -16,7 +16,7 @@ class ConvertCurrencyUseCase @Inject constructor(
         from: CurrencyType,
         to: CurrencyType,
         amount: Double,
-    ) : Result<Double> {
+    ): Result<Double> {
 
         val headers = mapOf(
             Constants.CoinMarketCap.apiKeyName to BuildConfig.COINMARKETCAP_API_KEY

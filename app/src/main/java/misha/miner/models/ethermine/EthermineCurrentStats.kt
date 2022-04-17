@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class EthermineCurrentStats(
-    val reportedHashrate : Double,
+    val reportedHashrate: Double,
     val currentHashrate: Double,
     val validShares: Int,
     val invalidShares: Int,

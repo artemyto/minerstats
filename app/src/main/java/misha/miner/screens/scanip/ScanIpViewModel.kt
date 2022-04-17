@@ -19,7 +19,7 @@ import javax.inject.Inject
 class ScanIpViewModel @Inject constructor(
     private val runTerminalCommandUseCase: RunTerminalCommandUseCase,
     private val settingsRepository: SettingsRepository,
-): ViewModel() {
+) : ViewModel() {
 
     companion object {
         const val DEFAULT_IP = "192.168."
@@ -62,17 +62,19 @@ class ScanIpViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val savedIp = selectedAddress.value ?: return@launch
             settingsRepository.setSavedScanIp(savedIp)
-            val output = listOf(runTerminalCommandUseCase.execute(
-                command = listOf(
-                    "/bin/sh",
-                    "-c",
-                    "address=1; " +
+            val output = listOf(
+                runTerminalCommandUseCase.execute(
+                    command = listOf(
+                        "/bin/sh",
+                        "-c",
+                        "address=1; " +
                             "while [ \$address -lt 255 ]; do " +
                             "echo \"$savedIp.\$address\"; " +
                             "address=`expr \$address + 1`; " +
                             "done | xargs -n1 -P0 ping -c1 | grep 'bytes from'"
+                    )
                 )
-            ))
+            )
             _isRefreshing.postValue(false)
             _outputList.postValue(output)
         }
