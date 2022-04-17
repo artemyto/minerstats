@@ -12,9 +12,8 @@ class GetPoolStatsUseCase @Inject constructor(
 ) {
     suspend fun execute(address: String) : Result<EthermineCurrentStats> {
 
-        val endPoint = Constants.Ethermine.statsByAddress(address)
         return runCatching {
-            val response = api.getPoolStats(endPoint)
+            val response = api.getPoolStats(address)
             if (response.status != EthermineResponseStatus.Ok) throw Exception(response.error?.error)
             response.data!!
         }.onFailure {

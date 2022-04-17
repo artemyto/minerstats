@@ -8,55 +8,44 @@ import misha.miner.models.ehterscan.EtherscanTransaction
 import misha.miner.models.ethermine.EthermineCurrentStats
 import misha.miner.models.ethermine.EthermineDashboard
 import misha.miner.models.ethermine.EthermineResponse
-import retrofit2.http.GET
-import retrofit2.http.HeaderMap
-import retrofit2.http.QueryMap
-import retrofit2.http.Url
+import retrofit2.http.*
 
 interface RetrofitService {
 
-    @GET
+    @GET("https://api.ethermine.org/miner/{address}/currentStats")
     suspend fun getPoolStats(
-        @Url
-        url: String
+        @Path("address")
+        address: String,
     ): EthermineResponse<EthermineCurrentStats>
 
-    @GET
+    @GET("https://api.ethermine.org/miner/{address}/dashboard")
     suspend fun getPoolDashboard(
-        @Url
-        url: String
+        @Path("address")
+        address: String,
     ): EthermineResponse<EthermineDashboard>
 
-    @GET
+    @GET("https://api.etherscan.io/api")
     suspend fun getWalletStats(
-        @Url
-        url: String,
         @QueryMap
-        queries: Map<String, String>
+        queries: Map<String, String>,
     ): EtherscanResponse<String>
 
-    @GET
+    @GET("https://api.etherscan.io/api")
     suspend fun getWalletTransactions(
-        @Url
-        url: String,
         @QueryMap
-        queries: Map<String, String>
+        queries: Map<String, String>,
     ): EtherscanResponse<List<EtherscanTransaction>>
 
-    @GET
+    @GET("https://pro-api.coinmarketcap.com/v1/tools/price-conversion")
     suspend fun convertCurrency(
-        @Url
-        url: String,
         @HeaderMap
         headers: Map<String, String>,
         @QueryMap
-        queries: Map<String, String>
+        queries: Map<String, String>,
     ): CoinMarketCapResponse<Converted>
 
-    @GET
+    @GET("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest")
     suspend fun getListings(
-        @Url
-        url: String,
         @HeaderMap
         headers: Map<String, String>,
     ): CoinMarketCapResponse<List<Listing>>

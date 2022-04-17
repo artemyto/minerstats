@@ -26,9 +26,8 @@ class ConvertCurrencyUseCase @Inject constructor(
             "convert" to to.value,
             "amount" to amount.toString()
         )
-        val endPoint = Constants.CoinMarketCap.priceConversion
         return runCatching {
-            val response = api.convertCurrency(endPoint, headers, queries)
+            val response = api.convertCurrency(headers, queries)
             if (response.status.errorCode != CoinMarketCapStatus.OK) throw Exception(response.status.errorMessage)
             currencyAmountToReturn(to, response.data.quote)
         }.onFailure {

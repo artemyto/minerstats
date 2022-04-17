@@ -12,9 +12,8 @@ class GetPoolDashboardUseCase @Inject constructor(
 ) {
     suspend fun execute(address: String) : Result<EthermineDashboard> {
 
-        val endPoint = Constants.Ethermine.dashboardByAddress(address)
         return runCatching {
-            val response = api.getPoolDashboard(endPoint)
+            val response = api.getPoolDashboard(address)
             if (response.status != EthermineResponseStatus.Ok) throw Exception(response.error?.error)
             response.data!!
         }.onFailure {

@@ -16,9 +16,8 @@ class GetListingsUseCase @Inject constructor(
         val headers = mapOf(
             Constants.CoinMarketCap.apiKeyName to BuildConfig.COINMARKETCAP_API_KEY
         )
-        val endPoint = Constants.CoinMarketCap.listings
         return runCatching {
-            val response = api.getListings(endPoint, headers)
+            val response = api.getListings(headers)
             if (response.status.errorCode != CoinMarketCapStatus.OK) throw Exception(response.status.errorMessage)
             response.data
         }.onFailure {

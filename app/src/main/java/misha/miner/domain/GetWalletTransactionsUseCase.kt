@@ -22,9 +22,8 @@ class GetWalletTransactionsUseCase @Inject constructor(
             "sort" to "asc",
             "apikey" to BuildConfig.ETHERSCAN_API_KEY
         )
-        val endPoint = Constants.Etherscan.api
         return runCatching {
-            val response = api.getWalletTransactions(endPoint, queries)
+            val response = api.getWalletTransactions(queries)
             if (response.status != EtherscanResponseStatus.OK) throw Exception(response.message)
             response.result
         }.onFailure {
