@@ -97,4 +97,6 @@ retrofitSerialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-s
 
 [plugins]
 
+gradleVersionPlugin = { id = "com.github.ben-manes.versions", version.ref = "gradleDependencyUpdates" }
+
 kotlinter = { id = "org.jmailen.kotlinter", version.ref = "kotlinter" }

@@ -1,5 +1,9 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
+plugins {
+    alias(libs.plugins.gradleVersionPlugin)
+}
+
 buildscript {
 
     repositories {
@@ -20,8 +24,6 @@ buildscript {
         classpath(libs.kotlinSerialization)
     }
 }
-
-apply(plugin = "com.github.ben-manes.versions")
 
 fun String.isNonStable(): Boolean {
     val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { toUpperCase().contains(it) }
