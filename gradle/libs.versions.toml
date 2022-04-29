@@ -57,8 +57,6 @@ espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "esp
 
 androidGradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 
-gradleVersionPlugin = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "gradleDependencyUpdates" }
-
 jsch = { module = "com.jcraft:jsch", version.ref = "jsch" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
