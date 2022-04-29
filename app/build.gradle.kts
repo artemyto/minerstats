@@ -68,16 +68,10 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.compose.ui)
-    implementation(libs.compose.material)
-    implementation(libs.compose.uiTooling)
-    implementation(libs.compose.runtime)
-    implementation(libs.compose.runtimeLivedata)
-    implementation(libs.compose.materialIconsExtended)
+    implementation(libs.bundles.compose)
     implementation(libs.androidx.lifecycle)
     implementation(libs.activity.compose)
     implementation(libs.navigation.compose)
-    implementation(libs.constraintlayout.compose)
     implementation(libs.accompanist.swiperefresh)
     implementation(libs.jsch)
 
@@ -99,16 +93,8 @@ dependencies {
     implementation(libs.okhttpLoggingInterceptor)
 
     //Pluto
-    debugImplementation(libs.pluto)
-    releaseImplementation(libs.plutoNoOp)
-    debugImplementation(libs.plutoExceptions)
-    releaseImplementation(libs.plutoExceptionsNoOp)
-    debugImplementation(libs.plutoLogger)
-    releaseImplementation(libs.plutoLoggerNoOp)
-    debugImplementation(libs.plutoNetwork)
-    releaseImplementation(libs.plutoNetworkNoOp)
-    debugImplementation(libs.plutoPreferences)
-    releaseImplementation(libs.plutoPreferencesNoOp)
+    debugImplementation(libs.bundles.pluto)
+    releaseImplementation(libs.bundles.plutoNoOp)
 
     implementation(libs.kotlinxSerializationJson)
 }

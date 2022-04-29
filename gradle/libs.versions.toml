@@ -91,6 +91,33 @@ realm = { module = "io.realm:realm-gradle-plugin", version.ref = "realm" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofitSerialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofitSerialization" }
 
+[bundles]
+compose = [
+    "compose-material",
+    "compose-materialIconsExtended",
+    "compose-runtime",
+    "compose-runtimeLivedata",
+    "compose-ui",
+    "compose-uiTooling",
+    "constraintlayout-compose",
+]
+
+pluto = [
+    "pluto",
+    "plutoExceptions",
+    "plutoLogger",
+    "plutoNetwork",
+    "plutoPreferences",
+]
+
+plutoNoOp = [
+    "plutoNoOp",
+    "plutoExceptionsNoOp",
+    "plutoLoggerNoOp",
+    "plutoNetworkNoOp",
+    "plutoPreferencesNoOp",
+]
+
 [plugins]
 
 gradleVersionPlugin = { id = "com.github.ben-manes.versions", version.ref = "gradleDependencyUpdates" }
