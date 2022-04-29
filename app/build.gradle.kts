@@ -14,6 +14,8 @@ plugins {
 android {
     compileSdk = libs.versions.sdk.get().toInt()
 
+    val javaVersion = JavaVersion.VERSION_1_8
+
     val buildPropsFile = file("build.properties")
 
     val buildProps = Properties()
@@ -47,11 +49,11 @@ android {
     }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = javaVersion.toString()
     }
     buildFeatures {
         compose = true
