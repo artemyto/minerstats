@@ -7,7 +7,7 @@ plugins {
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
     id("realm-android")
-    kotlin("plugin.serialization")
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.kotlinter)
 }
 

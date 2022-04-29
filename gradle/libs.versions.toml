@@ -68,8 +68,6 @@ hilt-gradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", v
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-
-kotlinSerialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 kotlinxSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
@@ -100,3 +98,4 @@ retrofitSerialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-s
 gradleVersionPlugin = { id = "com.github.ben-manes.versions", version.ref = "gradleDependencyUpdates" }
 
 kotlinter = { id = "org.jmailen.kotlinter", version.ref = "kotlinter" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

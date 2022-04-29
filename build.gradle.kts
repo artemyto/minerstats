@@ -21,7 +21,6 @@ buildscript {
         classpath(libs.hilt.gradlePlugin)
         classpath(libs.realm)
         classpath(libs.gradleVersionPlugin)
-        classpath(libs.kotlinSerialization)
     }
 }
 
