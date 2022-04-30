@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -53,7 +54,10 @@ fun AppMainScreen(
     currenciesViewModel: CurrenciesViewModel = viewModel(),
     walletViewModel: WalletViewModel = viewModel(),
     scanIpViewModel: ScanIpViewModel = viewModel(),
+    mainViewModel: MainViewModel = viewModel(),
 ) {
+    val context = LocalContext.current
+
     val navController = rememberNavController()
     Surface(color = MaterialTheme.colors.background) {
         val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -76,7 +80,8 @@ fun AppMainScreen(
                             popUpTo(navController.graph.startDestinationId)
                             launchSingleTop = true
                         }
-                    }
+                    },
+                    onAction = { action -> mainViewModel.onContextAction(context, action) }
                 )
             }
         ) {

@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import misha.miner.MainAction
 import misha.miner.common.ui.theme.MyMinerTheme
 
 sealed class DrawerScreens(val title: String, val route: String) {
@@ -33,7 +34,8 @@ private val screens = listOf(
 @Composable
 fun Drawer(
     modifier: Modifier = Modifier,
-    onDestinationClicked: (route: String) -> Unit
+    onDestinationClicked: (route: String) -> Unit,
+    onAction: (MainAction) -> Unit,
 ) {
     Column(
         modifier
@@ -52,9 +54,9 @@ fun Drawer(
                     .padding(vertical = 12.dp)
             )
         }
-        Pool()
-        Wallet()
-        Rate()
+        Pool(onAction)
+        Wallet(onAction)
+        Rate(onAction)
     }
 }
 
@@ -62,6 +64,6 @@ fun Drawer(
 @Composable
 fun DrawerPreview() {
     MyMinerTheme {
-        Drawer {}
+        Drawer(onDestinationClicked = {}, onAction = {})
     }
 }

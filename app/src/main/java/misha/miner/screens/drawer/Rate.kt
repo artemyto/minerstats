@@ -1,8 +1,5 @@
 package misha.miner.screens.drawer
 
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,24 +7,18 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
+import misha.miner.MainAction
 
 @Composable
-fun Rate() {
-
-    val context = LocalContext.current
-
+fun Rate(
+    onAction: (MainAction) -> Unit,
+) {
     Text(
         text = "Курс",
         style = MaterialTheme.typography.h5,
         modifier = Modifier
-            .clickable {
-                val openUrlIntent = Intent(Intent.ACTION_VIEW)
-                openUrlIntent.data = Uri.parse("https://ru.investing.com/crypto/ethereum/eth-usd")
-                ContextCompat.startActivity(context, openUrlIntent, Bundle())
-            }
+            .clickable { onAction(MainAction.LaunchUrRate) }
             .fillMaxWidth()
             .padding(vertical = 12.dp)
     )

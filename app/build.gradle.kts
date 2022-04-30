@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.bundles.compose)
     implementation(libs.androidx.lifecycle)
+    implementation(libs.androidx.browser)
     implementation(libs.activity.compose)
     implementation(libs.navigation.compose)
     implementation(libs.accompanist.swiperefresh)
