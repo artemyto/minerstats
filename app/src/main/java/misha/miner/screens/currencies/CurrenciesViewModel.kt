@@ -8,20 +8,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import misha.miner.domain.GetListingsUseCase
-import misha.miner.models.coinmarketcap.data.Listing
+import misha.miner.domain.GetCurrenciesUseCase
 import misha.miner.models.common.ErrorState
 import javax.inject.Inject
 
 @HiltViewModel
 class CurrenciesViewModel @Inject constructor(
-    private val getListings: GetListingsUseCase,
+    private val getCurrenciesUseCase: GetCurrenciesUseCase,
 ) : ViewModel() {
 
-    private val _currencies: MutableLiveData<MutableList<Listing>> =
+    private val _currencies: MutableLiveData<List<CurrencyVO>> =
         MutableLiveData(mutableListOf())
-    val currencies: LiveData<MutableList<Listing>> = _currencies
-    private lateinit var currenciesField: MutableList<Listing>
+    val currencies: LiveData<List<CurrencyVO>> = _currencies
 
     private val _isRefreshing: MutableLiveData<Boolean> = MutableLiveData()
     val isRefreshing: LiveData<Boolean> = _isRefreshing
@@ -50,10 +48,10 @@ class CurrenciesViewModel @Inject constructor(
 
     private fun getCurrencies() {
         viewModelScope.launch(Dispatchers.IO) {
-            getListings
+            getCurrenciesUseCase
                 .execute()
                 .onSuccess {
-                    _currencies.postValue(it.toMutableList())
+                    _currencies.postValue(it)
                     _isRefreshing.postValue(false)
                 }
                 .onFailure {

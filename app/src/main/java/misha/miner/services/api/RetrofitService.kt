@@ -3,6 +3,7 @@ package misha.miner.services.api
 import misha.miner.models.coinmarketcap.CoinMarketCapResponse
 import misha.miner.models.coinmarketcap.data.Converted
 import misha.miner.models.coinmarketcap.data.Listing
+import misha.miner.models.coinmarketcap.data.Metadata
 import misha.miner.models.ehterscan.EtherscanResponse
 import misha.miner.models.ehterscan.EtherscanTransaction
 import misha.miner.models.ethermine.EthermineCurrentStats
@@ -88,4 +89,18 @@ interface RetrofitService {
         @HeaderMap
         headers: Map<String, String>,
     ): CoinMarketCapResponse<List<Listing>>
+
+    /**
+     * Returns all static metadata available for one or more cryptocurrencies.
+     * This information includes details like logo, description, official website URL, social links, and links to a cryptocurrency's technical documentation.
+     *
+     * [Docs](https://coinmarketcap.com/api/documentation/v1/#operation/getV2CryptocurrencyInfo)
+     */
+    @GET("https://pro-api.coinmarketcap.com/v2/cryptocurrency/info")
+    suspend fun getCurrencyMetadata(
+        @HeaderMap
+        headers: Map<String, String>,
+        @QueryMap
+        queries: Map<String, String>,
+    ): CoinMarketCapResponse<Map<String, Metadata>>
 }

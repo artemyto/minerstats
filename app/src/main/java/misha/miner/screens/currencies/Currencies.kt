@@ -23,7 +23,6 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.Job
 import misha.miner.R
 import misha.miner.common.ui.widgets.SearchView
-import misha.miner.models.coinmarketcap.data.Listing
 import java.util.*
 
 @Composable
@@ -31,7 +30,7 @@ fun Currencies(viewModel: CurrenciesViewModel, openDrawer: () -> Job) {
 
     viewModel.initialize()
 
-    val outputList: List<Listing> by viewModel.currencies.observeAsState(mutableListOf())
+    val outputList: List<CurrencyVO> by viewModel.currencies.observeAsState(listOf())
     val isRefreshing: Boolean by viewModel.isRefreshing.observeAsState(false)
 
     ListingsScreen(
@@ -47,7 +46,7 @@ fun ListingsScreen(
     openDrawer: () -> Job,
     isRefreshing: Boolean,
     refreshClicked: () -> Unit,
-    list: List<Listing>
+    list: List<CurrencyVO>
 ) {
     SwipeRefresh(
         swipeEnabled = true,
@@ -104,7 +103,7 @@ fun ListingsScreen(
                 val filteredListings = if (searchedText.isEmpty()) {
                     list
                 } else {
-                    val resultList = mutableListOf<Listing>()
+                    val resultList = mutableListOf<CurrencyVO>()
                     for (listing in list) {
                         if (
                             listing.name.lowercase(Locale.getDefault())

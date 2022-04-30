@@ -1,14 +1,12 @@
 package misha.miner.models.coinmarketcap.data
 
 import kotlinx.serialization.Serializable
-import misha.miner.models.coinmarketcap.Quote
 
 @Serializable
-data class Listing(
+data class Metadata(
     val id: Int,
     val name: String,
     val symbol: String,
     val slug: String,
-    val cmc_rank: String,
-    val quote: Quote,
+    val logo: String,
 )
