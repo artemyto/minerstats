@@ -58,6 +58,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = javaVersion.toString()
+        freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
     }
     buildFeatures {
         compose = true
