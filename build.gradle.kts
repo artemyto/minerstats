@@ -45,6 +45,20 @@ allprojects {
     }
 }
 
-tasks.register("clean", Delete::class) {
+tasks.register<Delete>("clean") {
     delete(rootProject.buildDir)
 }
+
+val prepareDirs by tasks.register<Task>("prepareDirs") {
+    mkdir("${rootProject.rootDir}/.git/hooks")
+}
+
+val installGitHook by tasks.register<Copy>("installGitHook") {
+    from(File(rootProject.rootDir, "pre-push"))
+    into { File(rootProject.rootDir, ".git/hooks") }
+    fileMode = 0b111101101
+}
+
+tasks.getByPath(":app:preBuild")
+    .dependsOn(prepareDirs)
+    .dependsOn(installGitHook)
