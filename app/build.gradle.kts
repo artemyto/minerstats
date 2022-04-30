@@ -42,6 +42,10 @@ android {
     }
 
     buildTypes {
+        create("preRelease") {
+            initWith(getByName("debug"))
+            isDebuggable = false
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -95,6 +99,7 @@ dependencies {
 
     //Pluto
     debugImplementation(libs.bundles.pluto)
+    "preReleaseImplementation"(libs.bundles.plutoNoOp)
     releaseImplementation(libs.bundles.plutoNoOp)
 
     implementation(libs.kotlinxSerializationJson)
