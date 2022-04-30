@@ -12,15 +12,15 @@ fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
     viewModel.initialize()
 
     val eth: String by viewModel.eth.observeAsState("")
-    val poolOutputList: MutableList<String> by viewModel.poolOutputList.observeAsState(mutableListOf())
-    val balanceOutputList: MutableList<String> by viewModel.balanceOutputList.observeAsState(
-        mutableListOf()
+    val poolOutputList: List<String> by viewModel.poolOutputList.observeAsState(listOf())
+    val balanceOutputList: List<String> by viewModel.balanceOutputList.observeAsState(
+        listOf()
     )
-    val workerOutputList: MutableList<String> by viewModel.workerOutputList.observeAsState(
-        mutableListOf()
+    val workerOutputList: List<String> by viewModel.workerOutputList.observeAsState(
+        listOf()
     )
-    val sharesOutputList: MutableList<String> by viewModel.sharesOutputList.observeAsState(
-        mutableListOf()
+    val sharesOutputList: List<String> by viewModel.sharesOutputList.observeAsState(
+        listOf()
     )
     val isRefreshing: Boolean by viewModel.isRefreshing.observeAsState(false)
 

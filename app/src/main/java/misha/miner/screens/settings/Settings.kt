@@ -32,8 +32,8 @@ fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
     var command by rememberSaveable { mutableStateOf("") }
     val pc: String by viewModel.pc.observeAsState("")
 
-    val commandList: MutableList<String> by viewModel.commandList.observeAsState(mutableListOf())
-    val pcLabelList: MutableList<String> by viewModel.pcLabelList.observeAsState(mutableListOf())
+    val commandList: List<String> by viewModel.commandList.observeAsState(listOf())
+    val pcLabelList: List<String> by viewModel.pcLabelList.observeAsState(listOf())
 
     ConstraintLayout(
         Modifier

@@ -30,13 +30,13 @@ class RunCommandViewModel @Inject constructor(
     private val _pc: MutableLiveData<String> = MutableLiveData("")
     val pc: LiveData<String> = _pc
 
-    private val _pcLabelList: MutableLiveData<MutableList<String>> =
-        MutableLiveData(mutableListOf())
-    val pcLabelList: LiveData<MutableList<String>> = _pcLabelList
+    private val _pcLabelList: MutableLiveData<List<String>> =
+        MutableLiveData(listOf())
+    val pcLabelList: LiveData<List<String>> = _pcLabelList
 
-    private val _commandList: MutableLiveData<MutableList<String>> =
-        MutableLiveData(mutableListOf())
-    val commandList: LiveData<MutableList<String>> = _commandList
+    private val _commandList: MutableLiveData<List<String>> =
+        MutableLiveData(listOf())
+    val commandList: LiveData<List<String>> = _commandList
 
     val error: MutableStateFlow<ErrorState> = MutableStateFlow(ErrorState.None)
 

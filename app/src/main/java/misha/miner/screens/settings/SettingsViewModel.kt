@@ -34,13 +34,13 @@ class SettingsViewModel @Inject constructor(
     private val _password: MutableLiveData<String> = MutableLiveData("")
     val password: LiveData<String> = _password
 
-    private val _commandList: MutableLiveData<MutableList<String>> =
-        MutableLiveData(mutableListOf())
-    val commandList: LiveData<MutableList<String>> = _commandList
+    private val _commandList: MutableLiveData<List<String>> =
+        MutableLiveData(listOf())
+    val commandList: LiveData<List<String>> = _commandList
 
-    private val _pcLabelList: MutableLiveData<MutableList<String>> =
-        MutableLiveData(mutableListOf())
-    val pcLabelList: LiveData<MutableList<String>> = _pcLabelList
+    private val _pcLabelList: MutableLiveData<List<String>> =
+        MutableLiveData(listOf())
+    val pcLabelList: LiveData<List<String>> = _pcLabelList
 
     private lateinit var storageContext: StorageViewModel
 

@@ -18,7 +18,7 @@ class CurrenciesViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _currencies: MutableLiveData<List<CurrencyVO>> =
-        MutableLiveData(mutableListOf())
+        MutableLiveData(listOf())
     val currencies: LiveData<List<CurrencyVO>> = _currencies
 
     private val _isRefreshing: MutableLiveData<Boolean> = MutableLiveData()

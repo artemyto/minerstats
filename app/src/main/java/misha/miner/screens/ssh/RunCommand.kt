@@ -34,8 +34,8 @@ fun RunCommand(viewModel: RunCommandViewModel, openDrawer: () -> Job) {
 
     val error by viewModel.error.collectAsState()
 
-    val commandList: MutableList<String> by viewModel.commandList.observeAsState(mutableListOf())
-    val pcLabelList: MutableList<String> by viewModel.pcLabelList.observeAsState(mutableListOf())
+    val commandList: List<String> by viewModel.commandList.observeAsState(listOf())
+    val pcLabelList: List<String> by viewModel.pcLabelList.observeAsState(listOf())
 
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()

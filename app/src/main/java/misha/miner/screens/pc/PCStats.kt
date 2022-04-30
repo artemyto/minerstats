@@ -20,10 +20,10 @@ fun PCStats(viewModel: PCStatsViewModel, openDrawer: () -> Job) {
     val status by viewModel.status.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    val outputList: MutableList<String> by viewModel.outputList.observeAsState(mutableListOf())
+    val outputList: List<String> by viewModel.outputList.observeAsState(listOf())
 
     val selectedPC by viewModel.selectedPC.collectAsState()
-    val pcLabelList: MutableList<String> by viewModel.pcLabelList.observeAsState(mutableListOf())
+    val pcLabelList: List<String> by viewModel.pcLabelList.observeAsState(listOf())
 
     val isRefreshing: Boolean by viewModel.isRefreshing.observeAsState(false)
 

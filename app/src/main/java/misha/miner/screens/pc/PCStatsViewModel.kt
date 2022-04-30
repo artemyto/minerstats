@@ -32,14 +32,13 @@ class PCStatsViewModel @Inject constructor(
     private val _status: MutableStateFlow<String> = MutableStateFlow("Connection is not opened yet")
     val status: StateFlow<String> = _status
 
-    private val _outputList: MutableLiveData<MutableList<String>> =
-        MutableLiveData(mutableListOf())
-    val outputList: LiveData<MutableList<String>> = _outputList
+    private val _outputList: MutableLiveData<List<String>> =
+        MutableLiveData(listOf())
+    val outputList: LiveData<List<String>> = _outputList
 
-    private val _pcLabelList: MutableLiveData<MutableList<String>> =
-        MutableLiveData(mutableListOf())
-    val pcLabelList: LiveData<MutableList<String>> = _pcLabelList
-    private var pcLabelListValue: MutableList<String> = mutableListOf()
+    private val _pcLabelList: MutableLiveData<List<String>> =
+        MutableLiveData(listOf())
+    val pcLabelList: LiveData<List<String>> = _pcLabelList
 
     private val _selectedPC: MutableStateFlow<Int> = MutableStateFlow(-1)
     val selectedPC: StateFlow<Int> = _selectedPC
@@ -50,7 +49,7 @@ class PCStatsViewModel @Inject constructor(
     private val _isRefreshing: MutableLiveData<Boolean> = MutableLiveData()
     val isRefreshing: LiveData<Boolean> = _isRefreshing
 
-    private val commandList = mutableListOf(
+    private val commandList = listOf(
         Command.SimpleCommand(
             name = "AMD CPU\n\n       temp: ",
             command = "sensors | grep Tctl | grep -E -o '[[:digit:]]{1,}.[[:digit:]].'"
@@ -109,9 +108,9 @@ class PCStatsViewModel @Inject constructor(
     private fun makeSshStats() {
         val config = storageManager.getStorage()
 
-        pcLabelListValue = mutableListOf()
+        val pcLabelListValue = mutableListOf<String>()
 
-        config.pcList.forEachIndexed { index, item ->
+        config.pcList.forEachIndexed { index, _ ->
             pcLabelListValue.add("PC ${index + 1}")
         }
 
@@ -129,7 +128,7 @@ class PCStatsViewModel @Inject constructor(
     private fun runSsh(index: Int, item: PCViewModel) {
         viewModelScope.launch(Dispatchers.IO) {
 
-            _outputList.postValue(mutableListOf())
+            _outputList.postValue(listOf())
             _status.emit("")
             _isRefreshing.postValue(true)
 

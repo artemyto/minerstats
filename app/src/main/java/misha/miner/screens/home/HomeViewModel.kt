@@ -32,25 +32,24 @@ class HomeViewModel @Inject constructor(
     private val _eth: MutableLiveData<String> = MutableLiveData()
     val eth: LiveData<String> = _eth
 
-    private val _poolOutputList: MutableLiveData<MutableList<String>> =
-        MutableLiveData(mutableListOf())
-    val poolOutputList: LiveData<MutableList<String>> = _poolOutputList
-    private lateinit var poolOutputListField: MutableList<String>
+    private val _poolOutputList: MutableLiveData<List<String>> =
+        MutableLiveData(listOf())
+    val poolOutputList: LiveData<List<String>> = _poolOutputList
+    private lateinit var poolOutputListField: List<String>
 
-    private val _sharesOutputList: MutableLiveData<MutableList<String>> =
-        MutableLiveData(mutableListOf())
-    val sharesOutputList: LiveData<MutableList<String>> = _sharesOutputList
-    private lateinit var sharesOutputListField: MutableList<String>
+    private val _sharesOutputList: MutableLiveData<List<String>> =
+        MutableLiveData(listOf())
+    val sharesOutputList: LiveData<List<String>> = _sharesOutputList
+    private lateinit var sharesOutputListField: List<String>
 
-    private val _balanceOutputList: MutableLiveData<MutableList<String>> =
-        MutableLiveData(mutableListOf())
-    val balanceOutputList: LiveData<MutableList<String>> = _balanceOutputList
-    private lateinit var balanceOutputListField: MutableList<String>
+    private val _balanceOutputList: MutableLiveData<List<String>> =
+        MutableLiveData(listOf())
+    val balanceOutputList: LiveData<List<String>> = _balanceOutputList
+    private lateinit var balanceOutputListField: List<String>
 
-    private val _workerOutputList: MutableLiveData<MutableList<String>> =
-        MutableLiveData(mutableListOf())
-    val workerOutputList: LiveData<MutableList<String>> = _workerOutputList
-    private lateinit var workerOutputListField: MutableList<String>
+    private val _workerOutputList: MutableLiveData<List<String>> =
+        MutableLiveData(listOf())
+    val workerOutputList: LiveData<List<String>> = _workerOutputList
 
     private val address = storageManager.getStorage().wallet
 
@@ -104,7 +103,7 @@ class HomeViewModel @Inject constructor(
                         unpaid = ethHelper.getUnpaidBalanceValue()
                         estimated = ethHelper.getEstimatedEthForMonthValue()
 
-                        poolOutputListField = mutableListOf(
+                        poolOutputListField = listOf(
                             "Hashrate:\n",
                             "       Average: ${ethHelper.getAverageHashrate()}\n",
                             "       Reported: ${ethHelper.getReportedHashrate()}\n",
@@ -112,7 +111,7 @@ class HomeViewModel @Inject constructor(
                         )
                         _poolOutputList.postValue(poolOutputListField)
 
-                        sharesOutputListField = mutableListOf(
+                        sharesOutputListField = listOf(
                             "Shares (1 hour):\n",
                             "       valid: ${ethHelper.getValidShares()}\n",
                             "       stale: ${ethHelper.getStaleShares()}\n",
@@ -170,7 +169,7 @@ class HomeViewModel @Inject constructor(
                     val walletPoolSum = balance + unpaid
                     val walletPoolSumRub = oneEth * walletPoolSum
 
-                    balanceOutputListField = mutableListOf(
+                    balanceOutputListField = listOf(
                         "Balance:\n",
 
                         "       Wallet: " +
@@ -204,7 +203,7 @@ class HomeViewModel @Inject constructor(
             getPoolDashboard
                 .execute(address)
                 .onSuccess {
-                    workerOutputListField = mutableListOf("Workers:\n")
+                    val workerOutputListField = mutableListOf("Workers:\n")
                     for (worker in it.workers) {
                         workerOutputListField.add(
                             "       ${worker.worker} / reported: " +
