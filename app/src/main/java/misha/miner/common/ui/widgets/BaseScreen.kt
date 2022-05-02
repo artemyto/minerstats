@@ -22,6 +22,7 @@ import misha.miner.R
 
 @Composable
 fun BaseScreen(
+    modifier: Modifier = Modifier,
     swipeEnabled: Boolean,
     isRefreshing: Boolean,
     openDrawer: () -> Job,
@@ -31,6 +32,7 @@ fun BaseScreen(
     onRunClicked: (() -> Unit)? = null,
 ) {
     SwipeRefresh(
+        modifier = modifier,
         swipeEnabled = swipeEnabled,
         state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
         onRefresh = refreshClicked,

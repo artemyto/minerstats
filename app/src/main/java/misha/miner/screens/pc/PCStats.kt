@@ -1,5 +1,6 @@
 package misha.miner.screens.pc
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Monitor
@@ -7,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.Job
 import misha.miner.common.ui.widgets.BaseScreen
@@ -45,8 +47,9 @@ fun PCStats(openDrawer: () -> Job) {
                 }
             }
         }
-    ) {
+    ) { paddingValues ->
         BaseScreen(
+            modifier = Modifier.padding(paddingValues),
             swipeEnabled = true,
             isRefreshing = isRefreshing,
             openDrawer = openDrawer,
