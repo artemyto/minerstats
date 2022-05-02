@@ -9,13 +9,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.Job
 import misha.miner.common.ui.widgets.BaseScreen
 import misha.miner.common.ui.widgets.ErrorAlert
 import misha.miner.models.common.ErrorState
 
 @Composable
-fun ScanIp(viewModel: ScanIpViewModel, openDrawer: () -> Job) {
+fun ScanIp(openDrawer: () -> Job) {
+
+    val viewModel: ScanIpViewModel = hiltViewModel()
 
     viewModel.initialize()
 

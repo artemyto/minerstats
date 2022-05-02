@@ -3,11 +3,14 @@ package misha.miner.screens.home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.Job
 import misha.miner.common.ui.widgets.BaseScreen
 
 @Composable
-fun Home(viewModel: HomeViewModel, openDrawer: () -> Job) {
+fun Home(openDrawer: () -> Job) {
+
+    val viewModel: HomeViewModel = hiltViewModel()
 
     viewModel.initialize()
 

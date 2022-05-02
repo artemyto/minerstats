@@ -78,6 +78,7 @@ dependencies {
     implementation(libs.androidx.browser)
     implementation(libs.activity.compose)
     implementation(libs.navigation.compose)
+    implementation(libs.hilt.navigaiton.compose)
     implementation(libs.accompanist.swiperefresh)
     implementation(libs.jsch)
 

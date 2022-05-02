@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.Job
 import misha.miner.R
 import misha.miner.common.ui.widgets.ErrorAlert
@@ -24,7 +25,9 @@ import misha.miner.common.ui.widgets.ExposedDropDownMenu
 import misha.miner.models.common.ErrorState
 
 @Composable
-fun RunCommand(viewModel: RunCommandViewModel, openDrawer: () -> Job) {
+fun RunCommand(openDrawer: () -> Job) {
+
+    val viewModel: RunCommandViewModel = hiltViewModel()
 
     viewModel.initialize()
 

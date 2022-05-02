@@ -15,12 +15,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.Job
 import misha.miner.R
 import misha.miner.common.ui.widgets.ExposedDropDownMenu
 
 @Composable
-fun Settings(viewModel: SettingsViewModel, openDrawer: () -> Job) {
+fun Settings(openDrawer: () -> Job) {
+
+    val viewModel: SettingsViewModel = hiltViewModel()
 
     viewModel.initialization()
 

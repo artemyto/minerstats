@@ -20,6 +20,7 @@ desugaring = "1.1.5"
 espresso = "3.4.0"
 gradleDependencyUpdates = "0.42.0"
 hilt = "2.41"
+hilt-navigation-compose = "1.0.0"
 jsch = "0.1.55"
 junit = "4.13.2"
 kotlin = "1.6.20"
@@ -66,6 +67,7 @@ junit = { module = "junit:junit", version.ref = "junit" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-gradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-navigaiton-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinxSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }

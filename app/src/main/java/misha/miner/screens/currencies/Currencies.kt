@@ -17,6 +17,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -26,7 +27,9 @@ import misha.miner.common.ui.widgets.SearchView
 import java.util.*
 
 @Composable
-fun Currencies(viewModel: CurrenciesViewModel, openDrawer: () -> Job) {
+fun Currencies(openDrawer: () -> Job) {
+
+    val viewModel: CurrenciesViewModel = hiltViewModel()
 
     viewModel.initialize()
 
