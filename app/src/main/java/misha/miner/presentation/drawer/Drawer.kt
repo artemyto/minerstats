@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import misha.miner.MainAction
 import misha.miner.common.ui.theme.MyMinerTheme
+import misha.miner.presentation.main.MainAction
 
 sealed class DrawerScreens(val title: String, val route: String) {
     object Home : DrawerScreens("Главная", "home")

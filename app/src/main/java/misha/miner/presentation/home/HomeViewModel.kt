@@ -10,11 +10,11 @@ import kotlinx.coroutines.launch
 import misha.miner.common.EthermineHelper
 import misha.miner.common.util.getEthValue
 import misha.miner.common.util.hashrateToMegahashLabel
+import misha.miner.data.models.coinmarketcap.currency.CurrencyType
 import misha.miner.domain.ConvertCurrencyUseCase
 import misha.miner.domain.GetPoolDashboardUseCase
 import misha.miner.domain.GetPoolStatsUseCase
 import misha.miner.domain.GetWalletStatsUseCase
-import misha.miner.data.models.coinmarketcap.currency.CurrencyType
 import misha.miner.services.storage.StorageManager
 import javax.inject.Inject
 

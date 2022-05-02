@@ -9,10 +9,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import misha.miner.data.SettingsRepository
 import misha.miner.common.getIfNotBlankOrElse
-import misha.miner.domain.RunTerminalCommandUseCase
+import misha.miner.data.SettingsRepository
 import misha.miner.data.models.common.ErrorState
+import misha.miner.domain.RunTerminalCommandUseCase
 import javax.inject.Inject
 
 @HiltViewModel

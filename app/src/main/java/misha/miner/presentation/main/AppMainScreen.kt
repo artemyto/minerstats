@@ -1,4 +1,4 @@
-package misha.miner.presentation
+package misha.miner.presentation.main
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -10,7 +10,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import misha.miner.MainViewModel
 import misha.miner.common.ui.theme.MyMinerTheme
 import misha.miner.presentation.currencies.Currencies
 import misha.miner.presentation.drawer.Drawer

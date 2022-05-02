@@ -1,4 +1,4 @@
-package misha.miner
+package misha.miner.presentation.main
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

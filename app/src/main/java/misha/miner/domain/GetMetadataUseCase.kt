@@ -3,9 +3,9 @@ package misha.miner.domain
 import com.pluto.plugins.logger.PlutoLog
 import misha.miner.BuildConfig
 import misha.miner.common.Constants
+import misha.miner.data.RetrofitService
 import misha.miner.data.models.coinmarketcap.CoinMarketCapStatus
 import misha.miner.data.models.coinmarketcap.data.Metadata
-import misha.miner.data.RetrofitService
 import javax.inject.Inject
 
 class GetMetadataUseCase @Inject constructor(

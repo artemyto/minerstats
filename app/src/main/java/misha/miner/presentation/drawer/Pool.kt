@@ -8,7 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import misha.miner.MainAction
+import misha.miner.presentation.main.MainAction
 
 @Composable
 fun Pool(
