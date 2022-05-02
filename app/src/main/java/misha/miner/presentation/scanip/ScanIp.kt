@@ -2,7 +2,6 @@ package misha.miner.presentation.scanip
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.DrawerState
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -30,26 +29,24 @@ fun ScanIp(drawerState: DrawerState) {
 
     val selectedAddress: String by viewModel.selectedAddress.observeAsState("")
 
-    Scaffold {
-        BaseScreen(
-            swipeEnabled = !isRefreshing,
-            isRefreshing = isRefreshing,
-            drawerState = drawerState,
-            refreshClicked = { viewModel.runClicked() },
-            list = outputList,
-            customTopComposable = {
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = selectedAddress,
-                    onValueChange = {
-                        viewModel.inputAddress(it)
-                    },
-                    label = { Text("Первые 3 числа ip-адреса") }
-                )
-            },
-            onRunClicked = viewModel::runClicked,
-        )
-    }
+    BaseScreen(
+        swipeEnabled = !isRefreshing,
+        isRefreshing = isRefreshing,
+        drawerState = drawerState,
+        refreshClicked = { viewModel.runClicked() },
+        list = outputList,
+        customTopComposable = {
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = selectedAddress,
+                onValueChange = {
+                    viewModel.inputAddress(it)
+                },
+                label = { Text("Первые 3 числа ip-адреса") }
+            )
+        },
+        onRunClicked = viewModel::runClicked,
+    )
 
     if (error is ErrorState.Error) {
         val message = (error as ErrorState.Error).message
