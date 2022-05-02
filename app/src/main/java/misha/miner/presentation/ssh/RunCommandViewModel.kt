@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import misha.miner.models.common.ErrorState
 import misha.miner.models.storage.StorageViewModel
-import misha.miner.services.ssh.SSHConnectionManager
+import misha.miner.common.data.SSHConnectionManager
 import misha.miner.services.storage.StorageManager
 import javax.inject.Inject
 

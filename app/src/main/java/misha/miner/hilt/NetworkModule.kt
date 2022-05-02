@@ -9,7 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import misha.miner.common.Constants
-import misha.miner.services.api.RetrofitService
+import misha.miner.common.data.RetrofitService
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

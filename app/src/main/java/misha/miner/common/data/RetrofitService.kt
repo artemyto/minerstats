@@ -1,4 +1,4 @@
-package misha.miner.services.api
+package misha.miner.common.data
 
 import misha.miner.models.coinmarketcap.CoinMarketCapResponse
 import misha.miner.models.coinmarketcap.data.Converted

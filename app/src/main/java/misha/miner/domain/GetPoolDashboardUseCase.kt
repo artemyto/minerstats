@@ -3,7 +3,7 @@ package misha.miner.domain
 import com.pluto.plugins.logger.PlutoLog
 import misha.miner.models.ethermine.EthermineDashboard
 import misha.miner.models.ethermine.EthermineResponseStatus
-import misha.miner.services.api.RetrofitService
+import misha.miner.common.data.RetrofitService
 import javax.inject.Inject
 
 class GetPoolDashboardUseCase @Inject constructor(

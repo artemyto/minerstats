@@ -5,7 +5,7 @@ import misha.miner.BuildConfig
 import misha.miner.common.Constants
 import misha.miner.models.coinmarketcap.CoinMarketCapStatus
 import misha.miner.models.coinmarketcap.data.Listing
-import misha.miner.services.api.RetrofitService
+import misha.miner.common.data.RetrofitService
 import javax.inject.Inject
 
 class GetListingsUseCase @Inject constructor(

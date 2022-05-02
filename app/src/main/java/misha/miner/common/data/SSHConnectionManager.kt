@@ -1,4 +1,4 @@
-package misha.miner.services.ssh
+package misha.miner.common.data
 
 import com.jcraft.jsch.*
 import java.io.IOException

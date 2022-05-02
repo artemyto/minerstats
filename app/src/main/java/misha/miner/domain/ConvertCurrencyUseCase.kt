@@ -6,7 +6,7 @@ import misha.miner.common.Constants
 import misha.miner.models.coinmarketcap.CoinMarketCapStatus
 import misha.miner.models.coinmarketcap.Quote
 import misha.miner.models.coinmarketcap.currency.CurrencyType
-import misha.miner.services.api.RetrofitService
+import misha.miner.common.data.RetrofitService
 import javax.inject.Inject
 
 class ConvertCurrencyUseCase @Inject constructor(
