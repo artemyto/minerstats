@@ -8,7 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.Job
 import misha.miner.common.ui.widgets.BaseScreen
 import misha.miner.common.ui.widgets.ErrorAlert
-import misha.miner.models.common.ErrorState
+import misha.miner.data.models.common.ErrorState
 
 @Composable
 fun Wallet(openDrawer: () -> Job) {

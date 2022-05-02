@@ -22,7 +22,7 @@ import kotlinx.coroutines.Job
 import misha.miner.R
 import misha.miner.common.ui.widgets.ErrorAlert
 import misha.miner.common.ui.widgets.ExposedDropDownMenu
-import misha.miner.models.common.ErrorState
+import misha.miner.data.models.common.ErrorState
 
 @Composable
 fun RunCommand(openDrawer: () -> Job) {

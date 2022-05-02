@@ -2,7 +2,7 @@ package misha.miner.common
 
 import misha.miner.common.util.getEthValue
 import misha.miner.common.util.hashrateToMegahashLabel
-import misha.miner.models.ethermine.EthermineCurrentStats
+import misha.miner.data.models.ethermine.EthermineCurrentStats
 
 class EthermineHelper(private val currentStats: EthermineCurrentStats) {
 

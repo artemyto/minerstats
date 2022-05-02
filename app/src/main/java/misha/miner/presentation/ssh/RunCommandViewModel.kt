@@ -10,9 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import misha.miner.models.common.ErrorState
-import misha.miner.models.storage.StorageViewModel
-import misha.miner.common.data.SSHConnectionManager
+import misha.miner.data.models.common.ErrorState
+import misha.miner.data.models.storage.StorageViewModel
+import misha.miner.data.SSHConnectionManager
 import misha.miner.services.storage.StorageManager
 import javax.inject.Inject
 

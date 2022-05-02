@@ -2,8 +2,8 @@ package misha.miner.domain
 
 import com.pluto.plugins.logger.PlutoLog
 import misha.miner.BuildConfig
-import misha.miner.models.ehterscan.EtherscanResponseStatus
-import misha.miner.common.data.RetrofitService
+import misha.miner.data.models.ehterscan.EtherscanResponseStatus
+import misha.miner.data.RetrofitService
 import javax.inject.Inject
 
 class GetWalletStatsUseCase @Inject constructor(

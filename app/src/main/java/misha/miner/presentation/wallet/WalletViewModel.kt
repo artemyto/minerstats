@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import misha.miner.common.util.getEthValue
 import misha.miner.domain.GetWalletTransactionsUseCase
-import misha.miner.models.common.ErrorState
-import misha.miner.models.ehterscan.EtherscanTransaction
+import misha.miner.data.models.common.ErrorState
+import misha.miner.data.models.ehterscan.EtherscanTransaction
 import misha.miner.services.storage.StorageManager
 import java.time.Instant
 import java.time.LocalDateTime

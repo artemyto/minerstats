@@ -1,9 +1,9 @@
 package misha.miner.domain
 
 import com.pluto.plugins.logger.PlutoLog
-import misha.miner.models.ethermine.EthermineCurrentStats
-import misha.miner.models.ethermine.EthermineResponseStatus
-import misha.miner.common.data.RetrofitService
+import misha.miner.data.models.ethermine.EthermineCurrentStats
+import misha.miner.data.models.ethermine.EthermineResponseStatus
+import misha.miner.data.RetrofitService
 import javax.inject.Inject
 
 class GetPoolStatsUseCase @Inject constructor(

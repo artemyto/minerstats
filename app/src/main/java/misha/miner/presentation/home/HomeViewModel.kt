@@ -14,7 +14,7 @@ import misha.miner.domain.ConvertCurrencyUseCase
 import misha.miner.domain.GetPoolDashboardUseCase
 import misha.miner.domain.GetPoolStatsUseCase
 import misha.miner.domain.GetWalletStatsUseCase
-import misha.miner.models.coinmarketcap.currency.CurrencyType
+import misha.miner.data.models.coinmarketcap.currency.CurrencyType
 import misha.miner.services.storage.StorageManager
 import javax.inject.Inject
 

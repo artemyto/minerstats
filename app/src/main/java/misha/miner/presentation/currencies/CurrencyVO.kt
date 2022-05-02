@@ -1,8 +1,8 @@
 package misha.miner.presentation.currencies
 
-import misha.miner.models.coinmarketcap.Quote
-import misha.miner.models.coinmarketcap.data.Listing
-import misha.miner.models.coinmarketcap.data.Metadata
+import misha.miner.data.models.coinmarketcap.Quote
+import misha.miner.data.models.coinmarketcap.data.Listing
+import misha.miner.data.models.coinmarketcap.data.Metadata
 
 data class CurrencyVO(
     val id: Int,

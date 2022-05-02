@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import misha.miner.models.storage.PCViewModel
-import misha.miner.models.storage.StorageViewModel
+import misha.miner.data.models.storage.PCViewModel
+import misha.miner.data.models.storage.StorageViewModel
 import misha.miner.services.storage.StorageManager
 import javax.inject.Inject
 

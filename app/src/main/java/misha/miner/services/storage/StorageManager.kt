@@ -1,6 +1,6 @@
 package misha.miner.services.storage
 
-import misha.miner.models.storage.StorageViewModel
+import misha.miner.data.models.storage.StorageViewModel
 
 interface StorageManager {
     fun getStorage(): StorageViewModel

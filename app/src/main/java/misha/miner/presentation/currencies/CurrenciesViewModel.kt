@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import misha.miner.domain.GetCurrenciesUseCase
-import misha.miner.models.common.ErrorState
+import misha.miner.data.models.common.ErrorState
 import javax.inject.Inject
 
 @HiltViewModel
