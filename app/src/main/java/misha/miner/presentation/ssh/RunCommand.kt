@@ -1,4 +1,4 @@
-package misha.miner.screens.ssh
+package misha.miner.presentation.ssh
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.fillMaxSize

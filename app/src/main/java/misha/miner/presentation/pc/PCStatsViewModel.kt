@@ -1,4 +1,4 @@
-package misha.miner.screens.pc
+package misha.miner.presentation.pc
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,4 +1,4 @@
-package misha.miner.screens.wallet
+package misha.miner.presentation.wallet
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

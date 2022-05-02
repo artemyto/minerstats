@@ -1,4 +1,4 @@
-package misha.miner.screens.currencies
+package misha.miner.presentation.currencies
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

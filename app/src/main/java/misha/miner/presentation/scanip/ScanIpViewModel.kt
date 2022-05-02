@@ -1,4 +1,4 @@
-package misha.miner.screens.scanip
+package misha.miner.presentation.scanip
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,4 +1,4 @@
-package misha.miner.screens.currencies
+package misha.miner.presentation.currencies
 
 import misha.miner.models.coinmarketcap.Quote
 import misha.miner.models.coinmarketcap.data.Listing

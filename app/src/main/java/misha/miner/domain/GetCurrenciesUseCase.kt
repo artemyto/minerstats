@@ -2,7 +2,7 @@ package misha.miner.domain
 
 import misha.miner.models.coinmarketcap.data.Listing
 import misha.miner.models.coinmarketcap.data.Metadata
-import misha.miner.screens.currencies.CurrencyVO
+import misha.miner.presentation.currencies.CurrencyVO
 import javax.inject.Inject
 
 class GetCurrenciesUseCase @Inject constructor(

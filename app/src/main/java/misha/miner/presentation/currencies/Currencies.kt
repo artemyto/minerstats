@@ -1,4 +1,4 @@
-package misha.miner.screens.currencies
+package misha.miner.presentation.currencies
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

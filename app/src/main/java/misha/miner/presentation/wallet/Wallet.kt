@@ -1,4 +1,4 @@
-package misha.miner.screens.wallet
+package misha.miner.presentation.wallet
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState

@@ -1,4 +1,4 @@
-package misha.miner.screens.settings
+package misha.miner.presentation.settings
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

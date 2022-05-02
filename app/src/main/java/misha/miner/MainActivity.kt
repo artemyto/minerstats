@@ -15,15 +15,15 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import misha.miner.common.ui.theme.MyMinerTheme
-import misha.miner.screens.currencies.Currencies
-import misha.miner.screens.drawer.Drawer
-import misha.miner.screens.drawer.DrawerScreens
-import misha.miner.screens.home.Home
-import misha.miner.screens.pc.PCStats
-import misha.miner.screens.scanip.ScanIp
-import misha.miner.screens.settings.Settings
-import misha.miner.screens.ssh.RunCommand
-import misha.miner.screens.wallet.Wallet
+import misha.miner.presentation.currencies.Currencies
+import misha.miner.presentation.drawer.Drawer
+import misha.miner.presentation.drawer.DrawerScreens
+import misha.miner.presentation.home.Home
+import misha.miner.presentation.pc.PCStats
+import misha.miner.presentation.scanip.ScanIp
+import misha.miner.presentation.settings.Settings
+import misha.miner.presentation.ssh.RunCommand
+import misha.miner.presentation.wallet.Wallet
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

@@ -1,4 +1,4 @@
-package misha.miner.screens.scanip
+package misha.miner.presentation.scanip
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Scaffold

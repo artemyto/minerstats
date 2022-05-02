@@ -1,4 +1,4 @@
-package misha.miner.screens.pc
+package misha.miner.presentation.pc
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*

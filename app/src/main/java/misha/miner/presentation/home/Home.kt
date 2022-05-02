@@ -1,4 +1,4 @@
-package misha.miner.screens.home
+package misha.miner.presentation.home
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

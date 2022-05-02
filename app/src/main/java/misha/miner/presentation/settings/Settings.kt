@@ -1,4 +1,4 @@
-package misha.miner.screens.settings
+package misha.miner.presentation.settings
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
