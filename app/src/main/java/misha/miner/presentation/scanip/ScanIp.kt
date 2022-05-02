@@ -1,6 +1,7 @@
 package misha.miner.presentation.scanip
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.DrawerState
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -10,13 +11,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.Job
 import misha.miner.common.ui.widgets.BaseScreen
 import misha.miner.common.ui.widgets.ErrorAlert
 import misha.miner.data.models.common.ErrorState
 
 @Composable
-fun ScanIp(openDrawer: () -> Job) {
+fun ScanIp(drawerState: DrawerState) {
 
     val viewModel: ScanIpViewModel = hiltViewModel()
 
@@ -34,7 +34,7 @@ fun ScanIp(openDrawer: () -> Job) {
         BaseScreen(
             swipeEnabled = !isRefreshing,
             isRefreshing = isRefreshing,
-            openDrawer = openDrawer,
+            drawerState = drawerState,
             refreshClicked = { viewModel.runClicked() },
             list = outputList,
             customTopComposable = {

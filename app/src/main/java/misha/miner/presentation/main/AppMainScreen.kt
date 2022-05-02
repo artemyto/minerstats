@@ -9,8 +9,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.launch
 import misha.miner.common.ui.theme.MyMinerTheme
+import misha.miner.common.util.closeWithScope
 import misha.miner.presentation.currencies.Currencies
 import misha.miner.presentation.drawer.Drawer
 import misha.miner.presentation.drawer.DrawerScreens
@@ -31,20 +31,13 @@ fun AppMainScreen(
     Surface(color = MaterialTheme.colors.background) {
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
-        val openDrawer = {
-            scope.launch {
-                drawerState.open()
-            }
-        }
         ModalDrawer(
             drawerState = drawerState,
             gesturesEnabled = true,
             drawerContent = {
                 Drawer(
                     onDestinationClicked = { route ->
-                        scope.launch {
-                            drawerState.close()
-                        }
+                        drawerState.closeWithScope(scope)
                         navController.navigate(route) {
                             popUpTo(navController.graph.startDestinationId)
                             launchSingleTop = true
@@ -59,25 +52,25 @@ fun AppMainScreen(
                 startDestination = DrawerScreens.Home.route
             ) {
                 composable(DrawerScreens.Home.route) {
-                    Home(openDrawer)
+                    Home(drawerState)
                 }
                 composable(DrawerScreens.PCStats.route) {
-                    PCStats(openDrawer)
+                    PCStats(drawerState)
                 }
                 composable(DrawerScreens.RunCommand.route) {
-                    RunCommand(openDrawer)
+                    RunCommand(drawerState)
                 }
                 composable(DrawerScreens.Currencies.route) {
-                    Currencies(openDrawer)
+                    Currencies(drawerState)
                 }
                 composable(DrawerScreens.Settings.route) {
-                    Settings(openDrawer)
+                    Settings(drawerState)
                 }
                 composable(DrawerScreens.Wallet.route) {
-                    Wallet(openDrawer)
+                    Wallet(drawerState)
                 }
                 composable(DrawerScreens.ScanIp.route) {
-                    ScanIp(openDrawer)
+                    ScanIp(drawerState)
                 }
             }
         }

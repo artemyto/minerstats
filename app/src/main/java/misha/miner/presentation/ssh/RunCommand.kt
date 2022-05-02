@@ -6,30 +6,34 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.DrawerState
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.Job
 import misha.miner.R
 import misha.miner.common.ui.widgets.ErrorAlert
 import misha.miner.common.ui.widgets.ExposedDropDownMenu
+import misha.miner.common.util.openWithScope
 import misha.miner.data.models.common.ErrorState
 
 @Composable
-fun RunCommand(openDrawer: () -> Job) {
+fun RunCommand(drawerState: DrawerState) {
 
     val viewModel: RunCommandViewModel = hiltViewModel()
 
     viewModel.initialize()
+
+    val scope = rememberCoroutineScope()
 
     val status by viewModel.status.collectAsState()
     val output by viewModel.output.collectAsState()
@@ -52,7 +56,7 @@ fun RunCommand(openDrawer: () -> Job) {
                 start.linkTo(parent.start, 16.dp)
             },
             onClick = {
-                openDrawer()
+                drawerState.openWithScope(scope)
             }
         ) {
             Icon(

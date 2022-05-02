@@ -4,11 +4,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -17,20 +15,23 @@ import androidx.constraintlayout.compose.Dimension
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import kotlinx.coroutines.Job
 import misha.miner.R
+import misha.miner.common.util.openWithScope
 
 @Composable
 fun BaseScreen(
     modifier: Modifier = Modifier,
     swipeEnabled: Boolean,
     isRefreshing: Boolean,
-    openDrawer: () -> Job,
+    drawerState: DrawerState,
     refreshClicked: () -> Unit,
     list: List<String>,
     customTopComposable: @Composable (() -> Unit)? = null,
     onRunClicked: (() -> Unit)? = null,
 ) {
+
+    val scope = rememberCoroutineScope()
+
     SwipeRefresh(
         modifier = modifier,
         swipeEnabled = swipeEnabled,
@@ -50,7 +51,7 @@ fun BaseScreen(
 
             Button(
                 onClick = {
-                    openDrawer()
+                    drawerState.openWithScope(scope)
                 },
                 modifier = Modifier.constrainAs(menu) {
                     top.linkTo(parent.top, margin = 16.dp)

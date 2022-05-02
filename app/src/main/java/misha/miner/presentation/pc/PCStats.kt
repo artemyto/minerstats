@@ -10,13 +10,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.Job
 import misha.miner.common.ui.widgets.BaseScreen
 import misha.miner.common.ui.widgets.ErrorAlert
 import misha.miner.data.models.common.ErrorState
 
 @Composable
-fun PCStats(openDrawer: () -> Job) {
+fun PCStats(drawerState: DrawerState) {
 
     val viewModel: PCStatsViewModel = hiltViewModel()
 
@@ -52,7 +51,7 @@ fun PCStats(openDrawer: () -> Job) {
             modifier = Modifier.padding(paddingValues),
             swipeEnabled = true,
             isRefreshing = isRefreshing,
-            openDrawer = openDrawer,
+            drawerState = drawerState,
             refreshClicked = { viewModel.runClicked() },
             list = mutableListOf(status).apply { addAll(outputList) }
         )

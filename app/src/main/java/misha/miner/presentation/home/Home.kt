@@ -1,14 +1,14 @@
 package misha.miner.presentation.home
 
+import androidx.compose.material.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.Job
 import misha.miner.common.ui.widgets.BaseScreen
 
 @Composable
-fun Home(openDrawer: () -> Job) {
+fun Home(drawerState: DrawerState) {
 
     val viewModel: HomeViewModel = hiltViewModel()
 
@@ -30,7 +30,7 @@ fun Home(openDrawer: () -> Job) {
     BaseScreen(
         swipeEnabled = true,
         isRefreshing = isRefreshing,
-        openDrawer = openDrawer,
+        drawerState = drawerState,
         refreshClicked = viewModel::runClicked,
         list = mutableListOf<String>().apply {
             if (eth.isNotBlank()) add(eth)

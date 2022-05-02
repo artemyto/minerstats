@@ -1,17 +1,17 @@
 package misha.miner.presentation.wallet
 
+import androidx.compose.material.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.Job
 import misha.miner.common.ui.widgets.BaseScreen
 import misha.miner.common.ui.widgets.ErrorAlert
 import misha.miner.data.models.common.ErrorState
 
 @Composable
-fun Wallet(openDrawer: () -> Job) {
+fun Wallet(drawerState: DrawerState) {
 
     val viewModel: WalletViewModel = hiltViewModel()
 
@@ -25,7 +25,7 @@ fun Wallet(openDrawer: () -> Job) {
     BaseScreen(
         swipeEnabled = true,
         isRefreshing = isRefreshing,
-        openDrawer = openDrawer,
+        drawerState = drawerState,
         refreshClicked = viewModel::runClicked,
         list = mutableListOf<String>().apply {
             addAll(outputList)

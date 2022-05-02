@@ -3,10 +3,7 @@ package misha.miner.presentation.settings
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -16,16 +13,18 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.Job
 import misha.miner.R
 import misha.miner.common.ui.widgets.ExposedDropDownMenu
+import misha.miner.common.util.openWithScope
 
 @Composable
-fun Settings(openDrawer: () -> Job) {
+fun Settings(drawerState: DrawerState) {
 
     val viewModel: SettingsViewModel = hiltViewModel()
 
     viewModel.initialization()
+
+    val scope = rememberCoroutineScope()
 
     val wallet: State<String> = viewModel.wallet.collectAsState()
     val address: String by viewModel.address.observeAsState("")
@@ -61,7 +60,7 @@ fun Settings(openDrawer: () -> Job) {
 
         Button(
             onClick = {
-                openDrawer()
+                drawerState.openWithScope(scope)
             },
             modifier = Modifier.constrainAs(menu) {
                 top.linkTo(parent.top, margin = 16.dp)

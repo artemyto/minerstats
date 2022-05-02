@@ -5,11 +5,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -21,13 +18,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import kotlinx.coroutines.Job
 import misha.miner.R
 import misha.miner.common.ui.widgets.SearchView
+import misha.miner.common.util.openWithScope
 import java.util.*
 
 @Composable
-fun Currencies(openDrawer: () -> Job) {
+fun Currencies(drawerState: DrawerState) {
 
     val viewModel: CurrenciesViewModel = hiltViewModel()
 
@@ -37,7 +34,7 @@ fun Currencies(openDrawer: () -> Job) {
     val isRefreshing: Boolean by viewModel.isRefreshing.observeAsState(false)
 
     ListingsScreen(
-        openDrawer = openDrawer,
+        drawerState = drawerState,
         isRefreshing = isRefreshing,
         refreshClicked = viewModel::runClicked,
         list = outputList
@@ -46,11 +43,13 @@ fun Currencies(openDrawer: () -> Job) {
 
 @Composable
 fun ListingsScreen(
-    openDrawer: () -> Job,
+    drawerState: DrawerState,
     isRefreshing: Boolean,
     refreshClicked: () -> Unit,
     list: List<CurrencyVO>
 ) {
+    val scope = rememberCoroutineScope()
+
     SwipeRefresh(
         swipeEnabled = true,
         state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
@@ -69,7 +68,7 @@ fun ListingsScreen(
 
             Button(
                 onClick = {
-                    openDrawer()
+                    drawerState.openWithScope(scope)
                 },
                 modifier = Modifier.constrainAs(menu) {
                     top.linkTo(parent.top, margin = 16.dp)
