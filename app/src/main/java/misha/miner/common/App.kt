@@ -1,4 +1,4 @@
-package misha.miner
+package misha.miner.common
 
 import android.app.Application
 import com.pluto.Pluto

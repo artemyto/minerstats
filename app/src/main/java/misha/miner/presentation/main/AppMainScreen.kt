@@ -1,8 +1,5 @@
-package misha.miner
+package misha.miner.presentation
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -12,8 +9,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import misha.miner.MainViewModel
 import misha.miner.common.ui.theme.MyMinerTheme
 import misha.miner.presentation.currencies.Currencies
 import misha.miner.presentation.drawer.Drawer
@@ -24,19 +21,6 @@ import misha.miner.presentation.scanip.ScanIp
 import misha.miner.presentation.settings.Settings
 import misha.miner.presentation.ssh.RunCommand
 import misha.miner.presentation.wallet.Wallet
-
-@AndroidEntryPoint
-class MainActivity : ComponentActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            MyMinerTheme {
-                AppMainScreen()
-            }
-        }
-    }
-}
 
 @Composable
 fun AppMainScreen(
