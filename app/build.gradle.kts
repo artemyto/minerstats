@@ -2,13 +2,13 @@ import java.io.FileInputStream
 import java.util.*
 
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
-    id("realm-android")
-    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlinter)
+    id("kotlin-kapt")
+    id("realm-android")
 }
 
 android {

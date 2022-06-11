@@ -1,7 +1,12 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
     alias(libs.plugins.gradleVersionPlugin)
+    alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
 }
 
 buildscript {
@@ -12,13 +17,6 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath(libs.androidGradlePlugin)
-        classpath(libs.kotlinGradlePlugin)
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle.kts files
-
-        classpath(libs.hilt.gradlePlugin)
         classpath(libs.realm)
     }
 }

@@ -124,7 +124,10 @@ plutoNoOp = [
 
 [plugins]
 
+android-application = { id = "com.android.application", version.ref = "android-gradle-plugin"}
+android-library = { id = "com.android.library", version.ref = "android-gradle-plugin"}
 gradleVersionPlugin = { id = "com.github.ben-manes.versions", version.ref = "gradleDependencyUpdates" }
-
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinter = { id = "org.jmailen.kotlinter", version.ref = "kotlinter" }
-kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
